@@ -93,22 +93,12 @@
     };
   };
 
-  # From flake-utils-plus, a library to easily generate flake configurations.
-  nix = {
-    # Generates NIX_PATH from available inputs.
-    # NIX_PATH is used to resolve angle brackets, e.g. <name>, in nix expressions.
-    generateNixPathFromInputs = true;
-    # Generates nix.registry from flake inputs. nix.registry is a system-wide flake registry.
-    generateRegistryFromInputs = true;
-    # Symlink inputs to /etc/nix/inputs.
-    linkInputs = true;
-  };
-
   # --------------------------------------------------------------------------------------
   # Package config
   # --------------------------------------------------------------------------------------
 
   nixpkgs = {
+    hostPlatform = system;
     config = {
       ## Allow proprietary packages.
       # allowUnfree = true;
@@ -253,10 +243,8 @@
     powertop
     networkmanager
     sshpass
-    steam-run
     steampipe
     tmux
-    unrar
     usbutils
     utillinux
     vim

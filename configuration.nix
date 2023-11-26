@@ -1,8 +1,9 @@
-{ config, pkgs, ... }:
+{ inputs, pkgs, ... }:
 
 {
   imports = [
     ./profiles/common.nix
+    inputs.nixos-generators.nixosModules.all-formats
   ];
 
   # --------------------------------------------------------------------------------------

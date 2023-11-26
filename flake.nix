@@ -12,9 +12,14 @@
     nixpkgs-trunk.url = "github:NixOS/nixpkgs";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, ... }@inputs:
+  outputs = { self, nixpkgs, nixos-generators, ... }@inputs:
   {
     nixosConfigurations = {
       homefree =
