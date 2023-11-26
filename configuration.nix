@@ -1,9 +1,11 @@
-{ inputs, pkgs, ... }:
+{ inputs, ... }:
 
 {
   imports = [
-    ./profiles/common.nix
     inputs.nixos-generators.nixosModules.all-formats
+    ./profiles/common.nix
+    ./profiles/hardware-configuration.nix
+    ./profiles/virtual-machine.nix
   ];
 
   # --------------------------------------------------------------------------------------
