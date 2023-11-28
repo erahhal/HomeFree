@@ -1,6 +1,8 @@
 TODOS
 =====
 
+* Look into microvm instead of qemu, which has been difficult to work with
+  * https://github.com/astro/microvm.nix
 * Make a flake that sets up host machine for dev
 * Setup host so default network virbr0 starts at boot
   * currently need to us "sudo virsh net-start --network default"

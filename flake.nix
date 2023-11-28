@@ -17,6 +17,8 @@
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-editor.url = "github:vlinkz/nix-editor";
   };
 
   outputs = { self, nixpkgs, nixos-generators, ... }@inputs:
@@ -30,6 +32,7 @@
         system = system;
         modules = [
           (import ./configuration.nix)
+          (import ./profiles/system-build.nix)
           inputs.nixos-hardware.nixosModules.common-cpu-intel
           inputs.nixos-hardware.nixosModules.common-pc-laptop
         ];

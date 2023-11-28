@@ -4,6 +4,7 @@
   imports = [
     inputs.nixos-generators.nixosModules.all-formats
     ./profiles/common.nix
+    ./profiles/config-editor.nix
     ./profiles/hardware-configuration.nix
     ./profiles/virtual-machine.nix
   ];
@@ -19,7 +20,6 @@
       # Use maximum resolution in systemd-boot for hidpi
       consoleMode = "max";
     };
-    # Set font size early
     efi = {
       canTouchEfiVariables = true;
     };
@@ -30,6 +30,16 @@
   # --------------------------------------------------------------------------------------
 
   # @TODO: Setup luks or some disk encryption (ZFS?)
+
+  # --------------------------------------------------------------------------------------
+  # Network
+  # --------------------------------------------------------------------------------------
+
+  # Prevent hanging when waiting for network to be up
+  systemd.network.wait-online.anyInterface = true;
+  ## @TODO: Any ramifications of this?
+  systemd.network.wait-online.enable = false;
+  systemd.services.NetworkManager-wait-online.enable = false;
 
 
   # --------------------------------------------------------------------------------------
