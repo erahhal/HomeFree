@@ -6,6 +6,7 @@
     ./profiles/common.nix
     ./profiles/config-editor.nix
     ./profiles/hardware-configuration.nix
+    ./profiles/hosting.nix
     ./profiles/virtual-machine.nix
   ];
 

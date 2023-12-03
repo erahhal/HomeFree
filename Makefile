@@ -20,23 +20,20 @@ else
 endif
 
 run:
-	# qemu-system-x86_64 -smbios type=0,uefi=on -smp 4 -m 8192 -hda ./build/homefree.qcow2 -net user,hostfwd=tcp::2222-:22 -net nic
-	# -bios /var/run/libvirt/nix-ovmf/OVMF_CODE.fd \
-	# -bios /var/lib/libvirt/qemu/nvram/nixos_VARS.fd \
-	# -drive file=/var/run/libvirt/nix-ovmf/OVMF_CODE.fd,if=pflash,format=raw,unit=0,readonly=on \
-	# -drive file=/var/lib/libvirt/qemu/nvram/nixos_VARS.fd,if=pflash,format=raw,unit=1 \
-	# -hda ./build/homefree.qcow2 \
+		## 9p mount:
+		# -virtfs local,path=./,mount_tag=mount_homefree_source,security_model=passthrough,id=mount_homefree_source \
 	sudo cp /var/lib/libvirt/qemu/nvram/nixos_VARS.fd ./build/
 	sudo chown erahhal:users ./build/nixos_VARS.fd
-	qemu-system-x86_64 \
-		-enable-kvm \
-		-machine q35 \
-		-cpu host \
-		-object memory-backend-memfd,id=mem,size=4G,share=on \
+	virtiofsd --socket-path /tmp/vhostqemu --shared-dir ./ --cache auto &
+	qemu-kvm \
+		-chardev socket,id=char0,path=/tmp/vhostqemu \
+		-device vhost-user-fs-pci,queue-size=1024,chardev=char0,tag=mount_homefree_source \
+		-m 8G -object memory-backend-file,id=mem,size=8G,mem-path=/dev/shm,share=on \
+		-numa node,memdev=mem \
 		-drive file=/var/run/libvirt/nix-ovmf/OVMF_CODE.fd,if=pflash,format=raw,unit=0,readonly=on \
 		-drive file=./build/nixos_VARS.fd,if=pflash,format=raw,unit=1 \
 		-hda ./build/homefree.qcow2 \
 		-smp 4 \
-		-m 8192 \
-		-net user,hostfwd=tcp::2222-:22 \
-		-net nic
+		-m 8G \
+		-net nic \
+		-net user,hostfwd=tcp::2223-:22

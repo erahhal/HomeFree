@@ -26,7 +26,8 @@
 
   fileSystems."/home/homefree/nixcfg" =
     { device = "mount_homefree_source";
-      fsType = "virtiofs";
+      fsType = "9p";
+      options = [ "nofail" ];
     };
 
   swapDevices = [ ];
