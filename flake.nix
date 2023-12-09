@@ -19,9 +19,25 @@
     };
 
     nix-editor.url = "github:vlinkz/nix-editor";
+
+    # notnft = {
+    #   url = "github:chayleaf/notnft";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+    #
+    # nixos-router = {
+    #   url = "github:chayleaf/nixos-router";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
   };
 
-  outputs = { self, nixpkgs, nixos-generators, ... }@inputs:
+  outputs = {
+    self,
+    nixos-generators,
+    nixos-hardware,
+    nixpkgs,
+    ...
+  }@inputs:
   {
     nixosConfigurations = {
       homefree =
@@ -31,10 +47,29 @@
       inputs.nixpkgs.lib.nixosSystem {
         system = system;
         modules = [
-          (import ./configuration.nix)
-          (import ./profiles/system-build.nix)
-          inputs.nixos-hardware.nixosModules.common-cpu-intel
-          inputs.nixos-hardware.nixosModules.common-pc-laptop
+          nixos-hardware.nixosModules.common-cpu-intel
+          nixos-hardware.nixosModules.common-pc-laptop
+          # inputs.nixos-router.nixosModules.default
+          # inputs.notnft.lib.${system}
+
+          (import ./hosts/homefree/configuration.nix)
+        ];
+        specialArgs = {
+          inherit inputs;
+          inherit system;
+        };
+      };
+      lan-client =
+      let
+        system = "x86_64-linux";
+      in
+      inputs.nixpkgs.lib.nixosSystem {
+        system = system;
+        modules = [
+          nixos-hardware.nixosModules.common-cpu-intel
+          nixos-hardware.nixosModules.common-pc-laptop
+
+          (import ./hosts/lan-client/configuration.nix)
         ];
         specialArgs = {
           inherit inputs;
