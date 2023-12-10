@@ -20,6 +20,11 @@
 
     nix-editor.url = "github:vlinkz/nix-editor";
 
+    adblock-unbound = {
+      url = "github:MayNiklas/nixos-adblock-unbound";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # notnft = {
     #   url = "github:chayleaf/notnft";
     #   inputs.nixpkgs.follows = "nixpkgs";

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 let
   # @TODO: How to determine interface names?
@@ -12,6 +12,7 @@ let
   vlan-guest-id = 202;
   # lan-interface = "ens3";
   dns-servers = [ "1.1.1.1" "1.0.0.1" ];
+  adlist = inputs.adblock-unbound.packages.${pkgs.system};
 in
 {
 
@@ -278,6 +279,9 @@ in
 
     settings = {
       server = {
+        include = [
+          "\"${adlist.unbound-adblockStevenBlack}\""
+        ];
         interface = [
           "127.0.0.1"
           "::1"
