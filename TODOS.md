@@ -8,11 +8,41 @@ TODOS
 * setup ipv6
 * Make a flake that sets up host machine for dev
 * Figure out how to use host id_rsa.pub in build, rather than hard-coded key
+  * maybe share ~/.ssh/ida_rsa.pub into machine? would cause problems if share failed
 * Determine if there are any problems with disabling "wait for network" to get rid of error
 * Look into microvm instead of qemu, which has been difficult to work with
   * https://github.com/astro/microvm.nix
-* setup DNSSEC for dnsmasq
+* setup DNSSEC for dnsmasq, IPV6
   * https://blog.josefsson.org/2015/10/26/combining-dnsmasq-and-unbound/
+
+
+
+### Solutions
+* reverse proxy
+  * Traefik
+  * HAProxy
+  * nginx-proxy-manager
+  * caddy
+* ad block
+  * Unbound
+  * AdGuard
+  * PiHole
+* intrusion protection
+  * https://www.redhat.com/sysadmin/security-intrusion-detection
+  * fail2ban
+  * Suricata
+  * OSSEC-HIDS
+  * Snort
+  * Zeek
+  * Tripwire
+* certs
+  * certbot
+  * caddy
+* SSO
+  * authentik
+  * authelia
+  * keycloak
+
 
 ### DONE
 

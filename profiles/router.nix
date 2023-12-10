@@ -298,7 +298,17 @@ in
           "10.0.2.15"
           # @TODO: need ipv6 address
         ];
+        local-zone = [
+          "\"homefree.lan.\" static"
+        ];
+        local-data = [
+          "\"radicale.homefree.lan. IN A 10.1.1.1\""
+        ];
+        local-data-ptr = [
+          "\"10.1.1.1 radicale.homfree.lan\""
+        ];
       };
+
       forward-zone = [
         {
           name = ".";
@@ -318,6 +328,16 @@ in
       ];
       remote-control.control-enable = true;
     };
+  };
+
+  #-----------------------------------------------------------------------------------------------------
+  # Dynamic DNS
+  #-----------------------------------------------------------------------------------------------------
+
+  # @TODO: https://discourse.nixos.org/t/ddclient-options/20935
+  services.ddclient = {
+    enable = true;
+    quiet = true;
   };
 
   #-----------------------------------------------------------------------------------------------------
