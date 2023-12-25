@@ -23,14 +23,18 @@
 # SEE: https://futurewei-cloud.github.io/ARM-Datacenter/qemu/network-aarch64-qemu-guests/
 sudo cp /var/lib/libvirt/qemu/nvram/nixos_VARS.fd ./build/
 sudo chown erahhal:users ./build/nixos_VARS.fd
+# @TODO: What if virtiofsd is already running elsewhere? Can it be run as a service?
 virtiofsd --socket-path /tmp/vhostqemu --shared-dir ./ --cache auto &
 pids[1]=$!
     # -netdev tap,id=enp1s0,br=hfbr0,helper=$(which qemu-bridge-helper) \
     # -device e1000,netdev=enp1s0,mac=52:53:54:55:56:01 \
 sudo -E qemu-kvm \
+    -cpu host \
+    -device intel-iommu,intremap=on \
+    -enable-kvm \
     -chardev socket,id=char0,path=/tmp/vhostqemu \
     -device vhost-user-fs-pci,queue-size=1024,chardev=char0,tag=mount_homefree_source \
-    -m 8G -object memory-backend-file,id=mem,size=8G,mem-path=/dev/shm,share=on \
+    -object memory-backend-file,id=mem,size=8G,mem-path=/dev/shm,share=on \
     -numa node,memdev=mem \
     -drive file=/var/run/libvirt/nix-ovmf/OVMF_CODE.fd,if=pflash,format=raw,unit=0,readonly=on \
     -drive file=./build/nixos_VARS.fd,if=pflash,format=raw,unit=1 \
@@ -46,6 +50,9 @@ pids[2]=$!
     # -netdev tap,id=enp1s0,br=hfbr0,helper=$(which qemu-bridge-helper) \
     # -device e1000,netdev=enp1s0,mac=52:53:54:55:56:02 \
 sudo -E qemu-kvm \
+    -cpu host \
+    -device intel-iommu,intremap=on \
+    -enable-kvm \
     -drive file=/var/run/libvirt/nix-ovmf/OVMF_CODE.fd,if=pflash,format=raw,unit=0,readonly=on \
     -drive file=./build/nixos_VARS.fd,if=pflash,format=raw,unit=1 \
     -hda ./build/lan-client.qcow2 \

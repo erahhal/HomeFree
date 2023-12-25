@@ -15,8 +15,6 @@ TODOS
 * setup DNSSEC for dnsmasq, IPV6
   * https://blog.josefsson.org/2015/10/26/combining-dnsmasq-and-unbound/
 
-
-
 ### Solutions
 * reverse proxy
   * Traefik
@@ -39,10 +37,31 @@ TODOS
   * certbot
   * caddy
 * SSO
+  * https://github.com/greenpau/caddy-security
   * authentik
   * authelia
   * keycloak
+* VPN
+  * Tailscale/Headscale
+    * https://tailscale.com/kb/1136/tailnet
+    * https://github.com/tailscale/golink
+    * https://github.com/tailscale-dev/tclip
+  * wireguard
+  * openvpn
+* Backup
+  * bacula
+  * kopia
+  * restic
 
+### VyOS comparison
+
+* Netfiter - does it use nftables? How does its config language map to Netfilter? Can it be extracted?
+* FRR - high performance IP routing suite - any use for this in a home router?
+* strongSwan - IPsec VPN. IPsec is slower than Wireguard but clients are built into OSes
+* Acel-PPP - VPN/tunnel server for PPPoE, PPtP, L2TPv2, SSTP, IPoE
+* FastNetMon - DDoS detection
+* Squid - caching proxy
+* PowerDNS - commercial grade DNS server
 
 ### DONE
 

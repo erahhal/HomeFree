@@ -302,10 +302,10 @@ in
           "\"homefree.lan.\" static"
         ];
         local-data = [
-          "\"radicale.homefree.lan. IN A 10.1.1.1\""
+          "\"radicale.lan. IN A 10.1.1.1\""
         ];
         local-data-ptr = [
-          "\"10.1.1.1 radicale.homfree.lan\""
+          "\"10.1.1.1 radicale.lan\""
         ];
       };
 

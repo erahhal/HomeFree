@@ -1,6 +1,7 @@
 { pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
+    libvirt
     virtiofsd
   ];
 
@@ -12,5 +13,11 @@
       wantedBy = [ "multi-user.target" ];
       enable = true;
     }
+  ];
+
+  boot.extraModprobeConfig = "options kvm_intel nested=1";
+  boot.kernelParams = [
+    "intel_iommu=on"
+    "cgroup_enable=freezer"
   ];
 }
