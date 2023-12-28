@@ -32,7 +32,7 @@ fi
 
 if [ "$OS" == "Fedora Linux" ]; then
     # Install dependencies
-    sudo dnf install -y vim git make qemu-img qemu-kvm libvirt
+    sudo dnf install -y bc vim git make qemu-img qemu-kvm libvirt
 
     if ! command -v nix &> /dev/null; then
         if [ ! -e /nix/var/nix/profiles/system/bin/nix ]; then
