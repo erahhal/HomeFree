@@ -80,7 +80,7 @@ method=auto
 
 [proxy]
 EOF
-        sudo chmod 600 $BRIDGE_CONFIG
+        sudo chmod 600 $NM_BRIDGE_CONF
         sudo systemctl restart NetworkManager
     fi
 
