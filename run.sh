@@ -45,6 +45,12 @@ else
     exit 1
 fi
 
+if [ x$DISPLAY != x ] ; then
+    GUI_FLAG=
+else
+    GUI_FLAG=-nographic
+fi
+
 # TAP - Test Access Point, layer 2, data link layer, ethernet frames
 # TUN - Network TUNnel, layer 3, network layer, ip packets
 # Bridge - connects two network segments, like a super simple switch
@@ -74,7 +80,7 @@ pids[1]=$!
     # -netdev tap,id=enp1s0,br=hfbr0,helper=$QEMU_BRIDGE_HELPER \
     # -device e1000,netdev=enp1s0,mac=52:53:54:55:56:01 \
 sudo -E qemu-kvm \
-    -nographic \
+    $GUI_FLAG \
     -cpu host \
     -enable-kvm \
     -chardev socket,id=char0,path=/tmp/vhostqemu \
@@ -95,7 +101,7 @@ pids[2]=$!
     # -netdev tap,id=enp1s0,br=hfbr0,helper=$QEMU_BRIDGE_HELPER \
     # -device e1000,netdev=enp1s0,mac=52:53:54:55:56:02 \
 sudo -E qemu-kvm \
-    -nographic \
+    $GUI_FLAG \
     -cpu host \
     -enable-kvm \
     -drive file=$OVMF_CODE,if=pflash,format=raw,unit=0,readonly=on \
