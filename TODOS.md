@@ -16,6 +16,11 @@ TODOS
   * https://blog.josefsson.org/2015/10/26/combining-dnsmasq-and-unbound/
 
 ### Solutions
+* Firewall
+  * https://www.jjpdev.com/posts/home-router-nixos/
+* NAS
+  * https://github.com/reckenrode/nixos-configs/tree/c556206df2611af2f9ea83954aae1b51461e44c5/hosts/x86_64-linux/meteion
+  * https://www.reddit.com/r/NixOS/comments/yr21p1/offtheshelf_nas_supporting_nixos/
 * reverse proxy
   * Traefik
   * HAProxy
@@ -52,6 +57,8 @@ TODOS
   * bacula
   * kopia
   * restic
+* Hypervisor
+  * https://vpsadminos.org/
 
 ### VyOS comparison
 

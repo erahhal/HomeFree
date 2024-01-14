@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ config, inputs, pkgs, ... }:
 
 let
   # @TODO: How to determine interface names?
@@ -337,7 +337,13 @@ in
   # @TODO: https://discourse.nixos.org/t/ddclient-options/20935
   services.ddclient = {
     enable = true;
-    quiet = true;
+    interval = "10m";
+    # protocol = "zoneedit1";
+    # username = "erahhal";
+    # zone = "homefree.host";
+    # passwordFile = config.age.secrets.ddclient.path;
+    # verbose = true;
+    configFile = config.age.secrets.ddclient-conf.path;
   };
 
   #-----------------------------------------------------------------------------------------------------

@@ -28,3 +28,6 @@ setup:
 ssh:
 	ssh-keygen -R "[localhost]:2223"
 	ssh -o StrictHostKeychecking=no -p 2223 homefree@localhost
+
+generate-sops-config:
+	./generate-sops-config.sh

@@ -3,6 +3,7 @@
 {
   imports = [
     inputs.nixos-generators.nixosModules.all-formats
+    ../../profiles/agenix.nix
     ../../profiles/common.nix
     ../../profiles/config-editor.nix
     ../../profiles/hardware-configuration.nix
@@ -39,10 +40,6 @@
 
   # Prevent hanging when waiting for network to be up
   systemd.network.wait-online.anyInterface = true;
-  ## @TODO: Any ramifications of this?
-  systemd.network.wait-online.enable = false;
-  systemd.services.NetworkManager-wait-online.enable = false;
-
 
   # --------------------------------------------------------------------------------------
   # Device specific
@@ -54,15 +51,26 @@
   networking = {
     # @TODO: Make this UI configurable
     hostName = "homefree";
+    ## NetworkManager disabled in favor of networkd
     useNetworkd = true;
-    networkmanager = {
-      enable = true;
-    };
     wireless = {
       # Disable wpa_supplicant
       enable = false;
     };
+    interfaces = {
+      ens3.useDHCP = true;
+    };
   };
+
+  # services.openssh.hostKeys = [
+  #   {
+  #     bits = 4096;
+  #     openSSHFormat = true;
+  #     path = "/etc/ssh/ssh_host_rsa_key";
+  #     rounds = 100;
+  #     type = "rsa";
+  #   }
+  # ];
 
   # --------------------------------------------------------------------------------------
   # Hardware specific
