@@ -13,7 +13,7 @@
 
     virtualHosts."localhost" = {
       extraConfig = ''
-        respond "Hello, world!"
+        respond "Hello, my world!"
       '';
     };
 

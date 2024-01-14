@@ -20,6 +20,10 @@
 
     nix-editor.url = "github:vlinkz/nix-editor";
 
+    agenix.url = "github:ryantm/agenix";
+
+    sops-nix.url = "github:Mic92/sops-nix";
+
     adblock-unbound = {
       url = "github:MayNiklas/nixos-adblock-unbound";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -41,6 +45,8 @@
     nixos-generators,
     nixos-hardware,
     nixpkgs,
+    agenix,
+    sops-nix,
     ...
   }@inputs:
   {
@@ -54,6 +60,8 @@
         modules = [
           nixos-hardware.nixosModules.common-cpu-intel
           nixos-hardware.nixosModules.common-pc-laptop
+          agenix.nixosModules.default
+          sops-nix.nixosModules.sops
           # inputs.nixos-router.nixosModules.default
           # inputs.notnft.lib.${system}
 
@@ -62,6 +70,8 @@
         specialArgs = {
           inherit inputs;
           inherit system;
+          inherit agenix;
+          inherit sops-nix;
         };
       };
       lan-client =

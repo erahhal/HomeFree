@@ -35,9 +35,6 @@
 
   # Prevent hanging when waiting for network to be up
   systemd.network.wait-online.anyInterface = true;
-  ## @TODO: Any ramifications of this?
-  systemd.network.wait-online.enable = false;
-  systemd.services.NetworkManager-wait-online.enable = false;
 
 
   # --------------------------------------------------------------------------------------
@@ -49,13 +46,14 @@
 
   networking = {
     hostName = "lan-client";
+    ## NetworkManager disabled in favor of networkd
     useNetworkd = true;
-    networkmanager = {
-      enable = true;
-    };
     wireless = {
       # Disable wpa_supplicant
       enable = false;
+    };
+    interfaces = {
+      ens3.useDHCP = true;
     };
   };
 
