@@ -36,8 +36,9 @@ if [ "$OS" == "Fedora Linux" ]; then
     VIRTIOFSD=/usr/libexec/virtiofsd
     QEMU_BRIDGE_HELPER=/usr/libexec/qemu-bridge-helper
 elif [ "$OS" == "NixOS" ]; then
-    OVMF_NVRAM=/var/lib/libvirt/qemu/nvram/nixos_VARS.fd
-    OVMF_CODE=/var/run/libvirt/nix-ovmf/OVMF_CODE.fd
+    OVMF_PATH=$(nix --extra-experimental-features nix-command --extra-experimental-features flakes eval -f '<nixpkgs>' --raw "OVMF.fd")
+    OVMF_NVRAM=$OVMF_PATH/FV/OVMF_VARS.fd
+    OVMF_CODE=$OVMF_PATH/FV/OVMF_CODE.fd
     VIRTIOFSD=$(which virtiofsd)
     QEMU_BRIDGE_HELPER=$(which qemu-bridge-helper)
 else
