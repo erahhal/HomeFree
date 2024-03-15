@@ -6,6 +6,8 @@
     ../../profiles/agenix.nix
     ../../profiles/common.nix
     ../../profiles/config-editor.nix
+    ../../profiles/ddclient.nix
+    ../../profiles/home-assistant
     ../../profiles/hardware-configuration.nix
     ../../profiles/hosting.nix
     ../../profiles/router.nix

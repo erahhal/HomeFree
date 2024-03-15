@@ -94,7 +94,7 @@ sudo -E qemu-kvm \
     -smp 4 \
     -m 8G \
     -net nic \
-    -net user,hostfwd=tcp::2223-:22,hostfwd=tcp::8445-:443,hostfwd=tcp::8885-:80 \
+    -net user,hostfwd=tcp::2223-:22,hostfwd=tcp::8445-:443,hostfwd=tcp::8885-:80,hostfwd=tcp::8123-:8123 \
     -netdev bridge,br=hfbr0,id=hn1,helper=$QEMU_BRIDGE_HELPER \
     -device virtio-net,netdev=hn1,mac=e6:c8:ff:09:76:88 \
     &
