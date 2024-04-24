@@ -29,6 +29,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    authentik-nix = {
+      url = "github:nix-community/authentik-nix";
+      ## optional overrides. Note that using a different version of nixpkgs can cause issues, especially with python dependencies
+      # inputs.nixpkgs.follows = "nixpkgs"
+      # inputs.flake-parts.follows = "flake-parts"
+    };
+
     # notnft = {
     #   url = "github:chayleaf/notnft";
     #   inputs.nixpkgs.follows = "nixpkgs";
@@ -47,6 +54,7 @@
     nixpkgs,
     agenix,
     sops-nix,
+    authentik-nix,
     ...
   }@inputs:
   {
@@ -62,6 +70,7 @@
           nixos-hardware.nixosModules.common-pc-laptop
           agenix.nixosModules.default
           sops-nix.nixosModules.sops
+          authentik-nix.nixosModules.default
           # inputs.nixos-router.nixosModules.default
           # inputs.notnft.lib.${system}
 

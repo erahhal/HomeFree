@@ -1,9 +1,11 @@
-{ inputs, ... }:
+{ inputs, lib, ... }:
 
 {
   imports = [
     inputs.nixos-generators.nixosModules.all-formats
+    ../../secrets/sops.nix
     ../../profiles/agenix.nix
+    ../../profiles/authentik.nix
     ../../profiles/common.nix
     ../../profiles/config-editor.nix
     ../../profiles/ddclient.nix
@@ -48,7 +50,8 @@
   # --------------------------------------------------------------------------------------
 
   # @TODO: Make this UI configurable
-  time.timeZone = "America/Los_Angeles";
+  ## Must be forced due to Authentik hard coding a value of UTC
+  time.timeZone = lib.mkForce "America/Los_Angeles";
 
   networking = {
     # @TODO: Make this UI configurable
