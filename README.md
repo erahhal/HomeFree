@@ -12,3 +12,33 @@ liberate you from giant cloud providers.
 ― Neal Stephenson, The Diamond Age: Or, a Young Lady's Illustrated Primer
 
 ## Don't suckle the Feed. Cultivate the Seed.
+
+## Adding a secret
+
+```
+nix-shell -p sops --run "sops secrets/app.yaml"
+```
+
+Then add a key or keys, e.g.
+
+```
+env-vars: |
+     VAR1 = abc
+     VAR2 = def
+```
+
+Then reference in Nix config as follows:
+
+```
+config.sops.secrets.app.env-vars.path
+```
+
+Or point directly to the path, e.g.
+```
+sops.secrets."app" = {
+  owner = "homefree";
+  path = "/run/secrets/app/env-vars";
+  restartUnits = [ "app.service" ];
+};
+```
+and reference the path in config

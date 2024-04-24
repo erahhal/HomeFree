@@ -1,0 +1,20 @@
+#  see https://github.com/Mic92/dotfiles/blob/master/nixos/.sops.yaml
+keys:
+  - &user_homefree 06321d7f20335a7e08595ba905d137ee114ba2c2
+  - &server_homefree af60d7db5062d1de4cc90279491808670fa559b2
+creation_rules:
+  - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
+    key_groups:
+    - pgp:
+      - *user_homefree
+      - *server_homefree
+  - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
+    key_groups:
+    - pgp:
+      - *user_homefree
+      - *server_homefree
+  - path_regex: secrets/homefree/[^/]+\.(yaml|json|env|ini)$
+    key_groups:
+    - pgp:
+      - *user_homefree
+      - *server_homefree

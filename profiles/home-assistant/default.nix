@@ -1,7 +1,7 @@
 { config, inputs, pkgs, ... }:
 
 let
-  automations = import ./automations.nix;
+  # automations = import ./automations.nix;
   scenes = import ./scenes.nix;
   scripts = import ./scripts.nix;
   groups = import ./groups.nix;
@@ -37,7 +37,7 @@ in
       # https://www.home-assistant.io/integrations/default_config/
       default_config = {};
 
-      "automation manual" = automations;
+      # "automation manual" = automations;
       "automation ui" = "!include automations.yaml";
 
       "scene manual" = scenes;
