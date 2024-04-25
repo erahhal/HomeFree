@@ -3,7 +3,6 @@
 {
   imports = [
     inputs.nixos-generators.nixosModules.all-formats
-    ../../secrets/sops.nix
     ../../profiles/agenix.nix
     ../../profiles/authentik.nix
     ../../profiles/common.nix
@@ -12,6 +11,7 @@
     ../../profiles/home-assistant
     ../../profiles/hardware-configuration.nix
     ../../profiles/hosting.nix
+    ../../profiles/postgres.nix
     ../../profiles/router.nix
     ../../profiles/virtual-machine.nix
   ];

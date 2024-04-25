@@ -80,6 +80,9 @@ sudo $VIRTIOFSD --socket-path /tmp/vhostqemu --shared-dir ./ --cache auto &
 pids[1]=$!
     # -netdev tap,id=enp1s0,br=hfbr0,helper=$QEMU_BRIDGE_HELPER \
     # -device e1000,netdev=enp1s0,mac=52:53:54:55:56:01 \
+
+# Port 8123: Home Assistant
+# Port 9000: Authentik
 sudo -E qemu-kvm \
     $GUI_FLAG \
     -cpu host \
@@ -94,7 +97,7 @@ sudo -E qemu-kvm \
     -smp 4 \
     -m 8G \
     -net nic \
-    -net user,hostfwd=tcp::2223-:22,hostfwd=tcp::8445-:443,hostfwd=tcp::8885-:80,hostfwd=tcp::8123-:8123 \
+    -net user,hostfwd=tcp::2223-:22,hostfwd=tcp::8445-:443,hostfwd=tcp::8885-:80,hostfwd=tcp::8123-:8123,hostfwd=tcp::9000-:9000 \
     -netdev bridge,br=hfbr0,id=hn1,helper=$QEMU_BRIDGE_HELPER \
     -device virtio-net,netdev=hn1,mac=e6:c8:ff:09:76:88 \
     &
