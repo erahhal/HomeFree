@@ -12,6 +12,11 @@ in
   #-----------------------------------------------------------------------------------------------------
 
   imports = [
+    # On first run, this has to be commented out, and a single user created.
+    # Afterward, it can be re-included
+    ## @TODO: Auto-initializatin for HA
+    ## See: https://github.com/home-assistant/core/issues/16554
+    ./ldap.nix
     ./weather.nix
   ];
 
@@ -47,7 +52,7 @@ in
       "script ui" = "!include scripts.yaml";
 
       "group manual" = groups;
-      "group ui" = "!include groups.yaml";
+      # "group ui" = "!include groups.yaml";
 
       http = {
         use_x_forwarded_for = true;
@@ -112,18 +117,18 @@ in
         }
       ];
 
-      media_player = [
-        {
-          platform = "yamaha";
-          host = "10.0.0.41";
-          source_names = {
-            HDMI1 = "PC HDMI";
-          };
-          zone_names = {
-            Main_Zone = "Family Room";
-          };
-        }
-      ];
+      # media_player = [
+      #   {
+      #     platform = "yamaha";
+      #     host = "10.0.0.41";
+      #     source_names = {
+      #       HDMI1 = "PC HDMI";
+      #     };
+      #     zone_names = {
+      #       Main_Zone = "Family Room";
+      #     };
+      #   }
+      # ];
 
       sensor = [
         # See: https://github.com/home-assistant/core/issues/64839
@@ -151,193 +156,193 @@ in
             };
           };
         }
-        {
-          platform = "hp_ilo";
-          host = "10.0.0.9";
-          username = "Administrator";
-          # @TODO: REMOVE
-          password = "CHANGEME";
-          monitored_variables = [
-            {
-              name = "CPU fanspeed";
-              sensor_type = "server_health";
-              unit_of_measurement = "%";
-              value_template = "{{ ilo_data.fans[\"Fan 1\"].speed[0] }}";
-            }
-            {
-              name = "Fan 2";
-              sensor_type = "server_health";
-              unit_of_measurement = "%";
-              value_template = "{{ ilo_data.fans[\"Fan 2\"].speed[0] }}";
-            }
-            {
-              name = "Fan 3";
-              sensor_type = "server_health";
-              unit_of_measurement = "%";
-              value_template = "{{ ilo_data.fans[\"Fan 3\"].speed[0] }}";
-            }
-            {
-              name = "Server Health";
-              sensor_type = "server_health";
-              value_template = "{{ ilo_data.health_at_a_glance }}";
-            }
-            {
-              name = "Server Power Readings (raw)";
-              sensor_type = "server_power_readings";
-            }
-            {
-              name = "Server Power Status (raw)";
-              sensor_type = "server_power_status";
-            }
-            {
-              name = "Server health (raw)";
-              sensor_type = "server_health";
-            }
-            {
-              name = "Inlet temperature";
-              sensor_type = "server_health";
-              unit_of_measurement = "°C";
-              value_template = "{{ ilo_data.temperature[\"01-Inlet Ambient\"].currentreading[0] }}";
-            }
-            {
-              name = "Inlet temperature (raw)";
-              sensor_type = "server_health";
-              value_template = "{{ ilo_data.temperature[\"01-Inlet Ambient\"] }}";
-            }
-            {
-              name = "CPU 1 temperature";
-              sensor_type = "server_health";
-              unit_of_measurement = "°C";
-              value_template = "{{ ilo_data.temperature[\"02-CPU 1\"].currentreading[0] }}";
-            }
-            {
-              name = "P1 DIMM 1-4 temperature";
-              sensor_type = "server_health";
-              unit_of_measurement = "°C";
-              value_template = "{{ ilo_data.temperature[\"03-P1 DIMM 1-4\"].currentreading[0] }}";
-            }
-            {
-              name = "HD Max temperature";
-              sensor_type = "server_health";
-              unit_of_measurement = "°C";
-              value_template = "{{ ilo_data.temperature[\"04-HD Max\"].currentreading[0] }}";
-            }
-            {
-              name = "Chipset temperature";
-              sensor_type = "server_health";
-              unit_of_measurement = "°C";
-              value_template = "{{ ilo_data.temperature[\"05-Chipset\"].currentreading[0] }}";
-            }
-            {
-              name = "VR P1 temperature";
-              sensor_type = "server_health";
-              unit_of_measurement = "°C";
-              value_template = "{{ ilo_data.temperature[\"07-VR P1\"].currentreading[0] }}";
-            }
-            {
-              name = "SuperCAP Max temperature";
-              sensor_type = "server_health";
-              unit_of_measurement = "°C";
-              value_template = "{{ ilo_data.temperature[\"08-Supercap Max\"].currentreading[0] }}";
-            }
-            {
-              name = "iLO Zone temperature";
-              sensor_type = "server_health";
-              unit_of_measurement = "°C";
-              value_template = "{{ ilo_data.temperature[\"09-iLO Zone\"].currentreading[0] }}";
-            }
-            {
-              name = "LOM Zon temperature";
-              sensor_type = "server_health";
-              unit_of_measurement = "°C";
-              value_template = "{{ ilo_data.temperature[\"11-LOM Zone\"].currentreading[0] }}";
-            }
-            {
-              name = "PCI 2 temperature";
-              sensor_type = "server_health";
-              unit_of_measurement = "°C";
-              value_template = "{{ ilo_data.temperature[\"13-PCI 2\"].currentreading[0] }}";
-            }
-            {
-              name = "PCI 1 Zone temperature";
-              sensor_type = "server_health";
-              unit_of_measurement = "°C";
-              value_template = "{{ ilo_data.temperature[\"14-PCI 1 Zone\"].currentreading[0] }}";
-            }
-            {
-              name = "PCI 2 Zone temperature";
-              sensor_type = "server_health";
-              unit_of_measurement = "°C";
-              value_template = "{{ ilo_data.temperature[\15-PCI 2 Zone\].currentreading[0] }}";
-            }
-            {
-              name = "System Board temperature";
-              sensor_type = "server_health";
-              unit_of_measurement = "°C";
-              value_template = "{{ ilo_data.temperature[\"16-System Board\"].currentreading[0] }}";
-            }
-            {
-              name = "Sys Exhaust temperature";
-              sensor_type = "server_health";
-              unit_of_measurement = "°C";
-              value_template = "{{ ilo_data.temperature[\"17-Sys Exhaust\"].currentreading[0] }}";
-            }
-          ];
-        }
-        {
-          # This includes the config necessary for a washer and dryer.
-          # Code for dishwasher and mini-washer may be commented out as-needed,
-          # and are presented only for reference purposes.
-
-          # NOTE: YOUR ENTITY NAMES MAY BE DIFFERENT, THEN THIS WON'T WORK WITHOUT TWEAKING
-          # =================================================================================
-          # If your washer doesn't have entities named sensor.washer, sensor.washer_run_state
-          # (and similar for dryer), you have to change the names throughout here!
-
-          # NOTE: THIS CODE EXPECTS YOUR THINQ INTEGRATION TO RETURN ENGLISH STRINGS
-          # =================================================================================
-          # if your LG account is in another region/language, this will probably break unless
-          # you take the time to change out state strings like "Standby". Do this by watching
-          # your machine's entities change states during a run, or look at its history.
-
-          platform = "template";
-          sensors = {
-            front_load_washer_door_lock = {
-               friendly_name = "Washer Door Lock";
-               value_template = "{{ state_attr('sensor.front_load_washer','door_lock') }}";
-            };
-            front_load_washer_time_display = {
-              friendly_name = "Washer Time Display";
-              value_template = ''
-                {% if is_state('sensor.front_load_washer_run_state', '-') %}
-                {% elif is_state('sensor.front_load_washer_run_state', 'unavailable') %}
-                {% elif is_state('sensor.front_load_washer_run_state', 'Standby') %}
-                  -:--
-                {% else %}
-                  {{ state_attr("sensor.front_load_washer","remain_time").split(":")[:-1] | join(':') }}
-                {% endif %}
-              '';
-            };
-
-            dryer_time_display = {
-              friendly_name = "Dryer Time Display";
-              value_template = ''
-                {% if is_state('sensor.dryer_run_state', '-') %}
-                {% elif is_state('sensor.dryer_run_state', 'unavailable') %}
-                {% elif is_state('sensor.dryer_run_state', 'Standby') %}
-                  -:--
-                {% else %}
-                  {{ state_attr("sensor.dryer","remain_time").split(":")[:-1] | join(':') }}
-                {% endif %}
-              '';
-            };
-
-            blank = {
-              friendly_name = "Blank Sensor";
-              value_template = "";
-            };
-          };
-        }
+        # {
+        #   platform = "hp_ilo";
+        #   host = "10.0.0.9";
+        #   username = "Administrator";
+        #   # @TODO: REMOVE
+        #   password = "CHANGEME";
+        #   monitored_variables = [
+        #     {
+        #       name = "CPU fanspeed";
+        #       sensor_type = "server_health";
+        #       unit_of_measurement = "%";
+        #       value_template = "{{ ilo_data.fans[\"Fan 1\"].speed[0] }}";
+        #     }
+        #     {
+        #       name = "Fan 2";
+        #       sensor_type = "server_health";
+        #       unit_of_measurement = "%";
+        #       value_template = "{{ ilo_data.fans[\"Fan 2\"].speed[0] }}";
+        #     }
+        #     {
+        #       name = "Fan 3";
+        #       sensor_type = "server_health";
+        #       unit_of_measurement = "%";
+        #       value_template = "{{ ilo_data.fans[\"Fan 3\"].speed[0] }}";
+        #     }
+        #     {
+        #       name = "Server Health";
+        #       sensor_type = "server_health";
+        #       value_template = "{{ ilo_data.health_at_a_glance }}";
+        #     }
+        #     {
+        #       name = "Server Power Readings (raw)";
+        #       sensor_type = "server_power_readings";
+        #     }
+        #     {
+        #       name = "Server Power Status (raw)";
+        #       sensor_type = "server_power_status";
+        #     }
+        #     {
+        #       name = "Server health (raw)";
+        #       sensor_type = "server_health";
+        #     }
+        #     {
+        #       name = "Inlet temperature";
+        #       sensor_type = "server_health";
+        #       unit_of_measurement = "°C";
+        #       value_template = "{{ ilo_data.temperature[\"01-Inlet Ambient\"].currentreading[0] }}";
+        #     }
+        #     {
+        #       name = "Inlet temperature (raw)";
+        #       sensor_type = "server_health";
+        #       value_template = "{{ ilo_data.temperature[\"01-Inlet Ambient\"] }}";
+        #     }
+        #     {
+        #       name = "CPU 1 temperature";
+        #       sensor_type = "server_health";
+        #       unit_of_measurement = "°C";
+        #       value_template = "{{ ilo_data.temperature[\"02-CPU 1\"].currentreading[0] }}";
+        #     }
+        #     {
+        #       name = "P1 DIMM 1-4 temperature";
+        #       sensor_type = "server_health";
+        #       unit_of_measurement = "°C";
+        #       value_template = "{{ ilo_data.temperature[\"03-P1 DIMM 1-4\"].currentreading[0] }}";
+        #     }
+        #     {
+        #       name = "HD Max temperature";
+        #       sensor_type = "server_health";
+        #       unit_of_measurement = "°C";
+        #       value_template = "{{ ilo_data.temperature[\"04-HD Max\"].currentreading[0] }}";
+        #     }
+        #     {
+        #       name = "Chipset temperature";
+        #       sensor_type = "server_health";
+        #       unit_of_measurement = "°C";
+        #       value_template = "{{ ilo_data.temperature[\"05-Chipset\"].currentreading[0] }}";
+        #     }
+        #     {
+        #       name = "VR P1 temperature";
+        #       sensor_type = "server_health";
+        #       unit_of_measurement = "°C";
+        #       value_template = "{{ ilo_data.temperature[\"07-VR P1\"].currentreading[0] }}";
+        #     }
+        #     {
+        #       name = "SuperCAP Max temperature";
+        #       sensor_type = "server_health";
+        #       unit_of_measurement = "°C";
+        #       value_template = "{{ ilo_data.temperature[\"08-Supercap Max\"].currentreading[0] }}";
+        #     }
+        #     {
+        #       name = "iLO Zone temperature";
+        #       sensor_type = "server_health";
+        #       unit_of_measurement = "°C";
+        #       value_template = "{{ ilo_data.temperature[\"09-iLO Zone\"].currentreading[0] }}";
+        #     }
+        #     {
+        #       name = "LOM Zon temperature";
+        #       sensor_type = "server_health";
+        #       unit_of_measurement = "°C";
+        #       value_template = "{{ ilo_data.temperature[\"11-LOM Zone\"].currentreading[0] }}";
+        #     }
+        #     {
+        #       name = "PCI 2 temperature";
+        #       sensor_type = "server_health";
+        #       unit_of_measurement = "°C";
+        #       value_template = "{{ ilo_data.temperature[\"13-PCI 2\"].currentreading[0] }}";
+        #     }
+        #     {
+        #       name = "PCI 1 Zone temperature";
+        #       sensor_type = "server_health";
+        #       unit_of_measurement = "°C";
+        #       value_template = "{{ ilo_data.temperature[\"14-PCI 1 Zone\"].currentreading[0] }}";
+        #     }
+        #     {
+        #       name = "PCI 2 Zone temperature";
+        #       sensor_type = "server_health";
+        #       unit_of_measurement = "°C";
+        #       value_template = "{{ ilo_data.temperature[\"15-PCI 2 Zone\"].currentreading[0] }}";
+        #     }
+        #     {
+        #       name = "System Board temperature";
+        #       sensor_type = "server_health";
+        #       unit_of_measurement = "°C";
+        #       value_template = "{{ ilo_data.temperature[\"16-System Board\"].currentreading[0] }}";
+        #     }
+        #     {
+        #       name = "Sys Exhaust temperature";
+        #       sensor_type = "server_health";
+        #       unit_of_measurement = "°C";
+        #       value_template = "{{ ilo_data.temperature[\"17-Sys Exhaust\"].currentreading[0] }}";
+        #     }
+        #   ];
+        # }
+        # {
+        #   # This includes the config necessary for a washer and dryer.
+        #   # Code for dishwasher and mini-washer may be commented out as-needed,
+        #   # and are presented only for reference purposes.
+        #
+        #   # NOTE: YOUR ENTITY NAMES MAY BE DIFFERENT, THEN THIS WON'T WORK WITHOUT TWEAKING
+        #   # =================================================================================
+        #   # If your washer doesn't have entities named sensor.washer, sensor.washer_run_state
+        #   # (and similar for dryer), you have to change the names throughout here!
+        #
+        #   # NOTE: THIS CODE EXPECTS YOUR THINQ INTEGRATION TO RETURN ENGLISH STRINGS
+        #   # =================================================================================
+        #   # if your LG account is in another region/language, this will probably break unless
+        #   # you take the time to change out state strings like "Standby". Do this by watching
+        #   # your machine's entities change states during a run, or look at its history.
+        #
+        #   platform = "template";
+        #   sensors = {
+        #     front_load_washer_door_lock = {
+        #        friendly_name = "Washer Door Lock";
+        #        value_template = "{{ state_attr('sensor.front_load_washer','door_lock') }}";
+        #     };
+        #     front_load_washer_time_display = {
+        #       friendly_name = "Washer Time Display";
+        #       value_template = ''
+        #         {% if is_state('sensor.front_load_washer_run_state', '-') %}
+        #         {% elif is_state('sensor.front_load_washer_run_state', 'unavailable') %}
+        #         {% elif is_state('sensor.front_load_washer_run_state', 'Standby') %}
+        #           -:--
+        #         {% else %}
+        #           {{ state_attr("sensor.front_load_washer","remain_time").split(":")[:-1] | join(':') }}
+        #         {% endif %}
+        #       '';
+        #     };
+        #
+        #     dryer_time_display = {
+        #       friendly_name = "Dryer Time Display";
+        #       value_template = ''
+        #         {% if is_state('sensor.dryer_run_state', '-') %}
+        #         {% elif is_state('sensor.dryer_run_state', 'unavailable') %}
+        #         {% elif is_state('sensor.dryer_run_state', 'Standby') %}
+        #           -:--
+        #         {% else %}
+        #           {{ state_attr("sensor.dryer","remain_time").split(":")[:-1] | join(':') }}
+        #         {% endif %}
+        #       '';
+        #     };
+        #
+        #     blank = {
+        #       friendly_name = "Blank Sensor";
+        #       value_template = "";
+        #     };
+        #   };
+        # }
       ];
     };
   };
