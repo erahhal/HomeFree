@@ -1,6 +1,14 @@
 TODOS
 =====
 
+* HA Authentication
+  * Use local network authentication, then use Authentik proxy auth in front
+  * LDAP auth is annoying, and presents a different auth page
+  * Look into auto-initialization for HA: https://github.com/home-assistant/core/issues/16554
+    * Using auth_manager API to create user, or edit .storage/auth directly / deploy it
+* Authentik
+  * Auto LDAP deploy
+  * https://docs.goauthentik.io/docs/providers/ldap/generic_setup
 * setup VLANs
   * https://wiki.nftables.org/wiki-nftables/index.php/Main_Page
   * https://serverfault.com/questions/858556/transparent-firewall-with-nftables-and-vlans

@@ -1,5 +1,9 @@
-{ config, ... }:
+{ pkgs, ... }:
 {
+  environment.systemPackages = with pkgs; [
+    openldap
+  ];
+
   services.authentik = {
     enable = true;
     # Deployed SOPS file
@@ -18,8 +22,16 @@
     };
   };
 
-  # HTTP port
-  networking.firewall.allowedTCPPorts = [ 9000 ];
+  services.authentik-ldap = {
+    enable = true;
+    # Deployed SOPS file
+    environmentFile = "/run/secrets/authentik/authentik-ldap-env";
+  };
+
+  networking.firewall.allowedTCPPorts = [
+    # 3389    # LDAP
+    9000   # Web GUI
+  ];
 
   sops.secrets = {
     "authentik/authentik-env" = {
@@ -30,6 +42,15 @@
       owner = "homefree";
       path = "/run/secrets/authentik/authentik-env";
       restartUnits = [ "authentik.service" ];
+    };
+    "authentik/authentik-ldap-env" = {
+      format = "yaml";
+      # @TODO: Move secrets to this folder
+      sopsFile = ../secrets/authentik.yaml;
+
+      owner = "homefree";
+      path = "/run/secrets/authentik/authentik-ldap-env";
+      restartUnits = [ "authentik-ldap.service" ];
     };
     "authentik/postgres-password" = {
       format = "yaml";
