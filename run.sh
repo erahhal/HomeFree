@@ -81,6 +81,8 @@ pids[1]=$!
     # -netdev tap,id=enp1s0,br=hfbr0,helper=$QEMU_BRIDGE_HELPER \
     # -device e1000,netdev=enp1s0,mac=52:53:54:55:56:01 \
 
+# Port 8885: Caddy default HTTP
+# Port 8445: Caddy default HTTPS
 # Port 8123: Home Assistant
 # Port 9000: Authentik
 sudo -E qemu-kvm \
