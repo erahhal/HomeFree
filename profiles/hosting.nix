@@ -25,6 +25,61 @@ in
       extraConfig = hostConfig;
     };
 
+    virtualHosts."http://authentik.homefree.lan, http://auth.homefree.lan" = {
+      # Nix config mangles the log name, so set it manually
+      logFormat = ''
+        output file ${config.services.caddy.logDir}/access-authentik.log
+      '';
+      ## @TODO: Remove headers and check if still works
+      extraConfig = ''
+        reverse_proxy http://10.1.1.1:9000
+        header {
+          Strict-Transport-Security "max-age=31536000; includeSubdomains"
+          X-XSS-Protection "1; mode=block"
+          X-Content-Type-Options "nosniff"
+          X-Frame-Options "SAMEORIGIN"
+          Referrer-Policy "same-origin"
+        }
+      '';
+    };
+
+    ## For use with LDAP
+    # virtualHosts."http://ha.homefree.lan" = {
+    #   # Nix config mangles the log name, so set it manually
+    #   logFormat = ''
+    #     output file ${config.services.caddy.logDir}/access-homeassistant.log
+    #   '';
+      ## @TODO: Remove headers and check if still works
+    #   extraConfig = ''
+    #     reverse_proxy http://10.1.1.1:8123
+    #     header {
+    #       Strict-Transport-Security "max-age=31536000; includeSubdomains"
+    #       X-XSS-Protection "1; mode=block"
+    #       X-Content-Type-Options "nosniff"
+    #       X-Frame-Options "SAMEORIGIN"
+    #       Referrer-Policy "same-origin"
+    #     }
+    #   '';
+    # };
+
+    virtualHosts."http://ha.homefree.lan" = {
+      # Nix config mangles the log name, so set it manually
+      logFormat = ''
+        output file ${config.services.caddy.logDir}/access-homeassistant.log
+      '';
+      ## @TODO: Remove headers and check if still works
+      extraConfig = ''
+        reverse_proxy http://10.1.1.1:9000
+        header {
+          Strict-Transport-Security "max-age=31536000; includeSubdomains"
+          X-XSS-Protection "1; mode=block"
+          X-Content-Type-Options "nosniff"
+          X-Frame-Options "SAMEORIGIN"
+          Referrer-Policy "same-origin"
+        }
+      '';
+    };
+
     virtualHosts."http://radicale.homefree.lan" = {
       logFormat = ''
         output file ${config.services.caddy.logDir}/access-radicale.log

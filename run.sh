@@ -89,6 +89,7 @@ sudo -E qemu-kvm \
     $GUI_FLAG \
     -cpu host \
     -enable-kvm \
+    -display gtk,show-cursor=on \
     -chardev socket,id=char0,path=/tmp/vhostqemu \
     -device vhost-user-fs-pci,queue-size=1024,chardev=char0,tag=mount_homefree_source \
     -object memory-backend-file,id=mem,size=8G,mem-path=/dev/shm,share=on \
@@ -110,6 +111,7 @@ sudo -E qemu-kvm \
     $GUI_FLAG \
     -cpu host \
     -enable-kvm \
+    -display gtk,show-cursor=on \
     -drive file=$OVMF_CODE,if=pflash,format=raw,unit=0,readonly=on \
     -drive file=./build/OVMF_VARS.fd,if=pflash,format=raw,unit=1 \
     -hda ./build/lan-client.qcow2 \
