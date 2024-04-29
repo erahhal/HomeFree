@@ -1,6 +1,11 @@
 TODOS
 =====
 
+* Make a flake that sets up host machine for dev
+  * hosts file changes (networking.extraHosts)
+  * qemu
+  * OVMF.fd
+  * virtiofsd
 * HA Authentication
   * Use local network authentication, then use Authentik proxy auth in front
   * LDAP auth is annoying, and presents a different auth page
@@ -14,7 +19,6 @@ TODOS
   * https://serverfault.com/questions/858556/transparent-firewall-with-nftables-and-vlans
   * https://serverfault.com/questions/1057819/route-untagged-vlan-to-a-tagged-vlan-with-nftables
 * setup ipv6
-* Make a flake that sets up host machine for dev
 * Figure out how to use host id_rsa.pub in build, rather than hard-coded key
   * maybe share ~/.ssh/ida_rsa.pub into machine? would cause problems if share failed
 * Determine if there are any problems with disabling "wait for network" to get rid of error
