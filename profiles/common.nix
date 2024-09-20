@@ -155,10 +155,6 @@
   # Setting to true will kill things like tmux on logout
   services.logind.killUserProcesses = false;
 
-  # network locator e.g. scanners and printers
-  services.avahi.enable = true;
-  services.avahi.nssmdns = true;
-
   services.gvfs.enable = true; # SMB mounts, trash, and other functionality
   services.tumbler.enable = true; # Thumbnail support for images
 
@@ -210,7 +206,7 @@
   programs.neovim = {
     enable = true;
     defaultEditor = true;
-};
+  };
 
   environment.interactiveShellInit = ''
     alias vi='nvim'

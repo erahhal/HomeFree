@@ -12,8 +12,8 @@ build_image() {
     HOST=$1
     nix build .#nixosConfigurations.${HOST}.config.formats.qcow
     mkdir -p ./build
-    mv ./result ./${HOST}.qcow2
-    rsync -L ./${HOST}.qcow2 ./build/${HOST}.qcow2
+    mv ./result ./${HOST}-image
+    rsync -L ./${HOST}-image/nixos.qcow2 ./build/${HOST}.qcow2
     chmod 750 ./build/${HOST}.qcow2
 }
 

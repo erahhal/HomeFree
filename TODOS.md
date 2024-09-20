@@ -14,6 +14,8 @@ TODOS
 * Authentik
   * Auto LDAP deploy
   * https://docs.goauthentik.io/docs/providers/ldap/generic_setup
+* Security
+  * Wazuh
 * setup VLANs
   * https://wiki.nftables.org/wiki-nftables/index.php/Main_Page
   * https://serverfault.com/questions/858556/transparent-firewall-with-nftables-and-vlans
