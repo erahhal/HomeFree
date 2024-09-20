@@ -13,10 +13,22 @@ liberate you from giant cloud providers.
 
 ## Don't suckle the Feed. Cultivate the Seed.
 
+## Building
+
+```
+make build-image
+```
+
+## Running
+
+```
+make run
+```
+
 ## Adding a secret
 
 ```
-nix-shell -p sops --run "sops secrets/app.yaml"
+nix-shell -p sops --run "sops secrets/authentik.yaml"
 ```
 
 Then add a key or keys, e.g.
@@ -42,3 +54,21 @@ sops.secrets."app" = {
 };
 ```
 and reference the path in config
+
+## Getting server key
+
+After starting the vm using `make run`, run `make generate-sops-config`
+
+Then, within the VM:
+
+```
+cd ~/nixcfg
+make build
+```
+
+## Initializing Authentik
+
+Browse to:
+
+http://ha.homefree.lan:9000/if/flow/initial-setup/
+

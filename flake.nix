@@ -3,7 +3,7 @@
 
   inputs = {
     # Use stable for main
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
 
     # Trails trunk - latest packages with broken commits filtered out
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";

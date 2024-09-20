@@ -345,7 +345,7 @@ in
     ];
 
     # network locator e.g. scanners and printers
-    nssmdns = true;
+    nssmdns4 = true;
   };
 
   #-----------------------------------------------------------------------------------------------------
