@@ -16,7 +16,7 @@ in
     # Afterward, it can be re-included
     ## @TODO: Auto-initializatin for HA
     ## See: https://github.com/home-assistant/core/issues/16554
-    # ./ldap.nix
+    ./ldap.nix
     ./trusted-networks.nix
     ./weather.nix
   ];
@@ -34,10 +34,49 @@ in
 
     extraComponents = [
       # Components required to complete the onboarding
+      "adguard"
+      "backup"
+      "brother"
+      "ecobee"
+      "enphase_envoy"
       "esphome"
+      "flume"
+      "iaqualink"
+      "jellyfin"
+      "litterrobot"
       "met"
+      "mqtt"
       "radio_browser"
+      "roborock"
+      "schlage"
+      "snapcast"
+      "synology_dsm"
+      "unifi"
+      "usgs_earthquakes_feed"
+      "volumio"
+      "wake_on_lan"
+      "yamaha_musiccast"
+      "zwave_js"
     ];
+
+    customComponents = with pkgs.home-assistant-custom-components; [
+      frigate
+      smartthinq-sensors
+    ];
+
+    customLovelaceModules = with pkgs.home-assistant-custom-lovelace-modules; [
+      button-card
+      card-mod
+      decluttering-card
+      lg-webos-remote-control
+      light-entity-card
+      mini-graph-card
+      mini-media-player
+      multiple-entity-row
+      mushroom
+      valetudo-map-card
+    ];
+
     config = {
       # Includes dependencies for a basic setup
       # https://www.home-assistant.io/integrations/default_config/
@@ -66,6 +105,7 @@ in
         ];
       };
 
+      ## enable with empty top level key
       wake_on_lan = {};
 
       switch = [

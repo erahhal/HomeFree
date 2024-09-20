@@ -12,7 +12,7 @@ rm /tmp/id_rsa
 # remove key from known_hosts
 ssh-keygen -R "[localhost]:2223"
 # Get GPG fingerprint of server RSA key
-SERVER_GPG_FINGERPRINT=$(nix-shell --quiet -p gnupg -p ssh-to-pgp --run "ssh -o StrictHostKeychecking=no -p 2223 homefree@localhost \"sudo cat /etc/ssh/ssh_host_rsa_key\" | ssh-to-pgp -private-key | gpg --import --quiet" 2>&1)
+SERVER_GPG_FINGERPRINT=$(nix-shell --quiet -p gnupg -p ssh-to-pgp --run "ssh -o LogLevel=ERROR -o StrictHostKeychecking=no -p 2223 homefree@localhost \"sudo cat /etc/ssh/ssh_host_rsa_key\" | ssh-to-pgp -private-key | gpg --import --quiet" 2>&1)
 
 # This example uses YAML anchors which allows reuse of multiple keys
 # without having to repeat yourself.
@@ -40,3 +40,7 @@ creation_rules:
       - *user_homefree
       - *server_homefree
 EOF
+
+for config in $(find secrets -name '*.yaml'); do
+    nix-shell -p sops --run "sops updatekeys $config"
+done
