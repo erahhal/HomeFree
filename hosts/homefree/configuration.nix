@@ -13,6 +13,7 @@
     ../../profiles/hosting.nix
     ../../profiles/postgres.nix
     ../../profiles/router.nix
+    ../../profiles/vaultwarden.nix
     ../../profiles/virtual-machine.nix
   ];
 

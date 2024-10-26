@@ -15,6 +15,9 @@ in
     ## reload config while running instead of restarting. true by default.
     enableReload = true;
 
+    ## Temporarily set to staging
+    acmeCA = "https://acme-staging-v02.api.letsencrypt.org/directory";
+
     ## With both http and https set, caddy won't redirect http to https
     ## REMOVE THIS IN PROD
     virtualHosts."http://localhost, https://localhost" = {
@@ -25,7 +28,7 @@ in
       extraConfig = hostConfig;
     };
 
-    virtualHosts."http://authentik.homefree.lan, http://auth.homefree.lan" = {
+    virtualHosts."http://authentik.homefree.lan, http://auth.homefree.lan, https://authentik.homefree.host" = {
       # Nix config mangles the log name, so set it manually
       logFormat = ''
         output file ${config.services.caddy.logDir}/access-authentik.log
@@ -33,6 +36,23 @@ in
       ## @TODO: Remove headers and check if still works
       extraConfig = ''
         reverse_proxy http://10.1.1.1:9000
+        header {
+          Strict-Transport-Security "max-age=31536000; includeSubdomains"
+          X-XSS-Protection "1; mode=block"
+          X-Content-Type-Options "nosniff"
+          X-Frame-Options "SAMEORIGIN"
+          Referrer-Policy "same-origin"
+        }
+      '';
+    };
+
+    virtualHosts."http://vaultwarden.homefree.lan, https://vaultwarden.homefree.host" = {
+      # Nix config mangles the log name, so set it manually
+      logFormat = ''
+        output file ${config.services.caddy.logDir}/access-vaultwarden.log
+      '';
+      extraConfig = ''
+        reverse_proxy http://10.1.1.1:8222
         header {
           Strict-Transport-Security "max-age=31536000; includeSubdomains"
           X-XSS-Protection "1; mode=block"
