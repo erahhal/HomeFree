@@ -1,3 +1,5 @@
 build
 result
 *.qcow2
+homefree-image
+lan-client-image

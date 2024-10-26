@@ -3,7 +3,7 @@
 {
   imports = [
     inputs.nixos-generators.nixosModules.all-formats
-    ../../profiles/agenix.nix
+    # ../../profiles/agenix.nix
     ../../profiles/authentik.nix
     ../../profiles/common.nix
     ../../profiles/config-editor.nix

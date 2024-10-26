@@ -72,3 +72,7 @@ Browse to:
 
 http://ha.homefree.lan:9000/if/flow/initial-setup/
 
+## Changing password for Authentik
+
+ak create_recovery_key 10 akadmin
+
