@@ -1,6 +1,6 @@
-{ inputs, pkgs, system, ... }:
+{ homefree-inputs, system, ... }:
 {
-  environment.systemPackages = with pkgs; [
-    inputs.nix-editor.packages.${system}.default
+  environment.systemPackages = [
+    homefree-inputs.nix-editor.packages.${system}.default
   ];
 }

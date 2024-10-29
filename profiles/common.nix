@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, system, ...}:
+{ homefree-inputs, pkgs, system, ...}:
 {
 
   # --------------------------------------------------------------------------------------
@@ -11,7 +11,7 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.11"; # Did you read the comment?
+  system.stateVersion = "24.05"; # Did you read the comment?
 
   # @TODO: Could this be useful for auto-upgrading systems out there?
   # system.autoUpgrade = {
@@ -27,7 +27,7 @@
   # };
 
   nix = {
-    nixPath = [ "nixpkgs=${inputs.nixpkgs}" "nixos-config=/home/homefree/nixcfg" ];
+    nixPath = [ "nixpkgs=${homefree-inputs.nixpkgs}" "nixos-config=/home/homefree/nixcfg" ];
 
     # Which package collection to use system-wide.
     package = pkgs.nixFlakes;
@@ -73,7 +73,7 @@
         keep-outputs = true
       '';
 
-    registry.nixpkgs.flake = inputs.nixpkgs;
+    registry.nixpkgs.flake = homefree-inputs.nixpkgs;
 
     # Garbage collection - deletes all unreachable paths in Nix store.
     gc = {
@@ -119,22 +119,6 @@
 
   nixpkgs = {
     hostPlatform = system;
-    config = {
-      ## Allow proprietary packages.
-      # allowUnfree = true;
-      ## Allow broken packages.
-      # allowBroken = true;
-      packageOverrides = pkgs: {
-        unstable = import inputs.nixpkgs-unstable {
-          config = config.nixpkgs.config;
-          inherit system;
-        };
-        trunk = import inputs.nixpkgs-trunk {
-          config = config.nixpkgs.config;
-          inherit system;
-        };
-      };
-    };
   };
 
   # --------------------------------------------------------------------------------------
@@ -197,9 +181,6 @@
 
   programs.nix-ld.enable = true;
 
-  programs.command-not-found.enable = true;
-  programs.command-not-found.dbPath = "${inputs.nixpkgs}/programs.sqlite";
-
   programs.mosh.enable = true;
 
   # environment.variables.EDITOR = "neovim";
@@ -251,7 +232,7 @@
     minicom
     neofetch
     neovim
-    unstable.nil
+    nil
     nix-index
     openssl
     # openjdk16-bootstrap
