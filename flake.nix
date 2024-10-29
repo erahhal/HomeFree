@@ -5,12 +5,6 @@
     # Use stable for main
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
 
-    # Trails trunk - latest packages with broken commits filtered out
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-
-    # Very latest packages - some commits broken
-    nixpkgs-trunk.url = "github:NixOS/nixpkgs";
-
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     nixos-generators = {
@@ -19,8 +13,6 @@
     };
 
     nix-editor.url = "github:vlinkz/nix-editor";
-
-    agenix.url = "github:ryantm/agenix";
 
     sops-nix.url = "github:Mic92/sops-nix";
 
@@ -47,59 +39,19 @@
     # };
   };
 
-  outputs = {
-    self,
-    nixos-generators,
-    nixos-hardware,
-    nixpkgs,
-    agenix,
-    sops-nix,
-    authentik-nix,
-    ...
-  }@inputs:
+  outputs = { ... } @ inputs:
+  let
+    system = "x86_64-linux";
+    # Can't use name "inputs" as it gets overridden by parent flakes that define inputs.nixpkgs.lib.nixosSystem
+    homefree-inputs = inputs;
+  in
   {
-    nixosConfigurations = {
-      homefree =
-      let
-        system = "x86_64-linux";
-      in
-      inputs.nixpkgs.lib.nixosSystem {
-        system = system;
-        modules = [
-          nixos-hardware.nixosModules.common-cpu-intel
-          nixos-hardware.nixosModules.common-pc-laptop
-          agenix.nixosModules.default
-          sops-nix.nixosModules.sops
-          authentik-nix.nixosModules.default
-          # inputs.nixos-router.nixosModules.default
-          # inputs.notnft.lib.${system}
+    nixosModules = rec {
+      homefree = import ./default.nix { inherit homefree-inputs; inherit system; };
+      imports = [ ];
+      default = homefree;
 
-          (import ./hosts/homefree/configuration.nix)
-        ];
-        specialArgs = {
-          inherit inputs;
-          inherit system;
-          inherit agenix;
-          inherit sops-nix;
-        };
-      };
-      lan-client =
-      let
-        system = "x86_64-linux";
-      in
-      inputs.nixpkgs.lib.nixosSystem {
-        system = system;
-        modules = [
-          nixos-hardware.nixosModules.common-cpu-intel
-          nixos-hardware.nixosModules.common-pc-laptop
-
-          (import ./hosts/lan-client/configuration.nix)
-        ];
-        specialArgs = {
-          inherit inputs;
-          inherit system;
-        };
-      };
+      lan-client = import ./lan-client.nix { inherit homefree-inputs; inherit system; };
     };
   };
 }

@@ -1,8 +1,7 @@
-{ inputs, ... }:
+{ ... }:
 
 {
   imports = [
-    inputs.nixos-generators.nixosModules.all-formats
     ../../profiles/common.nix
     ../../profiles/hardware-configuration.nix
   ];

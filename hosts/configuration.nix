@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, inputs, lib, ... }:
 
 {
   imports = [
@@ -50,11 +50,10 @@
 
   # @TODO: Make this UI configurable
   ## Must be forced due to Authentik hard coding a value of UTC
-  time.timeZone = lib.mkForce "America/Los_Angeles";
+  time.timeZone = lib.mkForce config.homefree.system.timeZone;
 
   networking = {
-    # @TODO: Make this UI configurable
-    hostName = "homefree";
+    hostName = config.homefree.system.hostName;
     ## NetworkManager disabled in favor of networkd
     useNetworkd = true;
     wireless = {
