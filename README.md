@@ -76,3 +76,6 @@ http://ha.homefree.lan:9000/if/flow/initial-setup/
 
 ak create_recovery_key 10 akadmin
 
+## Setting up HAProxy to transparently proxy TSL requests to Caddy
+
+https://forum.opnsense.org/index.php?topic=18538.msg84958#msg84958
