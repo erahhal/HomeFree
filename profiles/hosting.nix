@@ -28,7 +28,7 @@ in
       extraConfig = hostConfig;
     };
 
-    virtualHosts."http://authentik.homefree.lan, http://auth.homefree.lan, https://authentik.${config.homefree.system.domain}" = {
+    virtualHosts."http://authentik.homefree.lan, http://auth.homefree.lan, https://authentik.${config.homefree.system.domain}, https://auth.${config.homefree.system.domain}" = {
       # Nix config mangles the log name, so set it manually
       logFormat = ''
         output file ${config.services.caddy.logDir}/access-authentik.log
@@ -90,6 +90,23 @@ in
       ## @TODO: Remove headers and check if still works
       extraConfig = ''
         reverse_proxy http://10.1.1.1:9000
+        header {
+          Strict-Transport-Security "max-age=31536000; includeSubdomains"
+          X-XSS-Protection "1; mode=block"
+          X-Content-Type-Options "nosniff"
+          X-Frame-Options "SAMEORIGIN"
+          Referrer-Policy "same-origin"
+        }
+      '';
+    };
+
+    virtualHosts."http://git.homefree.lan, https://git.${config.homefree.system.domain}" = {
+      # Nix config mangles the log name, so set it manually
+      logFormat = ''
+        output file ${config.services.caddy.logDir}/access-git.log
+      '';
+      extraConfig = ''
+        reverse_proxy http://10.1.1.1:3000
         header {
           Strict-Transport-Security "max-age=31536000; includeSubdomains"
           X-XSS-Protection "1; mode=block"
