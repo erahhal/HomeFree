@@ -7,6 +7,7 @@
     ../../profiles/config-editor.nix
     ../../profiles/ddclient.nix
     ../../profiles/home-assistant
+    ../../profiles/gitea.nix
     ../../profiles/hardware-configuration.nix
     ../../profiles/hosting.nix
     ../../profiles/postgres.nix
