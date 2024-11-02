@@ -11,7 +11,7 @@
     protocol = "hetzner";
     username = "erahhal";
     zone = "homefree.host";
-    domains = [ "*" "www" "dev" ];
+    domains = [ "@" "*" "www" "dev" ];
     passwordFile = "/run/secrets/ddclient/ddclient-password";
     use = "web, web=ipinfo.io/ip";
     verbose = true;

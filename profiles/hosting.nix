@@ -16,11 +16,11 @@ in
     enableReload = true;
 
     ## Temporarily set to staging
-    acmeCA = "https://acme-staging-v02.api.letsencrypt.org/directory";
+    # acmeCA = "https://acme-staging-v02.api.letsencrypt.org/directory";
 
     ## With both http and https set, caddy won't redirect http to https
     ## REMOVE THIS IN PROD
-    virtualHosts."http://localhost, https://localhost" = {
+    virtualHosts."http://localhost, https://localhost, https://${config.homefree.system.domain}, https://www.${config.homefree.system.domain}" = {
       # Nix config mangles the log name, so set it manually
       logFormat = ''
         output file ${config.services.caddy.logDir}/access-localhost.log
@@ -28,7 +28,7 @@ in
       extraConfig = hostConfig;
     };
 
-    virtualHosts."http://authentik.homefree.lan, http://auth.homefree.lan, https://authentik.homefree.host" = {
+    virtualHosts."http://authentik.homefree.lan, http://auth.homefree.lan, https://authentik.${config.homefree.system.domain}" = {
       # Nix config mangles the log name, so set it manually
       logFormat = ''
         output file ${config.services.caddy.logDir}/access-authentik.log
@@ -46,7 +46,7 @@ in
       '';
     };
 
-    virtualHosts."http://vaultwarden.homefree.lan, https://vaultwarden.homefree.host" = {
+    virtualHosts."http://vaultwarden.homefree.lan, https://vaultwarden.${config.homefree.system.domain}" = {
       # Nix config mangles the log name, so set it manually
       logFormat = ''
         output file ${config.services.caddy.logDir}/access-vaultwarden.log
@@ -82,7 +82,7 @@ in
     #   '';
     # };
 
-    virtualHosts."http://ha.homefree.lan" = {
+    virtualHosts."http://ha.homefree.lan, https://ha.${config.homefree.system.domain}" = {
       # Nix config mangles the log name, so set it manually
       logFormat = ''
         output file ${config.services.caddy.logDir}/access-homeassistant.log
@@ -100,7 +100,7 @@ in
       '';
     };
 
-    virtualHosts."http://radicale.homefree.lan" = {
+    virtualHosts."http://radicale.homefree.lan, https://radicale.${config.homefree.system.domain}" = {
       logFormat = ''
         output file ${config.services.caddy.logDir}/access-radicale.log
       '';
