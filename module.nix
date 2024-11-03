@@ -12,12 +12,14 @@
         description = "Hostname for the system";
       };
 
+      ## @TODO: Detect during setup
       timeZone = lib.mkOption {
         type = lib.types.str;
         default = "America/Los_Angeles";
         description = "Timezone for the system";
       };
 
+      ## @TODO: Detect during setup
       defaultLocale = lib.mkOption {
         type = lib.types.str;
         default = "en_US.UTF-8";
@@ -26,6 +28,7 @@
 
       searchDomainsLocal = lib.mkOption {
         type = lib.types.listOf lib.types.str;
+        ## @TODO: Should this be "local"?
         default = [ "localdomain" ];
         description = "Search domain for the system";
       };
@@ -55,7 +58,23 @@
       };
     };
 
-    ddclient = lib.mkOption {
+    network = {
+      ## @TODO: Detect during setup
+      wan-interface = lib.mkOption {
+        type = lib.types.str;
+        default = "ens3";
+        description = "External interface to the internet";
+      };
+
+      ## @TODO: Detect during setup
+      lan-interface = lib.mkOption {
+        type = lib.types.str;
+        default = "ens5";
+        description = "Internal interface to the local network";
+      };
+    };
+
+    ddclient = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -97,7 +116,29 @@
         default = "web, web=ipinfo.io/ip";
         description = "Use format for dynamic DNS client";
       };
+    };
 
+    wireguard = {
+      peers = lib.mkOption {
+        type = lib.types.listOf lib.types.attrs;
+        default = [ ];
+        description = "List of wireguard peers";
+        example = ''
+          [
+            # List of allowed peers.
+            { # Feel free to give a meaning full name
+              # Public key of the peer (not a file path).
+              publicKey = "{client public key}";
+              # List of IPs assigned to this peer within the tunnel subnet. Used to configure routing.
+              allowedIPs = [ "10.100.0.2/32" ];
+            }
+            { # John Doe
+              publicKey = "{john doe's public key}";
+              allowedIPs = [ "10.100.0.3/32" ];
+            }
+          ];
+        '';
+      };
     };
   };
 

@@ -10,10 +10,12 @@
     ../../profiles/gitea.nix
     ../../profiles/hardware-configuration.nix
     ../../profiles/hosting.nix
+    ../../profiles/nixvim.nix
     ../../profiles/postgres.nix
     ../../profiles/router.nix
     ../../profiles/vaultwarden.nix
     ../../profiles/virtual-machine.nix
+    ../../profiles/wireguard.nix
   ];
 
   # --------------------------------------------------------------------------------------

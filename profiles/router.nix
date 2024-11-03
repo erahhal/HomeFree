@@ -1,11 +1,9 @@
-{ homefree-inputs, pkgs, ... }:
+{ config, homefree-inputs, pkgs, ... }:
 
 let
   # @TODO: How to determine interface names?
-  # wan-interface = "ens5";
-  wan-interface = "ens3";
-  # lan-interface = "ens6";
-  lan-interface = "ens5";
+  wan-interface = config.homefree.network.wan-interface;
+  lan-interface = config.homefree.network.lan-interface;
   vlan-wan-id = 100;
   vlan-lan-id = 200;
   vlan-iot-id = 201;
@@ -115,7 +113,10 @@ in
     # Firewall
     #-----------------------------------------------------------------------------------------------------
 
-    nat.enable = false;
+    ## @TODO: Evaluate this
+    # nat.enable = false;
+
+    ## @TODO: Evaluate this
     firewall.enable = false;
 
     ## @TODO: Look into nftables Nix DSL: https://github.com/chayleaf/notnft

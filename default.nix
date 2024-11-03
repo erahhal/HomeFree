@@ -8,6 +8,7 @@
     homefree-inputs.nixos-hardware.nixosModules.common-pc-laptop
     homefree-inputs.sops-nix.nixosModules.sops
     homefree-inputs.authentik-nix.nixosModules.default
+    homefree-inputs.nixvim.nixosModules.nixvim
     ./module.nix
     ./hosts/homefree/configuration.nix
   ];
