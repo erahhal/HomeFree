@@ -183,17 +183,6 @@
 
   programs.mosh.enable = true;
 
-  # environment.variables.EDITOR = "neovim";
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-  };
-
-  environment.interactiveShellInit = ''
-    alias vi='nvim'
-    alias vim='nvim'
-  '';
-
   environment.systemPackages = with pkgs; [
     at-spi2-core
     backblaze-b2
@@ -231,7 +220,6 @@
     memtest86plus
     minicom
     neofetch
-    neovim
     nil
     nix-index
     openssl
