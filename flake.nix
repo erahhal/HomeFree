@@ -2,7 +2,6 @@
   description = "HomeFree Self-Hosting Platform";
 
   inputs = {
-    # Use stable for main
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -27,10 +26,11 @@
     };
 
     authentik-nix = {
-      url = "github:nix-community/authentik-nix";
+      # url = "github:nix-community/authentik-nix/version/2024.8.3";
+      # url = "github:nix-community/authentik-nix";
+      url = "github:erahhal/authentik-nix/no-docs";
       ## optional overrides. Note that using a different version of nixpkgs can cause issues, especially with python dependencies
-      # inputs.nixpkgs.follows = "nixpkgs"
-      # inputs.flake-parts.follows = "flake-parts"
+      # inputs.flake-parts.follows = "flake-parts";
     };
 
     # notnft = {
@@ -44,19 +44,34 @@
     # };
   };
 
-  outputs = { ... } @ inputs:
+  outputs = { self, ... } @ inputs:
   let
     system = "x86_64-linux";
     # Can't use name "inputs" as it gets overridden by parent flakes that define inputs.nixpkgs.lib.nixosSystem
     homefree-inputs = inputs;
+    # versionInfo = import ./version.nix;
+    # version = versionInfo.version + (inputs.nixpkgs.lib.optionalString (!versionInfo.released) "-dirty");
   in
   {
     nixosModules = rec {
       homefree = import ./default.nix { inherit homefree-inputs; inherit system; };
       imports = [ ];
       default = homefree;
-
       lan-client = import ./lan-client.nix { inherit homefree-inputs; inherit system; };
+    };
+    nixosConfigurations = {
+      homefree-test = inputs.nixpkgs.lib.nixosSystem {
+        system = system;
+        modules = [
+          self.nixosModules.homefree
+        ];
+      };
+      lan-client = inputs.nixpkgs.lib.nixosSystem {
+        system = system;
+        modules = [
+          self.nixosModules.lan-client
+        ];
+      };
     };
   };
 }

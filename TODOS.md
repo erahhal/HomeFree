@@ -1,6 +1,59 @@
 TODOS
 =====
 
+* Go Live Checklist
+  * P1
+    * [ ] Landing Page
+    * [ ] Blog
+    * [ ] Mirror to Github
+    * [ ] Caddy proxy to HP server, HA
+      * [ ] HAProxy / Unbound override configuration migration
+    * [ ] Wireguard
+    * [ ] AdGuard
+      * [ ] Copy exceptions
+    * [ ] DHCP
+      * [ ] Copy Static IPs
+    * [ ] DNS (Dnsmasq or Unbound)
+    * [ ] qemu setup
+  * P2
+    * [ ] Backups
+    * [ ] Migration of services from HP server, HA
+    * [ ] SSO/Authentik
+    * [ ] GUI for setup, management
+    * [ ] Roadmap
+      * Problem statement
+      * Goal
+      * Top issues to solve
+      * Schedule
+      * Long term vision
+    * [ ] NAS
+    * [ ] SSO
+    * [ ] Security (wazuh ?)
+  * P3
+    * [ ] Monitoring Dashboard
+    * [ ] VLANs
+    * [ ] Health / Alerts
+    * [ ] Mirror to Gitlab
+    * [ ] Mirror to Bitbucket
+    * [ ] Mirror to Sourcehut
+    * [ ] Mirror to Codeberg
+    * [ ] Mirror to Gitea
+    * [ ] Mirror to Gogs
+
+* Firewall
+  * Aliases
+  * NAT
+    * Port forwarding
+    * 1:1 NAT
+    * Outbound
+    * NPTv6
+  * Rules
+  * Shaper
+* Services
+  * Captive Portal
+  * Intrusion Detection
+
+
 * Make a flake that sets up host machine for dev
   * hosts file changes (networking.extraHosts)
       networking.extraHosts = ''

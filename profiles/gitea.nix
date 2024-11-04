@@ -8,7 +8,7 @@
     };
     settings = {
       server = {
-        HTTP_PORT = 3000;
+        HTTP_PORT = 3001;
         DOMAIN = "git.${config.homefree.system.domain}";
       };
     };

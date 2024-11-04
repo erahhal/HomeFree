@@ -1,8 +1,15 @@
 ## @TODO: Look at the following for a VM test setup
 ## https://github.com/nix-community/disko/blob/master/module.nix
 
-{ lib, ... }:
+{ config, lib, extendModules, ... }:
 
+let
+  vmVariantWithHomefree = extendModules {
+    modules = [
+      ./lib/interactive-vm.nix
+    ];
+  };
+in
 {
   options.homefree = {
     system = {
@@ -142,6 +149,18 @@
     };
   };
 
+  options.virtualisation.vmVariantWithHomefree = lib.mkOption {
+    description = ''
+      Machine configuration to be added for the vm script available at `.system.build.vmWithHomefree`.
+    '';
+    inherit (vmVariantWithHomefree) type;
+    default = { };
+    visible = "shallow";
+  };
+
   config = {
+    system.build = {
+      testVms = lib.mkDefault config.virtualisation.vmVariantWithHomefree.system.build.vmWithHomefree;
+    };
   };
 }

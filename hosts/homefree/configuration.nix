@@ -2,7 +2,8 @@
 
 {
   imports = [
-    ../../profiles/authentik.nix
+    ../../profiles/adguardhome.nix
+    # ../../profiles/authentik.nix
     ../../profiles/common.nix
     ../../profiles/config-editor.nix
     ../../profiles/ddclient.nix
@@ -13,6 +14,7 @@
     ../../profiles/nixvim.nix
     ../../profiles/postgres.nix
     ../../profiles/router.nix
+    ../../profiles/unifi.nix
     ../../profiles/vaultwarden.nix
     ../../profiles/virtual-machine.nix
     ../../profiles/wireguard.nix
