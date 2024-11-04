@@ -465,6 +465,10 @@
 
     plugins.trouble.enable = true;
 
+    # ## Needed for telescope, nvim-tree, trouble, diffview, bufferline, and other plugins
+    # ## Only on unstable at the moment
+    # plugins.web-devicons.enable = true;
+
     ## ------------------------------------------------
     ## Extra Plugins
     ## ------------------------------------------------

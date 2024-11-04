@@ -8,6 +8,7 @@
     enable = true;
     # Deployed SOPS file
     environmentFile = "/run/secrets/authentik/authentik-env";
+    ## @TODO: make these configurable from module
     settings = {
       email = {
         host = "smtp.homefree.host";

@@ -30,6 +30,7 @@
     nixPath = [ "nixpkgs=${homefree-inputs.nixpkgs}" "nixos-config=/home/homefree/nixcfg" ];
 
     # Which package collection to use system-wide.
+    # package = pkgs.nixVersions.stable;
     package = pkgs.nixFlakes;
 
     settings = {
@@ -73,7 +74,7 @@
         keep-outputs = true
       '';
 
-    registry.nixpkgs.flake = homefree-inputs.nixpkgs;
+    # registry.nixpkgs.flake = homefree-inputs.nixpkgs;
 
     # Garbage collection - deletes all unreachable paths in Nix store.
     gc = {

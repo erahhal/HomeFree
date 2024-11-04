@@ -1,4 +1,4 @@
-{ homefree-inputs, system, ... }:
+{ homefree-inputs, ... }:
 {
   _module.args.homefree-inputs = homefree-inputs;
 
