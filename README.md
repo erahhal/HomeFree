@@ -13,17 +13,13 @@ liberate you from giant cloud providers.
 
 ## Don't suckle the Feed. Cultivate the Seed.
 
-## Building
+## Installing
 
-```
-make build-image
-```
+Install NixOS directly, or use a deployment system such as [NixOS Anywhere](https://github.com/nix-community/nixos-anywhere)
 
-## Running
+Update system's configuration to look like something in [example-flake.nix](./example-flake.nix)
 
-```
-make run
-```
+Configure system by setting up values as defined in the [HomeFree module](./module.nix)
 
 ## Adding a secret
 
