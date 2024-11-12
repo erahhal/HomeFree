@@ -13,7 +13,8 @@
     zone = "homefree.host";
     domains = [ "@" "*" "www" "dev" ];
     passwordFile = "/run/secrets/ddclient/ddclient-password";
-    use = "web, web=ipinfo.io/ip";
+    usev4 = "web, web=ipinfo.io/ip";
+    usev6 = "web, web=v6.ipinfo.io/ip";
     verbose = true;
   };
 

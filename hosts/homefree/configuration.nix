@@ -3,7 +3,7 @@
 {
   imports = [
     ../../profiles/adguardhome.nix
-    # ../../profiles/authentik.nix
+    ../../profiles/authentik.nix
     ../../profiles/common.nix
     ../../profiles/config-editor.nix
     ../../profiles/ddclient.nix
