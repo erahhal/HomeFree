@@ -30,8 +30,8 @@
     nixPath = [ "nixpkgs=${homefree-inputs.nixpkgs}" "nixos-config=/home/homefree/nixcfg" ];
 
     # Which package collection to use system-wide.
-    # package = pkgs.nixVersions.stable;
-    package = pkgs.nixFlakes;
+    package = pkgs.nixVersions.stable;
+    # package = pkgs.nixFlakes;
 
     settings = {
       # sets up an isolated environment for each build process to improve reproducibility.

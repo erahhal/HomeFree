@@ -363,7 +363,8 @@
 
     plugins.bufferline = {
       enable = true;
-      extraOptions = {
+      # extraOptions = {
+      settings = {
         options = {
           tabpages = true;
           sidebar_filetypes = {
@@ -467,7 +468,7 @@
 
     # ## Needed for telescope, nvim-tree, trouble, diffview, bufferline, and other plugins
     # ## Only on unstable at the moment
-    # plugins.web-devicons.enable = true;
+    plugins.web-devicons.enable = true;
 
     ## ------------------------------------------------
     ## Extra Plugins
