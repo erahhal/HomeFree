@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
 
+## @TODO: consolidate to single script that works on host or on guest
+## @TODO: If no user key on guest, complain and abort
+## @TODO: Fix error messages that mess with getting fingerprit
+## @TODO: Make sure uid matches <curruser>@localhost, as it tells sops where to look for keyring
+##   https://www.reddit.com/r/GnuPG/comments/m76to1/is_there_a_way_to_change_the_name_on_a_key_pair/
+
 ## Import the user's SSH key into GPG
 
 cp ~/.ssh/id_rsa /tmp/id_rsa
 ssh-keygen -p -N "" -f /tmp/id_rsa
-USER_GPG_FINGERPRINT=$(nix-shell --quiet -p gnupg -p ssh-to-pgp --run "ssh-to-pgp -private-key -i /tmp/id_rsa | gpg --import --quiet" 2>&1 | head -2 | tail -1)
+USER_GPG_FINGERPRINT=$(nix-shell --quiet -p gnupg -p ssh-to-pgp --run "ssh-to-pgp -private-key -i /tmp/id_rsa | gpg --import --allow-non-selfsigned-uid --quiet" 2>&1 | head -2 | tail -1)
 echo "${USER_GPG_FINGERPRINT}"
 rm /tmp/id_rsa
 # set ultimate trust level
