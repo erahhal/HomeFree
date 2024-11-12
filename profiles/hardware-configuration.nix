@@ -8,15 +8,20 @@
     [ (modulesPath + "/profiles/qemu-guest.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "virtio_blk" ];
+  boot.initrd.availableKernelModules = [ "ata_piix" "ahci" "xhci_pci" "virtio_pci" "virtio_blk" "floppy" "sd_mod" "sr_mod"  ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
+  boot.kernelModules = [ "kvm-amd" "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
     {
       device = "/dev/disk/by-label/nixos";
       fsType = "ext4";
+    };
+
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-label/ESP";
+      fsType = "vfat";
     };
 
   fileSystems."/efi" =
