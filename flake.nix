@@ -7,6 +7,9 @@
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
+    disko.url = "github:nix-community/disko";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
+
     nixvim = {
       # url = "github:nix-community/nixvim/nixos-24.05";
       url = "github:nix-community/nixvim";
