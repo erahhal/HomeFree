@@ -16,6 +16,13 @@ TODOS
     * [ ] DNS (Dnsmasq or Unbound)
     * [ ] qemu setup
   * P2
+    * [ ] SOPS fixes
+      * [ ] consolidate to single script that works on host or on guest
+      * [ ] If no user key on guest, complain and abort
+      * [ ] Fix error messages that mess with getting fingerprit
+      * [ ] Make sure uid matches <curruser>@localhost, as it tells sops where to look for keyring
+    * [ ] Move hardware config to module config
+      * [ ] DB of hardware, similar to nixos-hardware repo
     * [ ] Backups
     * [ ] Migration of services from HP server, HA
     * [ ] SSO/Authentik

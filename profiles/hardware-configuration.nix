@@ -8,7 +8,7 @@
     [ (modulesPath + "/profiles/qemu-guest.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "ata_piix" "ahci" "xhci_pci" "virtio_pci" "virtio_blk" "floppy" "sd_mod" "sr_mod"  ];
+  boot.initrd.availableKernelModules = [ "ata_piix" "ahci" "xhci_pci" "nvme" "virtio_pci" "virtio_blk" "floppy" "sd_mod" "sr_mod" "usb_storage" "usbhid" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" "kvm-intel" ];
   boot.extraModulePackages = [ ];
@@ -45,4 +45,5 @@
   # networking.interfaces.enp1s0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

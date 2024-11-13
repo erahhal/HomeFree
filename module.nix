@@ -55,7 +55,11 @@
       adminHashedPassword = lib.mkOption {
         type = lib.types.str;
         default = "";
-        description = "Hashed password for the system admin";
+        description = ''
+          Hashed password for the system admin
+          Generate with:
+          mkpasswd --method=SHA-512 --stdin
+        '';
       };
 
       authorizedKeys = lib.mkOption {
@@ -87,13 +91,6 @@
         default = false;
         description = "Enable dynamic DNS client";
       };
-
-      interval = lib.mkOption {
-        type = lib.types.str;
-        default = "10m";
-        description = "Interval for dynamic DNS client";
-      };
-
       protocol = lib.mkOption {
         type = lib.types.str;
         default = "hetzner";
@@ -110,6 +107,12 @@
         type = lib.types.str;
         default = "homefree.host";
         description = "Zone for dynamic DNS client";
+      };
+
+      interval = lib.mkOption {
+        type = lib.types.str;
+        default = "10m";
+        description = "Interval for dynamic DNS client";
       };
 
       domains = lib.mkOption {
