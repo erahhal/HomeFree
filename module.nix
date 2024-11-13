@@ -58,7 +58,7 @@
         description = ''
           Hashed password for the system admin
           Generate with:
-          mkpasswd --method=SHA-512 --stdin
+          mkpasswd -m sha-512
         '';
       };
 
@@ -117,14 +117,20 @@
 
       domains = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ "*" "www" "dev" ];
+        default = [ "@" "*" "www" "dev" ];
         description = "Domains for dynamic DNS client";
       };
 
-      use = lib.mkOption {
+      usev4 = lib.mkOption {
         type = lib.types.str;
         default = "web, web=ipinfo.io/ip";
-        description = "Use format for dynamic DNS client";
+        description = "Use format for obtaining ipv4 for dynamic DNS client";
+      };
+
+      usev6 = lib.mkOption {
+        type = lib.types.str;
+        default = "web, web=v6.ipinfo.io/ip";
+        description = "Use format for obtaining ipv6 for dynamic DNS client";
       };
     };
 

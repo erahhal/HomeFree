@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
     openldap
@@ -40,7 +40,7 @@
       # @TODO: Move secrets to this folder
       sopsFile = ../secrets/authentik.yaml;
 
-      owner = "homefree";
+      owner = config.homefree.system.adminUsername;
       path = "/run/secrets/authentik/authentik-env";
       restartUnits = [ "authentik.service" ];
     };
@@ -49,7 +49,7 @@
       # @TODO: Move secrets to this folder
       sopsFile = ../secrets/authentik.yaml;
 
-      owner = "homefree";
+      owner = config.homefree.system.adminUsername;
       path = "/run/secrets/authentik/authentik-ldap-env";
       restartUnits = [ "authentik-ldap.service" ];
     };

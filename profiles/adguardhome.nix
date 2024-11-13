@@ -15,8 +15,9 @@
       };
       users = [
         {
-          name = "erahhal";
+          name = config.homefree.system.adminUsername;
           password = "$2a$10$Tt4QvbLQxnspv2TbcLMP7ug8eJ0NqMsGyVPbpEqtmkyCVrFpvh4GS";
+          # password = config.homefree.system.adminHashedPassword;
         }
       ];
       auth_attempts = 5;
@@ -24,14 +25,17 @@
       theme = "auto";
       dns = {
         bind_hosts = [ "0.0.0.0" ];
-        port = 53000;
+        port = 53;
         anonymize_client_ip = false;
         ratelimit = 20;
         ratelimit_subnet_len_ipv4 = 24;
         ratelimit_subnet_len_ipv6 = 56;
         ratelimit_whitelist = [];
         refuse_any = true;
-        upstream_dns = [ "https://dns10.quad9.net/dns-query" ];
+        upstream_dns = [
+          "10.0.0.1"
+          "https://dns10.quad9.net/dns-query"
+        ];
         bootstrap_dns = [
           "9.9.9.10"
           "149.112.112.10"

@@ -51,6 +51,9 @@ in
     useDHCP = false;
     nameservers = dns-servers;
 
+    # resolvconf = {
+    # };
+
     ## Define VLANS
     ## https://www.breakds.org/post/vlan-configuration-by-examples/
     # vlans = {
@@ -75,7 +78,7 @@ in
     interfaces = {
       # Don't request DHCP on the physical interfaces
       ${wan-interface} = {
-        # useDHCP = false;
+        # useDHCP = true;
       };
       ${lan-interface} = {
         useDHCP = false;
@@ -251,7 +254,7 @@ in
         "${lan-interface},10.1.1.100,10.1.1.254,255.255.255.0,8h"
       ];
 
-      ## Disable DNS
+      ## Disable DNS, since Unbound is handling DNS
       port = 0;
 
       ## Additional DHCP options
@@ -283,6 +286,7 @@ in
         include = [
           "\"${adlist.unbound-adblockStevenBlack}\""
         ];
+        port = 5353;
         interface = [
           "127.0.0.1"
           "::1"
@@ -308,12 +312,23 @@ in
         local-data-ptr = [
           "\"10.1.1.1 radicale.lan\""
         ];
+
+        hide-identity = true;
+        hide-version = true;
+
+        # Based on recommended settings in https://doc.pi-hole.net/guides/dns/unbound/#configure-unbound
+        harden-glue = true;
+        harden-dnssec-stripped = true;
+        use-caps-for-id = false;
+        prefetch = true;
+        edns-buffer-size = 1232;
       };
 
       forward-zone = [
         {
           name = ".";
           forward-addr = [
+            "9.9.9.9#dns.quad9.net"
             "1.1.1.1@853#cloudflare-dns.com"
             "1.0.0.1@853#cloudflare-dns.com"
           ];

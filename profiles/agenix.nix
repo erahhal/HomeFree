@@ -1,4 +1,4 @@
-{ agenix, options, system, ... }:
+{ config, agenix, options, system, ... }:
 {
   environment.systemPackages = [
     agenix.packages.${system}.default
@@ -9,6 +9,6 @@
 
   # default path is /etc/ssh/ssh_host_rsa_key
   age.identityPaths = options.age.identityPaths.default ++ [
-    "/home/homefree/.ssh/id_rsa"
+    "/home/${config.system.homefree.adminUsername}/.ssh/id_rsa"
   ];
 }
