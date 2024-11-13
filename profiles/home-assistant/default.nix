@@ -100,6 +100,7 @@ in
         use_x_forwarded_for = true;
         trusted_proxies = [
           # @TODO: Make this a passed-in var
+          "127.0.0.1"
           "10.0.0.1"
           "10.0.2.15"
           "10.1.1.1"
