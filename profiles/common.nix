@@ -1,4 +1,4 @@
-{ homefree-inputs, pkgs, system, ...}:
+{ config, homefree-inputs, pkgs, system, ...}:
 {
 
   # --------------------------------------------------------------------------------------
@@ -11,7 +11,7 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.05"; # Did you read the comment?
+  system.stateVersion = "24.11"; # Did you read the comment?
 
   # @TODO: Could this be useful for auto-upgrading systems out there?
   # system.autoUpgrade = {
@@ -27,7 +27,7 @@
   # };
 
   nix = {
-    nixPath = [ "nixpkgs=${homefree-inputs.nixpkgs}" "nixos-config=/home/homefree/nixcfg" ];
+    nixPath = [ "nixpkgs=${homefree-inputs.nixpkgs}" "nixos-config=/home/${config.homefree.system.adminUsername}/nixcfg" ];
 
     # Which package collection to use system-wide.
     package = pkgs.nixVersions.stable;
@@ -97,14 +97,13 @@
   # User config
   # --------------------------------------------------------------------------------------
 
-  users.users.homefree = {
+  users.users."${config.homefree.system.adminUsername}" = {
     isNormalUser  = true;
-    home  = "/home/homefree";
-    description  = "Homefree User";
+    home  = "/home/${config.homefree.system.adminUsername}";
+    description  = "Homefree Admin";
     extraGroups  = [ "wheel" ];
-    # @TODO: Make this dynamic, not hard coded
-    openssh.authorizedKeys.keys  = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDNvmGn1/uFnfgnv5qsec0GC04LeVB1Qy/G7WivvvUZVBBDzp8goe1DsE8M8iqnBSin56gQZDWsd50co2MbFAWuqH2HxY7OGay7P/V2q+SziTYFva85WGl84qWvYMmdB+alAFBT3L4eH5cegC5NhNp+OGsQuq32RdojgXXQt6vyZnaOypuz90k3rqV6Rt+iBTLz6VziasCLcYydwOvi9f1q6YQwGPLKaupDrV6gxvoX9bXLdopqwnXPSE/Eqczxgwc3PefvAJPSd6TOqIXvbtpv/B3Evt5SPe2gq+qASc5K0tzgra8KAe813kkpq4FuKJzHbT+EmO70wiJjru7zMEhd erahhal@nfml-erahhalQFL" ];
-    hashedPassword = "$6$5.6V9H0g5F47ubUm$e0N.GXZ9eoqmvpO9MjZlCISC9IIxKKcf0xtnuFyuXSQEQlfaazrS4kBhplDB6GCsQgwpOxdrX2DmcwbMiX/h30";
+    openssh.authorizedKeys.keys= config.homefree.system.authorizedKeys;
+    hashedPassword = config.homefree.system.adminHashedPassword;
   };
 
   security.sudo.extraRules = [
@@ -129,6 +128,15 @@
   # Disables writing to Nix store by mounting read-only. "false" should only be used as a last resort.
   # Nix mounts read-write automatically when it needs to write to it.
   boot.readOnlyNixStore = true;
+
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  # --------------------------------------------------------------------------------------
+  # Hardware
+  # --------------------------------------------------------------------------------------
+
+  hardware.enableRedistributableFirmware = true;
+  hardware.enableAllFirmware = true;
 
   # --------------------------------------------------------------------------------------
   # Services
@@ -163,6 +171,15 @@
     powertop.enable = true;
   };
 
+  # Eternal Terminal
+  services.eternal-terminal.enable = true;
+  # et port
+  networking.firewall.allowedTCPPorts = [ 2022 ];
+  environment.variables = {
+    ET_NO_TELEMETRY = "1";
+  };
+
+
   # --------------------------------------------------------------------------------------
   # i18n
   # --------------------------------------------------------------------------------------
@@ -190,6 +207,7 @@
     bashmount
     bfg-repo-cleaner
     bind
+    btop
     ccze             # readable parsed system logs
     cpufrequtils
     distrobox

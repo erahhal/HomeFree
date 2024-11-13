@@ -95,6 +95,7 @@ in
       # "group ui" = "!include groups.yaml";
 
       http = {
+        # @TODO: Make this a passed-in var
         base_url = "ha.homefree.lan";
         use_x_forwarded_for = true;
         trusted_proxies = [

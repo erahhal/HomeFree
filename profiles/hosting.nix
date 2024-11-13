@@ -35,7 +35,8 @@ in
       '';
       ## @TODO: Remove headers and check if still works
       extraConfig = ''
-        reverse_proxy http://10.1.1.1:9000
+        # reverse_proxy http://10.1.1.1:9000
+        reverse_proxy http://127.0.0.1:9000
         header {
           Strict-Transport-Security "max-age=31536000; includeSubdomains"
           X-XSS-Protection "1; mode=block"
@@ -52,7 +53,8 @@ in
         output file ${config.services.caddy.logDir}/access-vaultwarden.log
       '';
       extraConfig = ''
-        reverse_proxy http://10.1.1.1:8222
+        # reverse_proxy http://10.1.1.1:8222
+        reverse_proxy http://127.0.0.1:8222
         header {
           Strict-Transport-Security "max-age=31536000; includeSubdomains"
           X-XSS-Protection "1; mode=block"
@@ -71,7 +73,8 @@ in
     #   '';
       ## @TODO: Remove headers and check if still works
     #   extraConfig = ''
-    #     reverse_proxy http://10.1.1.1:8123
+    #     # reverse_proxy http://10.1.1.1:8123
+    #     reverse_proxy http://127.0.0.1:8123
     #     header {
     #       Strict-Transport-Security "max-age=31536000; includeSubdomains"
     #       X-XSS-Protection "1; mode=block"
@@ -92,7 +95,8 @@ in
         ## Authentik
         # reverse_proxy http://10.1.1.1:9000
 
-        reverse_proxy http://10.1.1.1:9000
+        # reverse_proxy http://10.1.1.1:9000
+        reverse_proxy http://127.0.0.1:9000
         header {
           Strict-Transport-Security "max-age=31536000; includeSubdomains"
           X-XSS-Protection "1; mode=block"
@@ -109,7 +113,8 @@ in
         output file ${config.services.caddy.logDir}/access-git.log
       '';
       extraConfig = ''
-        reverse_proxy http://10.1.1.1:3001
+        # reverse_proxy http://10.1.1.1:3001
+        reverse_proxy http://127.0.0.1:3001
         header {
           Strict-Transport-Security "max-age=31536000; includeSubdomains"
           X-XSS-Protection "1; mode=block"
@@ -126,7 +131,8 @@ in
         output file ${config.services.caddy.logDir}/access-adguard.log
       '';
       extraConfig = ''
-        reverse_proxy http://10.1.1.1:3000
+        # reverse_proxy http://10.1.1.1:3000
+        reverse_proxy http://127.0.0.1:3000
         header {
           Strict-Transport-Security "max-age=31536000; includeSubdomains"
           X-XSS-Protection "1; mode=block"
@@ -143,7 +149,8 @@ in
         output file ${config.services.caddy.logDir}/access-unifi.log
       '';
       extraConfig = ''
-        reverse_proxy https://10.1.1.1:8443 {
+        # reverse_proxy https://10.1.1.1:8443 {
+        reverse_proxy https://127.0.0.1:8443 {
           transport http {
             tls
             tls_insecure_skip_verify

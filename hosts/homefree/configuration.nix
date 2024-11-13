@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
 {
   imports = [
@@ -8,6 +8,7 @@
     ../../profiles/config-editor.nix
     ../../profiles/ddclient.nix
     ../../profiles/home-assistant
+    ../../profiles/git.nix
     ../../profiles/gitea.nix
     ../../profiles/hardware-configuration.nix
     ../../profiles/hosting.nix
@@ -16,7 +17,6 @@
     ../../profiles/router.nix
     ../../profiles/unifi.nix
     ../../profiles/vaultwarden.nix
-    ../../profiles/virtual-machine.nix
     ../../profiles/wireguard.nix
   ];
 
@@ -55,19 +55,19 @@
 
   # @TODO: Make this UI configurable
   ## Must be forced due to Authentik hard coding a value of UTC
-  time.timeZone = lib.mkForce "America/Los_Angeles";
+  time.timeZone = lib.mkForce config.homefree.system.timeZone;
 
   networking = {
     # @TODO: Make this UI configurable
-    hostName = "homefree";
+    hostName = config.homefree.system.hostName;
     ## NetworkManager disabled in favor of networkd
     useNetworkd = true;
-    wireless = {
-      # Disable wpa_supplicant
-      enable = false;
-    };
+    # wireless = {
+    #   # Disable wpa_supplicant
+    #   enable = false;
+    # };
     interfaces = {
-      ens3.useDHCP = true;
+      "${config.homefree.network.wan-interface}".useDHCP = true;
     };
   };
 
