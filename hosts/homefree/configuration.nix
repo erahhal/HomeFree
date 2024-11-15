@@ -7,6 +7,7 @@
     ../../profiles/common.nix
     ../../profiles/config-editor.nix
     ../../profiles/ddclient.nix
+    ../../profiles/dnsmasq.nix
     ../../profiles/home-assistant
     ../../profiles/git.nix
     ../../profiles/gitea.nix
@@ -15,6 +16,7 @@
     ../../profiles/nixvim.nix
     ../../profiles/postgres.nix
     ../../profiles/router.nix
+    ../../profiles/unbound.nix
     ../../profiles/unifi.nix
     ../../profiles/vaultwarden.nix
     ../../profiles/wireguard.nix
