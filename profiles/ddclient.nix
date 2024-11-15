@@ -1,26 +1,28 @@
-{ config, inputs, pkgs, ... }:
+{ config, inputs, pkgs, lib, ... }:
 let
-  ## @TODO: Update to support multiple zones
-  ddclientConfig = builtins.elemAt config.homefree.dynamic-dns 0;
+  cfg = config.homefree.dynamic-dns;
 in
 {
   #-----------------------------------------------------------------------------------------------------
   # Dynamic DNS
   #-----------------------------------------------------------------------------------------------------
 
-  services.ddclient = {
+  services.ddclient-multi = {
     enable = true;
-    interval = ddclientConfig.interval;
-    protocol = ddclientConfig.protocol;
-    username = ddclientConfig.username;
-    zone = ddclientConfig.zone;
-    domains = ddclientConfig.domains;
-    passwordFile = "/run/secrets/ddclient/ddclient-password";
-    usev4 = ddclientConfig.usev4;
-    usev6 = ddclientConfig.usev6;
+    interval = cfg.interval;
+    usev4 = cfg.usev4;
+    usev6 = cfg.usev6;
     verbose = true;
+    zones = lib.map (zone: {
+      protocol = zone.protocol;
+      username = zone.username;
+      zone = zone.zone;
+      domains = zone.domains;
+      passwordFile = zone.passwordFile;
+    }) cfg.zones;
   };
 
+  ## @TODO: Move to host config
   sops.secrets = {
     "ddclient/ddclient-password" = {
       format = "yaml";

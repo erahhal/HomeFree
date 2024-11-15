@@ -26,12 +26,12 @@ in
         interface = [
           "127.0.0.1"
           "::1"
-          "10.1.1.1"
+          "10.0.0.1"
         ];
         access-control = [
           "127.0.0.1/8 allow"
           "::1 allow"
-          "10.1.1.1/8 allow"
+          "10.0.0.1/8 allow"
           # @TODO: need ipv6 address
         ];
         outgoing-interface = [

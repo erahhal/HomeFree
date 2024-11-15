@@ -16,6 +16,7 @@
     ../../profiles/nixvim.nix
     ../../profiles/postgres.nix
     ../../profiles/router.nix
+    ../../profiles/traffic-shaping.nix
     ../../profiles/unbound.nix
     ../../profiles/unifi.nix
     ../../profiles/vaultwarden.nix

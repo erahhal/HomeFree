@@ -47,7 +47,7 @@ in
 
     useDHCP = false;
     ## @TODO: Base on config for lan gateway
-    nameservers = [ "10.1.1.1" ];
+    nameservers = [ "10.0.0.1" ];
 
     # resolvconf = {
     # };
@@ -81,7 +81,7 @@ in
       ${lan-interface} = {
         useDHCP = false;
         ipv4.addresses = [{
-          address = "10.1.1.1";
+          address = "10.0.0.1";
           prefixLength = 24;
         }];
       };
@@ -92,7 +92,7 @@ in
       # };
       # lan = {
       #   ipv4.addresses = [{
-      #     address = "10.1.1.1";
+      #     address = "10.0.0.1";
       #     prefixLength = 24;
       #   }];
       # };
@@ -186,21 +186,21 @@ in
       smp2=3
       rps2=2
 
-      ens3_irq=$($GREP ens3 /proc/interrupts | $AWK '{ print $1+0 }')
+      wan_irq=$($GREP ${wan-interface} /proc/interrupts | $AWK '{ print $1+0 }')
 
       # set balancer for enp1s0
-      echo $smp1 > /proc/irq/$ens3_irq/smp_affinity
+      echo $smp1 > /proc/irq/$wan_irq/smp_affinity
 
-      # set rps for ens3
-      echo $rps1 > /sys/class/net/ens3/queues/rx-0/rps_cpus
+      # set rps for wan interface
+      echo $rps1 > /sys/class/net/${wan-interface}/queues/rx-0/rps_cpus
 
-      ens5_irq=$($GREP ens5 /proc/interrupts | $AWK '{ print $1+0 }')
+      lan_irq=$($GREP ${lan-interface} /proc/interrupts | $AWK '{ print $1+0 }')
 
       # set balancer for enp2s0
-      # echo $smp2 > /proc/irq/$ens5_irq/smp_affinity
+      # echo $smp2 > /proc/irq/$lan_irq/smp_affinity
 
-      # set rps for ens5
-      echo $rps2 > /sys/class/net/ens5/queues/rx-0/rps_cpus
+      # set rps for lan interface
+      echo $rps2 > /sys/class/net/${lan-interface}/queues/rx-0/rps_cpus
     '';
   };
 
