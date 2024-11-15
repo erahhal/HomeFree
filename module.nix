@@ -95,6 +95,16 @@
         description = "External interface to the internet";
       };
 
+      wan-bitrate-mbps-down = lib.mkOption {
+        type = lib.types.int;
+        description = "WAN download bitrate in Mbit/s";
+      };
+
+      wan-bitrate-mbps-up = lib.mkOption {
+        type = lib.types.int;
+        description = "WAN upload bitrate in Mbit/s";
+      };
+
       ## @TODO: Detect during setup
       lan-interface = lib.mkOption {
         type = lib.types.str;
@@ -162,73 +172,83 @@
       };
 
       blocked-domains = lib.mkOption {
-        type = lib.typse.listOf lib.types.str;
+        type = lib.types.listOf lib.types.str;
         default = [];
         description = "list of domains to block";
       };
     };
 
-    dynamic-dns = lib.mkOption {
-      description = "Dynamic DNS Config";
-      default = [];
-      type = with lib.types; listOf (submodule {
-        options = {
-          enable = lib.mkOption {
-            type = lib.types.bool;
-            default = false;
-            description = "enable dynamic dns for zone";
-          };
+    dynamic-dns = {
+      interval = lib.mkOption {
+        type = lib.types.str;
+        default = "10m";
+        description = "Interval for dynamic DNS client";
+      };
 
-          ## @TODO: validate against network.domain and network.additionalDomains
-          zone = lib.mkOption {
-            type = lib.types.str;
-            default = "homefree.host";
-            description = "Zone for dynamic DNS client";
-          };
+      usev4 = lib.mkOption {
+        type = lib.types.str;
+        default = "webv4, webv4=ipinfo.io/ip";
+        description = "Use format for obtaining ipv4 for dynamic DNS client";
+      };
 
-          protocol = lib.mkOption {
-            type = lib.types.str;
-            default = "hetzner";
-            description = "Protocol for dynamic DNS client";
-          };
+      usev6 = lib.mkOption {
+        type = lib.types.str;
+        default = "webv6, webv6=v6.ipinfo.io/ip";
+        description = "Use format for obtaining ipv6 for dynamic DNS client";
+      };
 
-          username = lib.mkOption {
-            type = lib.types.str;
-            default = "erahhal";
-            description = "Username for dynamic DNS client";
-          };
+      zones = lib.mkOption {
+        description = "Dynamic DNS Zone Config";
+        default = [];
+        type = with lib.types; listOf (submodule {
+          options = {
+            disable = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = "disable dynamic dns for zone";
+            };
 
-          interval = lib.mkOption {
-            type = lib.types.str;
-            default = "10m";
-            description = "Interval for dynamic DNS client";
-          };
+            ## @TODO: validate against network.domain and network.additionalDomains?
+            zone = lib.mkOption {
+              type = lib.types.str;
+              default = "homefree.host";
+              description = "Zone for dynamic DNS client";
+            };
 
-          domains = lib.mkOption {
-            type = lib.types.listOf lib.types.str;
-            default = [ "@" "*" "www" "dev" ];
-            description = "Domains for dynamic DNS client";
-          };
+            protocol = lib.mkOption {
+              type = lib.types.str;
+              default = "hetzner";
+              description = "Protocol for dynamic DNS client";
+            };
 
-          usev4 = lib.mkOption {
-            type = lib.types.str;
-            default = "web, web=ipinfo.io/ip";
-            description = "Use format for obtaining ipv4 for dynamic DNS client";
-          };
+            username = lib.mkOption {
+              type = lib.types.str;
+              default = "erahhal";
+              description = "Username for dynamic DNS client";
+            };
 
-          usev6 = lib.mkOption {
-            type = lib.types.str;
-            default = "web, web=v6.ipinfo.io/ip";
-            description = "Use format for obtaining ipv6 for dynamic DNS client";
+            domains = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [ "@" "*" "www" "dev" ];
+              description = "Domains for dynamic DNS client";
+            };
+
+            passwordFile = lib.mkOption {
+              type = lib.types.str;
+              description = "String path to password file";
+            };
           };
-        };
-      });
+        });
+      };
     };
 
     wireguard = {
+      listenPort = lib.mkOption {
+        type = lib.types.int;
+        default = 64210;
+        description = "External listening port for clients";
+      };
       peers = lib.mkOption {
-        type = lib.types.listOf lib.types.attrs;
-        default = [ ];
         description = "List of wireguard peers";
         example = ''
           [
@@ -245,6 +265,27 @@
             }
           ];
         '';
+        type = with lib.types; listOf (submodule {
+          options = {
+            name = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = "Name of peer";
+            };
+
+            publicKey = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = "Public key for peer";
+            };
+
+            allowedIPs = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [];
+              description = "List of IPs assigned to this peer within the tunnel subnet. Used to configure routing.";
+            };
+          };
+        });
       };
     };
   };

@@ -15,7 +15,7 @@
 
       ## DNS servers to pass to clients
       ## @TODO: Make this based on configured gateway IP
-      server = [ "10.1.1.1" ];
+      server = [ "10.0.0.1" ];
 
       ## Which interfaces to bind to
       interface = [
@@ -27,10 +27,10 @@
 
       ## IP ranges to hand out
       dhcp-range = [
-        # "lan,10.1.1.100,10.1.1.254,255.255.255.0,8h"
+        # "lan,10.0.0.100,10.0.0.254,255.255.255.0,8h"
         # "iot,10.2.1.100,10.2.1.254,255.255.255.0,8h"
         # "guest,10.3.1.100,10.3.1.254,255.255.255.0,8h"
-        "${config.homefree.network.lan-interface},10.1.1.100,10.1.1.254,255.255.255.0,8h"
+        "${config.homefree.network.lan-interface},10.0.0.100,10.0.0.254,255.255.255.0,8h"
       ];
 
       ## Disable DNS, since Unbound is handling DNS
@@ -41,7 +41,7 @@
       ## Additional DHCP options
       dhcp-option = [
         "option6:dns-server,[::]"  # @TODO: point this at Unbound when ipv6 is setup
-        "option:dns-server,10.1.1.1"
+        "option:dns-server,10.0.0.1"
       ];
 
       dhcp-host = lib.map (ip-config:
