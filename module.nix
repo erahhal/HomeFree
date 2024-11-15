@@ -33,6 +33,15 @@
         description = "Default locale for the system";
       };
 
+      localDomain = lib.mkOption {
+        type = lib.types.str;
+        ## @TODO: Should this be "local"?
+        default = "localdomain";
+        description = "local lan domain";
+      };
+
+      ## @TODO: Deduplicate this with localDomain
+      ## recursive?
       searchDomainsLocal = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         ## @TODO: Should this be "local"?
@@ -44,6 +53,12 @@
         type = lib.types.str;
         default = "homefree.host";
         description = "Domain for the system";
+      };
+
+      additionalDomains = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [];
+        description = "Additional zones for the system";
       };
 
       adminUsername = lib.mkOption {
@@ -69,6 +84,9 @@
       };
     };
 
+    ## @TODO: Add default subnet and gateway config, e.g. 10.0.0.0/24, 10.0.0.1
+    ## @TODO: This section doesn't make sense. Some network config is in "system" above
+    ##        and some is in separate services, e.g. unbound and ddns
     network = {
       ## @TODO: Detect during setup
       wan-interface = lib.mkOption {
@@ -83,55 +101,128 @@
         default = "ens5";
         description = "Internal interface to the local network";
       };
-    };
 
-    ddclient = {
-      enable = lib.mkOption {
+      static-ip-expiration = lib.mkOption {
+        type = lib.types.str;
+        default = "3d";
+        description = "Expiration time of static IPs";
+      };
+
+      static-ips = lib.mkOption {
+        default = [];
+        description = "Static IP mappings";
+        type = with lib.types; listOf (submodule {
+          options = {
+            mac-address = lib.mkOption {
+              type = lib.types.str;
+              description = "MAC address to assign IP to";
+            };
+
+            hostname = lib.mkOption {
+              type = lib.types.str;
+              description = "Hostname to assign to IP";
+            };
+
+            ip = lib.mkOption {
+              type = lib.types.str;
+              description = "IP Address";
+            };
+          };
+        });
+      };
+
+      ## @TODO: Make type for dns override entry
+      dns-overrides = lib.mkOption {
+        description = "dns hostname to IP overrides";
+        default = [];
+        type = with lib.types; listOf (submodule {
+          options = {
+            hostname = lib.mkOption {
+              type = lib.types.str;
+              description = "Hostname of override";
+            };
+
+            domain = lib.mkOption {
+              type = lib.types.str;
+              description = "Domain of override";
+            };
+
+            ip = lib.mkOption {
+              type = lib.types.str;
+              description = "IP Address";
+            };
+          };
+        });
+      };
+
+      enable-adblock = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Enable dynamic DNS client";
-      };
-      protocol = lib.mkOption {
-        type = lib.types.str;
-        default = "hetzner";
-        description = "Protocol for dynamic DNS client";
+        description = "enable ad blocking";
       };
 
-      username = lib.mkOption {
-        type = lib.types.str;
-        default = "erahhal";
-        description = "Username for dynamic DNS client";
+      blocked-domains = lib.mkOption {
+        type = lib.typse.listOf lib.types.str;
+        default = [];
+        description = "list of domains to block";
       };
+    };
 
-      zone = lib.mkOption {
-        type = lib.types.str;
-        default = "homefree.host";
-        description = "Zone for dynamic DNS client";
-      };
+    dynamic-dns = lib.mkOption {
+      description = "Dynamic DNS Config";
+      default = [];
+      type = with lib.types; listOf (submodule {
+        options = {
+          enable = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = "enable dynamic dns for zone";
+          };
 
-      interval = lib.mkOption {
-        type = lib.types.str;
-        default = "10m";
-        description = "Interval for dynamic DNS client";
-      };
+          ## @TODO: validate against network.domain and network.additionalDomains
+          zone = lib.mkOption {
+            type = lib.types.str;
+            default = "homefree.host";
+            description = "Zone for dynamic DNS client";
+          };
 
-      domains = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        default = [ "@" "*" "www" "dev" ];
-        description = "Domains for dynamic DNS client";
-      };
+          protocol = lib.mkOption {
+            type = lib.types.str;
+            default = "hetzner";
+            description = "Protocol for dynamic DNS client";
+          };
 
-      usev4 = lib.mkOption {
-        type = lib.types.str;
-        default = "web, web=ipinfo.io/ip";
-        description = "Use format for obtaining ipv4 for dynamic DNS client";
-      };
+          username = lib.mkOption {
+            type = lib.types.str;
+            default = "erahhal";
+            description = "Username for dynamic DNS client";
+          };
 
-      usev6 = lib.mkOption {
-        type = lib.types.str;
-        default = "web, web=v6.ipinfo.io/ip";
-        description = "Use format for obtaining ipv6 for dynamic DNS client";
-      };
+          interval = lib.mkOption {
+            type = lib.types.str;
+            default = "10m";
+            description = "Interval for dynamic DNS client";
+          };
+
+          domains = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [ "@" "*" "www" "dev" ];
+            description = "Domains for dynamic DNS client";
+          };
+
+          usev4 = lib.mkOption {
+            type = lib.types.str;
+            default = "web, web=ipinfo.io/ip";
+            description = "Use format for obtaining ipv4 for dynamic DNS client";
+          };
+
+          usev6 = lib.mkOption {
+            type = lib.types.str;
+            default = "web, web=v6.ipinfo.io/ip";
+            description = "Use format for obtaining ipv6 for dynamic DNS client";
+          };
+        };
+      });
     };
 
     wireguard = {

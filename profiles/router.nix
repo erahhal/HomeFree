@@ -8,9 +8,6 @@ let
   vlan-lan-id = 200;
   vlan-iot-id = 201;
   vlan-guest-id = 202;
-  # lan-interface = "ens3";
-  dns-servers = [ "1.1.1.1" "1.0.0.1" ];
-  adlist = homefree-inputs.adblock-unbound.packages.${pkgs.system};
 in
 {
 
@@ -49,7 +46,8 @@ in
     #-----------------------------------------------------------------------------------------------------
 
     useDHCP = false;
-    nameservers = dns-servers;
+    ## @TODO: Base on config for lan gateway
+    nameservers = [ "10.1.1.1" ];
 
     # resolvconf = {
     # };
@@ -207,7 +205,7 @@ in
   };
 
   #-----------------------------------------------------------------------------------------------------
-  # DHCP
+  # DHCP/DNS
   #-----------------------------------------------------------------------------------------------------
 
   # See: https://nixos.wiki/wiki/Systemd-resolved
@@ -220,130 +218,6 @@ in
     extraConfig = ''
       DNSOverTLS=yes
     '';
-  };
-
-  services.dnsmasq = {
-    enable = true;
-
-    settings = {
-      ## @TODO
-      ## @WARNING - changes to this do not clear out old entries from /etc/dnsmasq-conf.conf
-
-      ## Only DHCP server on network
-      dhcp-authoritative = true;
-
-      ## Enable Router Advertising for ipv6
-      enable-ra = true;
-
-      ## DNS servers to pass to clients
-      server = dns-servers;
-
-      ## Which interfaces to bind to
-      interface = [
-        # "${lan-interface}.${builtins.toString vlan-lan-id}"
-        # "${lan-interface}.${builtins.toString vlan-iot-id}"
-        # "${lan-interface}.${builtins.toString vlan-guest-id}"
-        lan-interface
-      ];
-
-      ## IP ranges to hand out
-      dhcp-range = [
-        # "lan,10.1.1.100,10.1.1.254,255.255.255.0,8h"
-        # "iot,10.2.1.100,10.2.1.254,255.255.255.0,8h"
-        # "guest,10.3.1.100,10.3.1.254,255.255.255.0,8h"
-        "${lan-interface},10.1.1.100,10.1.1.254,255.255.255.0,8h"
-      ];
-
-      ## Disable DNS, since Unbound is handling DNS
-      port = 0;
-
-      ## Additional DHCP options
-      dhcp-option = [
-        "option6:dns-server,[::]"  # @TODO: point this at Unbound when ipv6 is setup
-        "option:dns-server,10.1.1.1"
-      ];
-
-      cache-size = 500;
-    };
-  };
-
-  #-----------------------------------------------------------------------------------------------------
-  # DNS
-  #-----------------------------------------------------------------------------------------------------
-
-  ## @TODO - Setup Unbound
-  ## See: https://blog.josefsson.org/2015/10/26/combining-dnsmasq-and-unbound/
-
-  services.unbound = {
-    enable = true;
-
-    user = "root";
-
-    resolveLocalQueries = true;
-
-    settings = {
-      server = {
-        include = [
-          "\"${adlist.unbound-adblockStevenBlack}\""
-        ];
-        port = 5353;
-        interface = [
-          "127.0.0.1"
-          "::1"
-          "10.1.1.1"
-        ];
-        access-control = [
-          "127.0.0.1/8 allow"
-          "::1 allow"
-          "10.1.1.1/8 allow"
-          # @TODO: need ipv6 address
-        ];
-        outgoing-interface = [
-          ## @TODO: should be WAN IP - how to get this automatically?
-          "10.0.2.15"
-          # @TODO: need ipv6 address
-        ];
-        local-zone = [
-          "\"homefree.lan.\" static"
-        ];
-        local-data = [
-          "\"radicale.lan. IN A 10.1.1.1\""
-        ];
-        local-data-ptr = [
-          "\"10.1.1.1 radicale.lan\""
-        ];
-
-        hide-identity = true;
-        hide-version = true;
-
-        # Based on recommended settings in https://doc.pi-hole.net/guides/dns/unbound/#configure-unbound
-        harden-glue = true;
-        harden-dnssec-stripped = true;
-        use-caps-for-id = false;
-        prefetch = true;
-        edns-buffer-size = 1232;
-      };
-
-      forward-zone = [
-        {
-          name = ".";
-          forward-addr = [
-            "9.9.9.9#dns.quad9.net"
-            "1.1.1.1@853#cloudflare-dns.com"
-            "1.0.0.1@853#cloudflare-dns.com"
-          ];
-          forward-tls-upstream = "yes";
-        }
-        # {
-        #   name = "example.org.";
-        #   forward-addr = [
-        #     "1.1.1.1@853#cloudflare-dns.com"
-        #     "1.0.0.1@853#cloudflare-dns.com"
-        #   ];
-        # }
-      ];
-      remote-control.control-enable = true;
-    };
   };
 
   #-----------------------------------------------------------------------------------------------------

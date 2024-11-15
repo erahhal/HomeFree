@@ -1,5 +1,8 @@
 { config, inputs, pkgs, ... }:
-
+let
+  ## @TODO: Update to support multiple zones
+  ddclientConfig = builtins.elemAt config.homefree.dynamic-dns 0;
+in
 {
   #-----------------------------------------------------------------------------------------------------
   # Dynamic DNS
@@ -7,14 +10,14 @@
 
   services.ddclient = {
     enable = true;
-    interval = config.homefree.ddclient.interval;
-    protocol = config.homefree.ddclient.protocol;
-    username = config.homefree.ddclient.username;
-    zone = config.homefree.ddclient.zone;
-    domains = config.homefree.ddclient.domains;
+    interval = ddclientConfig.interval;
+    protocol = ddclientConfig.protocol;
+    username = ddclientConfig.username;
+    zone = ddclientConfig.zone;
+    domains = ddclientConfig.domains;
     passwordFile = "/run/secrets/ddclient/ddclient-password";
-    usev4 = config.homefree.ddclient.usev4;
-    usev6 = config.homefree.ddclient.usev6;
+    usev4 = ddclientConfig.usev4;
+    usev6 = ddclientConfig.usev6;
     verbose = true;
   };
 
