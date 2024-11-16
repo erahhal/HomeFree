@@ -33,8 +33,8 @@
         ratelimit_whitelist = [];
         refuse_any = true;
         upstream_dns = [
-          "10.0.0.1"
-          "https://dns10.quad9.net/dns-query"
+          "10.0.0.1:53530"
+          # "https://dns10.quad9.net/dns-query"
         ];
         bootstrap_dns = [
           "9.9.9.10"

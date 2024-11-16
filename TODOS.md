@@ -61,6 +61,15 @@ TODOS
   * Captive Portal
   * Intrusion Detection
 
+* losing and gaining carrier repeatedly on WAN interface
+  * Could be due to modem being 2.5Gbps trying to negotiate with 1Gbps interface
+  * https://bbs.archlinux.org/viewtopic.php?id=292987
+
+* Browser Bookmarks
+  * https://github.com/floccusaddon/floccus
+
+* EMAIL
+  * https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/
 
 * Make a flake that sets up host machine for dev
   * hosts file changes (networking.extraHosts)
