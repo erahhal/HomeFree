@@ -288,6 +288,37 @@
         });
       };
     };
+
+    proxied-hosts = lib.mkOption {
+      description = "List of hosts on lan to proxy";
+      type = with lib.types; listOf (submodule {
+        options = {
+          label = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+            description = "label of proxy config";
+          };
+
+          description = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+            description = "description of proxy config";
+          };
+
+          hostname = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+            description = "hostname of service on lan network";
+          };
+
+          port = lib.mkOption {
+            type = lib.types.int;
+            default = "";
+            description = "port of service on lan network";
+          };
+        };
+      });
+    };
   };
 
   # options.virtualisation.vmVariantWithHomefree = lib.mkOption {

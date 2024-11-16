@@ -29,16 +29,16 @@ in
           "10.0.0.1"
         ];
         access-control = [
-          "127.0.0.1/8 allow"
+          "127.0.0.1/24 allow"
           "::1 allow"
-          "10.0.0.1/8 allow"
+          "10.0.0.1/24 allow"
           # @TODO: need ipv6 address
         ];
-        outgoing-interface = [
-          ## @TODO: should be WAN IP - how to get this automatically?
-          "10.0.2.15"
-          # @TODO: need ipv6 address
-        ];
+        # outgoing-interface = [
+        #   ## @TODO: should be WAN IP - how to get this automatically?
+        #   "10.0.2.15"
+        #   # @TODO: need ipv6 address
+        # ];
         local-zone = [
           "\"homefree.lan\" static"
           "\"homefree.host\" transparent"

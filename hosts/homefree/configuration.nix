@@ -15,6 +15,7 @@
     ../../profiles/hosting.nix
     ../../profiles/nixvim.nix
     ../../profiles/postgres.nix
+    # ../../profiles/radvd.nix
     ../../profiles/router.nix
     ../../profiles/traffic-shaping.nix
     ../../profiles/unbound.nix

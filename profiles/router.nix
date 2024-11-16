@@ -40,6 +40,30 @@ in
     "net.ipv6.conf.${wan-interface}.autoconf" = 1;
   };
 
+  systemd.network = {
+    networks = {
+      "01-${lan-interface}" = {
+        name = lan-interface;
+        networkConfig = {
+          Description = "LAN link";
+          Address = "10.0.0.1/24";
+          LinkLocalAddressing = "yes";
+          IPv6AcceptRA = "no";
+          # Announce a prefix here and act as a router.
+          IPv6SendRA = "yes";
+          # Use a DHCPv6-PD delegated prefix (DHCPv6PrefixDelegation.SubnetId)
+          # from the pool and assigns one /64 to this network.
+          DHCPPrefixDelegation = "yes";
+        };
+        ipv6SendRAConfig = {
+          # Currently dnsmasq manages DNS servers.
+          EmitDNS = "no";
+          EmitDomains = "no";
+        };
+      };
+    };
+  };
+
   networking = {
     #-----------------------------------------------------------------------------------------------------
     # Interface config
@@ -74,9 +98,8 @@ in
     # };
 
     interfaces = {
-      # Don't request DHCP on the physical interfaces
       ${wan-interface} = {
-        # useDHCP = true;
+        useDHCP = true;
       };
       ${lan-interface} = {
         useDHCP = false;
@@ -84,6 +107,10 @@ in
           address = "10.0.0.1";
           prefixLength = 24;
         }];
+        # ipv6.addresses = [{
+        #   address = "2001:DB8::";
+        #   prefixLength = 64;
+        # }];
       };
 
       # Handle the VLANs
