@@ -158,7 +158,17 @@
   services.printing.drivers = [ pkgs.brlaser ];
 
   # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    settings = {
+      ## This doesn't work, can't SSH at all
+      # AllowUsers = [
+      #  "*@192.168.*.*"
+      #  "*@10.0.0.1"
+      #  "erahhal@10.0.0.1"
+      # ];
+    };
+  };
 
   # This will save you money and possibly your life!
   services.thermald.enable = true;

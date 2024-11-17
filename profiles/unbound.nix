@@ -27,12 +27,13 @@ in
           "127.0.0.1"
           "::1"
           "10.0.0.1"
+          "192.168.2.1"     # wireguard
         ];
         access-control = [
           "127.0.0.1/24 allow"
           "::1 allow"
           "10.0.0.1/24 allow"
-          # @TODO: need ipv6 address
+          "192.168.2.1/24 allow"
         ];
         # outgoing-interface = [
         #   ## @TODO: should be WAN IP - how to get this automatically?
@@ -60,12 +61,24 @@ in
         ++
         (lib.map (zone: "\"${config.homefree.system.hostName}.${zone} IN A 127.0.0.1\"") zones)
         ++
+        # Add DNS overrides
         (lib.map (local-data-config:
           if builtins.hasAttr "domain" local-data-config then
             "\"${local-data-config.hostname}.${local-data-config.domain} IN A ${local-data-config.ip}\""
           else
             "\"${local-data-config.hostname} IN A ${local-data-config.ip}\""
           ) config.homefree.network.dns-overrides
+        )
+        ++
+        # Point URLs to internal IP when on LAN
+        (lib.map (fqn:
+          "\"${fqn} IN A 10.0.0.1\""
+          ) (lib.flatten (lib.map (proxy-config:
+            let
+              domains = proxy-config.http-domains ++ proxy-config.https-domains;
+            in
+              lib.flatten (lib.map (subdomain: (lib.map (domain: "${subdomain}.${domain}") domains)) proxy-config.subdomains)
+          ) (lib.filter (proxy-config: proxy-config.public == false) config.homefree.proxied-hosts)))
         )
         ++
         ## router lan ip with public domains
