@@ -48,6 +48,10 @@ TODOS
     * [ ] Mirror to Gitea
     * [ ] Mirror to Gogs
 
+* FIREWALL
+  * Setup VLANs as firewall?
+  * https://francis.begyn.be/blog/nixos-home-router
+
 * Firewall
   * Aliases
   * NAT

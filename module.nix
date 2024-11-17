@@ -305,16 +305,51 @@
             description = "description of proxy config";
           };
 
-          hostname = lib.mkOption {
+          subdomains = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [];
+            description = "list of subdomains";
+          };
+
+          http-domains = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [];
+            description = "list of http domains";
+          };
+
+          https-domains = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [];
+            description = "list of https domains";
+          };
+
+          host = lib.mkOption {
             type = lib.types.str;
-            default = "";
-            description = "hostname of service on lan network";
+            default = "10.0.0.1";
+            description = "host name or address of service to proxy";
           };
 
           port = lib.mkOption {
             type = lib.types.int;
-            default = "";
             description = "port of service on lan network";
+          };
+
+          public = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = "Whether to expose on WAN interface";
+          };
+
+          ssl = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = "Whether upstream service is using TLS";
+          };
+
+          ssl-no-verify = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = "Whether to verify certificate of upstream service";
           };
         };
       });

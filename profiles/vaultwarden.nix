@@ -7,7 +7,7 @@
     ## @TODO: Setup proper backup
     backupDir = "/var/backup/vaultwarden";
     config = {
-      ROCKET_ADDRESS = "0.0.0.0";
+      ROCKET_ADDRESS = "10.0.0.1";
       ROCKET_PORT = 8222;
     };
   };

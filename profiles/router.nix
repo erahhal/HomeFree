@@ -190,6 +190,27 @@ in
     };
   };
 
+  # systemd.services.block-wan-traffic = {
+  #   wantedBy = [ "multi-user.target" ];
+  #   enable = true;
+  #   serviceConfig = {
+  #     User = "root";
+  #     Group = "root";
+  #   };
+  #   script = ''
+  #     IPTABLES=${pkgs.iptables}/bin/iptables
+  #
+  #     $IPTABLES -A INPUT -i ${wan-interface} -p tcp -m tcp -m multiport --dports 80,443 -j ACCEPT
+  #     $IPTABLES -A INPUT -i ${wan-interface} -p tcp -m tcp -m multiport --dports ${toString config.homefree.wireguard.listenPort} -j ACCEPT
+  #     $IPTABLES -A INPUT -i ${wan-interface} -m conntrack -j ACCEPT  --ctstate RELATED,ESTABLISHED
+  #     $IPTABLES -A INPUT -i ${wan-interface} -j DROP
+  #     # $IPTABLES -A OUTPUT -o ${wan-interface} -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+  #     # $IPTABLES -A OUTPUT -o ${wan-interface} -j DROP
+  #     # $IPTABLES -A FORWARD -i ${wan-interface} -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+  #     # $IPTABLES -A FORWARD -i ${wan-interface} -j DROP
+  #   '';
+  # };
+
   #-----------------------------------------------------------------------------------------------------
   # Performance Tuning
   #-----------------------------------------------------------------------------------------------------
