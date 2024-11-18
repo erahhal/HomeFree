@@ -2,6 +2,9 @@
 let
   adlist = homefree-inputs.adblock-unbound.packages.${pkgs.system};
   zones = [config.homefree.system.domain] ++ config.homefree.system.additionalDomains;
+  preStart = ''
+    touch /run/unbound/include.conf
+  '';
 in
 {
   ## See: https://blog.josefsson.org/2015/10/26/combining-dnsmasq-and-unbound/
@@ -9,6 +12,12 @@ in
   ## Unbound is a caching resolver, not meant to be used as authoritative.
   ## nbound does support simple authoritative hosting with local-zone config.
   ## For a proper authoritative DNS, look at NSD.
+
+  systemd.services.unbound = {
+    serviceConfig = {
+      ExecStartPre = [ "!${pkgs.writeShellScript "unbound-prestart" preStart}" ];
+    };
+  };
 
   services.unbound = {
     enable = true;
@@ -21,6 +30,10 @@ in
       server = {
         include = [
           "\"${adlist.unbound-adblockStevenBlack}\""
+          ## Include run-time config, such as WAN ip mappings
+          ## @TODO: Update this with ddclient scripts
+          ## @TODO: Remove WAN entries from bare hostname maps below
+          "\"/run/unbound/include.conf\""
         ];
         port = 53530;
         interface = [
@@ -57,8 +70,10 @@ in
           "\"localhost AAAA ::1\""
         ]
         ++
+        ## add localhost.<zone> for all configured zones
         (lib.map (zone: "\"localhost.${zone} IN A 127.0.0.1\"") zones)
         ++
+        ## add <hostname>.<zone> for all configured zones
         (lib.map (zone: "\"${config.homefree.system.hostName}.${zone} IN A 127.0.0.1\"") zones)
         ++
         # Add DNS overrides
@@ -70,15 +85,36 @@ in
           ) config.homefree.network.dns-overrides
         )
         ++
-        # Point URLs to internal IP when on LAN
-        (lib.map (fqn:
-          "\"${fqn} IN A 10.0.0.1\""
-          ) (lib.flatten (lib.map (proxy-config:
-            let
-              domains = proxy-config.http-domains ++ proxy-config.https-domains;
-            in
-              lib.flatten (lib.map (subdomain: (lib.map (domain: "${subdomain}.${domain}") domains)) proxy-config.subdomains)
-          ) (lib.filter (proxy-config: proxy-config.public == false) config.homefree.proxied-hosts)))
+        # Point proxy URLs to internal IP when on LAN
+        (lib.map
+          (fqn: "\"${fqn} IN A 10.0.0.1\"")
+          ## Flatten to single list
+          ## e.g. [ "hij.lmnop" "hij".xyz" "abc.lmnop" "abc.xyz"  "def.lmnop" "def.xyz" ]
+          (lib.flatten
+            ## Map across all proxy configs with public proxies filtered out,
+            ## creating list of lists
+            ## e.g. [ [ "hij.lmnop" "hij".xyz" ] [ "abc.lmnop" "abc.xyz"  "def.lmnop" "def.xyz" ] ]
+            (lib.map
+              (proxy-config:
+                ## Flatten subdomain-domain combinations for individual proxy into single list
+                ## e.g. [ "abc.lmnop" "abc.xyz"  "def.lmnop" "def.xyz" ]
+                lib.flatten
+                ## Create all subdomain-domain combinations, grouped by subdomain
+                ## e.g. [ [ "abc.lmnop" "abc.xyz" ] [ "def.lmnop" "def.xyz" ]]
+                (lib.map
+                  (subdomain:
+                    # Create <subdomain>.<domain> fqn string
+                    (lib.map
+                      (domain: "${subdomain}.${domain}")
+                      (proxy-config.http-domains ++ proxy-config.https-domains)
+                    )
+                  )
+                  proxy-config.subdomains
+                )
+              )
+              (lib.filter (proxy-config: proxy-config.public == false) config.homefree.proxied-hosts)
+            )
+          )
         )
         ++
         ## router lan ip with public domains
@@ -106,11 +142,11 @@ in
         ++
         ## Bare hostname maps
         [
-          ## router wan IP
+          ## router wan IP - @TODO - THIS NEEDS TO BE DYNAMIC
           "\"${config.homefree.system.hostName} IN A 104.182.229.64\""
-          ## router wan ipv6 IP
+          ## router wan ipv6 IP - @TODO - THESE ARE WRONG
           "\"${config.homefree.system.hostName} IN AAAA 2600:1700:ab00:4650:2e0:67ff:fe22:3e62\""
-          ## ??
+          ## ??? @TODO - WHAT IS THIS?
           "\"${config.homefree.system.hostName} IN AAAA 2600:1700:ab00:465f:2e0:67ff:fe22:3e63\""
         ]
         ++
