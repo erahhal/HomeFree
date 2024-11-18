@@ -6,6 +6,14 @@ let
   proxiedHostConfig = config.homefree.proxied-hosts;
 in
 {
+
+  systemd.services.caddy = {
+    serviceConfig = {
+      After = [ "network.target" "network-online.target" "unbound.service" ];
+      Requires = [ "network-online.target" "unbound.service" ];
+    };
+  };
+
   services.caddy = {
     enable = true;
 
@@ -37,8 +45,10 @@ in
             #   Referrer-Policy "same-origin"
             # }
           '' + (if entry.public == false then ''
-            bind 10.0.0.1
-          '' else "")
+            bind 10.0.0.1 192.168.2.1
+          '' else ''
+            bind 10.0.0.1 192.168.2.1 ${config.homefree.system.domain}
+          '')
           + (if entry.ssl == true && entry.ssl-no-verify then ''
             reverse_proxy https://${entry.host}:${toString entry.port} {
               transport http {
