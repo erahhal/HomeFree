@@ -114,8 +114,8 @@ in
               )
               ## @TODO: Get rid of this filter
               ## See: https://caddy.community/t/caddy-not-handling-requests-when-listening-on-all-interfaces-serving-a-hostname-mapped-to-an-internal-ip/26384
-              (lib.filter (proxy-config: proxy-config.public == false) config.homefree.proxied-hosts)
-              # config.homefree.proxied-hosts
+              # (lib.filter (proxy-config: proxy-config.public == false) config.homefree.proxied-hosts)
+              config.homefree.proxied-hosts
             )
           )
         )
