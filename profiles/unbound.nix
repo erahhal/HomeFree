@@ -91,7 +91,7 @@ in
           ## Flatten to single list
           ## e.g. [ "hij.lmnop" "hij".xyz" "abc.lmnop" "abc.xyz"  "def.lmnop" "def.xyz" ]
           (lib.flatten
-            ## Map across all proxy configs with public proxies filtered out,
+            ## Map across all proxy configs
             ## creating list of lists
             ## e.g. [ [ "hij.lmnop" "hij".xyz" ] [ "abc.lmnop" "abc.xyz"  "def.lmnop" "def.xyz" ] ]
             (lib.map
@@ -112,7 +112,10 @@ in
                   proxy-config.subdomains
                 )
               )
+              ## @TODO: Get rid of this filter
+              ## See: https://caddy.community/t/caddy-not-handling-requests-when-listening-on-all-interfaces-serving-a-hostname-mapped-to-an-internal-ip/26384
               (lib.filter (proxy-config: proxy-config.public == false) config.homefree.proxied-hosts)
+              # config.homefree.proxied-hosts
             )
           )
         )
