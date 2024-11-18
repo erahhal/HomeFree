@@ -1,4 +1,8 @@
 { config, pkgs, lib, ... }:
+
+## @TODO: Convert to work with nftables
+## @TODO: Test with ethernet cable using the following: https://www.waveform.com/tools/bufferbloat
+
 let
   wan-interface = config.homefree.network.wan-interface;
   wan-bitrate-mbps-down = config.homefree.network.wan-bitrate-mbps-down;
