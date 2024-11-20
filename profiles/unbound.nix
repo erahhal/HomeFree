@@ -29,7 +29,9 @@ in
     settings = {
       server = {
         include = [
-          "\"${adlist.unbound-adblockStevenBlack}\""
+          ## Leave ad-blocking to AdGuard, as it can be disabled by the client
+          # "\"${adlist.unbound-adblockStevenBlack}\""
+
           ## Include run-time config, such as WAN ip mappings
           ## @TODO: Update this with ddclient scripts
           ## @TODO: Remove WAN entries from bare hostname maps below

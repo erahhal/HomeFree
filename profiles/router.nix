@@ -24,13 +24,13 @@ in
   #-----------------------------------------------------------------------------------------------------
 
   boot.kernel.sysctl = {
-    # if you use ipv4, this is all you need
+    # enable ipv4 forwarding
     "net.ipv4.conf.all.forwarding" = true;
 
-    # If you want to use it for ipv6
+    # enable ipv6 forwarding
     "net.ipv6.conf.all.forwarding" = true;
 
-    # source: https://github.com/mdlayher/homelab/blob/master/nixos/routnerr-2/configuration.nix#L52
+    # source: https://github.com/mdlayher/homelab/blob/master/nixos/routnerr-3/configuration.nix#L46[]
     # By default, not automatically configure any IPv6 addresses.
     "net.ipv6.conf.all.accept_ra" = 0;
     "net.ipv6.conf.all.autoconf" = 0;
@@ -167,8 +167,13 @@ in
             type filter hook input priority 0; policy drop;
 
             ## Allow for web traffic
-            tcp dport { 443 } ct state new accept;
+            tcp dport { https } ct state new accept;
+
+            ## Allow wireguard connections
             udp dport { ${toString wireguard-port} } ct state new accept;
+
+            ## Allow for ipv6 route advertisements
+            icmpv6 type { echo-request, nd-neighbor-solicit, nd-neighbor-advert, nd-router-solicit, nd-router-advert, mld-listener-query } accept;
 
             iifname { "lo" } accept comment "Allow localhost to access the router"
             iifname { "${lan-interface}" } accept comment "Allow local network to access the router"
@@ -183,17 +188,24 @@ in
           chain forward {
             type filter hook forward priority 0; policy drop;
 
+            ## LAN-WAN
             iifname { "${lan-interface}" } oifname { "${wan-interface}" } accept comment "Allow trusted LAN to WAN"
             iifname { "${wan-interface}" } oifname { "${lan-interface}" } ct state established, related accept comment "Allow established back to LANs"
+
+            ## @TODO: Confirm which, if any, of these are needed.
+
+            ## Wireguard-WAN
             iifname { "wg0" } oifname { "${wan-interface}" } accept comment "Allow trusted wireguard to WAN"
             iifname { "${wan-interface}" } oifname { "wg0" } ct state established, related accept comment "Allow established back to wireguard"
+
+            ## Wireguard-LAN
             iifname { "wg0" } oifname { "${lan-interface}" } accept comment "Allow trusted wireguard to LAN"
             iifname { "${lan-interface}" } oifname { "wg0" } ct state established, related accept comment "Allow established back to wireguard"
           }
         }
 
-        ## "ip" is ipv4 only. No NAT needed for ipv6.
-        table inet nat {
+        ## only need "ip" (ipv4), not "inet" (ipv4+ipv6) as it breaks ipv6 on clients. NAT is not needed for ipv6.
+        table ip nat {
           chain prerouting {
             ## Lower priority number indicates higher priority
             type nat hook prerouting priority 0; policy accept;
@@ -202,7 +214,7 @@ in
           # for all packets to WAN, after routing, replace source address with primary IP of WAN interface
           chain postrouting {
             type nat hook postrouting priority 100; policy accept;
-            ## oifname: "output interface name"
+            ## This handles both wg0 and the lan interface
             oifname "${wan-interface}" masquerade
           }
         }

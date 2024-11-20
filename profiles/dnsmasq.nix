@@ -24,7 +24,8 @@ in
       enable-ra = true;
 
       ## Ipv6
-      ra-param = "${lan-interface},0,0";
+      ## ra-param = "${lan-interface},0,0";  ## This disables router-advertisements
+      ra-param = "${lan-interface},10,300";
 
       ## DNS servers to pass to clients
       ## @TODO: Make this based on configured gateway IP
@@ -43,7 +44,7 @@ in
         # "lan,10.0.0.100,10.0.0.254,255.255.255.0,8h"
         # "iot,10.2.1.100,10.2.1.254,255.255.255.0,8h"
         # "guest,10.3.1.100,10.3.1.254,255.255.255.0,8h"
-        "tag:${lan-interface},::1,constructor:${lan-interface},ra-names,slaac,12h"  #ipv6
+        "tag:${lan-interface},::1,constructor:${lan-interface},ra-names,slaac,12h"    #ipv6
         # "::,constructor:${lan-interface},ra-stateless"                              # ipv6
         "${lan-interface},10.0.0.100,10.0.0.254,255.255.255.0,8h"                     # ipv4
       ];
