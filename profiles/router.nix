@@ -167,7 +167,8 @@ in
             type filter hook input priority 0; policy drop;
 
             ## Allow for web traffic
-            tcp dport { 443, ${toString wireguard-port }} ct state new accept;
+            tcp dport { 443 } ct state new accept;
+            udp dport { ${toString wireguard-port} } ct state new accept;
 
             iifname { "lo" } accept comment "Allow localhost to access the router"
             iifname { "${lan-interface}" } accept comment "Allow local network to access the router"
