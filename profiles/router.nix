@@ -4,6 +4,7 @@ let
   # @TODO: How to determine interface names?
   wan-interface = config.homefree.network.wan-interface;
   lan-interface = config.homefree.network.lan-interface;
+  wireguard-port = config.homefree.wireguard.listenPort;
   vlan-wan-id = 100;
   vlan-lan-id = 200;
   vlan-iot-id = 201;
@@ -154,35 +155,53 @@ in
       ruleset = ''
         flush ruleset
 
-        # table ip filter {
-        #   # allow all packets sent by the firewall machine itself
-        #   chain output {
-        #     type filter hook output priority 100; policy accept;
-        #   }
-        #
-        #   # allow LAN to firewall, disallow WAN to firewall
-        #   chain input {
-        #     type filter hook input priority 0; policy accept;
-        #     iifname "${lan-interface}" accept
-        #     iifname "${wan-interface}" drop
-        #   }
-        #
-        #   # allow packets from LAN to WAN, and WAN to LAN if LAN initiated the connection
-        #   chain forward {
-        #     type filter hook forward priority 0; policy drop;
-        #     iifname "${lan-interface}" oifname "${wan-interface}" accept
-        #     iifname "${wan-interface}" oifname "${lan-interface}" ct state related,established accept
-        #   }
-        # }
+        ## "inet" indicates both ipv4 and ipv6
+        table inet filter {
+          ## allow all packets sent by the firewall machine itself
+          chain output {
+            type filter hook output priority 100; policy accept;
+          }
 
-        table ip nat {
+          ## allow LAN to firewall, disallow WAN to firewall
+          chain input {
+            type filter hook input priority 0; policy drop;
+
+            ## Allow for web traffic
+            tcp dport { 443, ${toString wireguard-port }} ct state new accept;
+
+            iifname { "lo" } accept comment "Allow localhost to access the router"
+            iifname { "${lan-interface}" } accept comment "Allow local network to access the router"
+            iifname { "wg0" } accept comment "Allow wireguard network to access the router"
+
+            iifname "${wan-interface}" ct state { established, related } accept comment "Allow established traffic"
+            iifname "${wan-interface}" icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
+            iifname "${wan-interface}" counter drop comment "Drop all other unsolicited traffic from wan"
+          }
+
+          ## allow packets from LAN to WAN, and WAN to LAN if LAN initiated the connection
+          chain forward {
+            type filter hook forward priority 0; policy drop;
+
+            iifname { "${lan-interface}" } oifname { "${wan-interface}" } accept comment "Allow trusted LAN to WAN"
+            iifname { "${wan-interface}" } oifname { "${lan-interface}" } ct state established, related accept comment "Allow established back to LANs"
+            iifname { "wg0" } oifname { "${wan-interface}" } accept comment "Allow trusted wireguard to WAN"
+            iifname { "${wan-interface}" } oifname { "wg0" } ct state established, related accept comment "Allow established back to wireguard"
+            iifname { "wg0" } oifname { "${lan-interface}" } accept comment "Allow trusted wireguard to LAN"
+            iifname { "${lan-interface}" } oifname { "wg0" } ct state established, related accept comment "Allow established back to wireguard"
+          }
+        }
+
+        ## "ip" is ipv4 only. No NAT needed for ipv6.
+        table inet nat {
           chain prerouting {
+            ## Lower priority number indicates higher priority
             type nat hook prerouting priority 0; policy accept;
           }
 
           # for all packets to WAN, after routing, replace source address with primary IP of WAN interface
           chain postrouting {
             type nat hook postrouting priority 100; policy accept;
+            ## oifname: "output interface name"
             oifname "${wan-interface}" masquerade
           }
         }

@@ -38,6 +38,10 @@
       # inputs.flake-parts.follows = "flake-parts";
     };
 
+    styx = {
+      url = "github:styx-static/styx";
+    };
+
     # notnft = {
     #   url = "github:chayleaf/notnft";
     #   inputs.nixpkgs.follows = "nixpkgs";
