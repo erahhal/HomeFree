@@ -1,5 +1,4 @@
 { config, lib, ... }:
-
 {
   imports = [
     ../../profiles/adguardhome.nix
