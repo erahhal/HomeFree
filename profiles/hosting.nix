@@ -4,6 +4,7 @@ let
     respond "Hello, world! I am being accessed from {scheme}."
   '';
   proxiedHostConfig = config.homefree.proxied-hosts;
+  site = pkgs.callPackage  ../site { };
 in
 {
 
@@ -21,7 +22,8 @@ in
     ## Temporarily set to staging
     # acmeCA = "https://acme-staging-v02.api.letsencrypt.org/directory";
 
-    virtualHosts = lib.listToAttrs (lib.map (entry:
+    virtualHosts = lib.mkMerge [
+      (lib.listToAttrs (lib.map (entry:
       let
         http-urls = lib.flatten (lib.map (subdomain: (lib.map (domain: "http://${subdomain}.${domain}") entry.http-domains)) entry.subdomains);
         https-urls = lib.flatten (lib.map (subdomain: (lib.map (domain: "https://${subdomain}.${domain}") entry.https-domains)) entry.subdomains);
@@ -59,7 +61,21 @@ in
           '');
         };
       }
-    ) proxiedHostConfig);
+      ) proxiedHostConfig))
+      ## Static root site
+      {
+        "http://localhost, https://localhost, https://${config.homefree.system.domain}, https://www.${config.homefree.system.domain}" = {
+          logFormat = ''
+            output file ${config.services.caddy.logDir}/access-homefree-site.log
+          '';
+          extraConfig = ''
+            bind 10.0.0.1 192.168.2.1 ${config.homefree.system.domain}
+            root * ${site}/lib/node_modules/homefree-site/_site/
+            file_server
+          '';
+        };
+      }
+    ];
 
     ## With both http and https set, caddy won't redirect http to https
     ## REMOVE THIS IN PROD
