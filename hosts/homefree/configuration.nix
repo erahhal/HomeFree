@@ -1,26 +1,28 @@
 { config, lib, ... }:
 {
   imports = [
-    ../../profiles/adguardhome.nix
-    ../../profiles/authentik.nix
     ../../profiles/common.nix
     ../../profiles/config-editor.nix
-    ../../profiles/ddclient.nix
-    ../../profiles/dnsmasq.nix
-    ../../profiles/home-assistant
     ../../profiles/git.nix
-    ../../profiles/gitea.nix
     ../../profiles/hardware-configuration.nix
     ../../profiles/hosting.nix
     ../../profiles/nixvim.nix
-    ../../profiles/postgres.nix
     # ../../profiles/radvd.nix
     ../../profiles/router.nix
     ../../profiles/traffic-shaping.nix
-    ../../profiles/unbound.nix
-    ../../profiles/unifi.nix
-    ../../profiles/vaultwarden.nix
-    ../../profiles/wireguard.nix
+
+    ../../services/adguardhome.nix
+    ../../services/authentik.nix
+    ../../services/ddclient.nix
+    ../../services/dnsmasq.nix
+    ../../services/home-assistant
+    ../../services/gitea.nix
+    ../../services/postgres.nix
+    ../../services/radicale.nix
+    ../../services/unbound.nix
+    ../../services/unifi.nix
+    ../../services/vaultwarden.nix
+    ../../services/wireguard.nix
   ];
 
   # --------------------------------------------------------------------------------------

@@ -51,7 +51,7 @@ in
           Description = "LAN link";
           Address = "10.0.0.1/24";
           LinkLocalAddressing = "yes";
-          IPv6AcceptRA = "no";
+          IPv6AcceptRA = "yes";
           # Announce a prefix here and act as a router.
           IPv6SendRA = "yes";
           # Use a DHCPv6-PD delegated prefix (DHCPv6PrefixDelegation.SubnetId)
@@ -175,10 +175,13 @@ in
             udp dport { ${toString wireguard-port} } ct state new accept;
 
             ## Allow for ipv6 route advertisements
-            icmpv6 type { echo-request, nd-neighbor-solicit, nd-neighbor-advert, nd-router-solicit, nd-router-advert, mld-listener-query } accept;
+            # icmpv6 type { echo-request, nd-neighbor-solicit, nd-neighbor-advert, nd-router-solicit, nd-router-advert, mld-listener-query } accept;
+            meta l4proto ipv6-icmp accept comment "Accept ICMPv6"
+            meta l4proto icmp accept comment "Accept ICMP"
+            ip protocol igmp accept comment "Accept IGMP"
 
             # DHCPv6
-            ip6 saddr fe80::/10 ip6 daddr fe80::/10 udp sport 547 udp dport 546 accept
+            # ip6 saddr fe80::/10 ip6 daddr fe80::/10 udp sport 547 udp dport 546 accept
 
             iifname { "lo" } accept comment "Allow localhost to access the router"
             iifname { "${lan-interface}" } accept comment "Allow local network to access the router"

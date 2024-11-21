@@ -7,7 +7,6 @@ let
   site = pkgs.callPackage  ../site { };
 in
 {
-
   systemd.services.caddy = {
     after = [ "network.target" "network-online.target" "unbound.service" ];
     requires = [ "network-online.target" "unbound.service" ];

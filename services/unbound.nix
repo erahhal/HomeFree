@@ -50,7 +50,9 @@ in
           ## @TODO: Remove WAN entries from bare hostname maps below
           "\"/run/unbound/include.conf\""
         ];
-        port = 53530;
+        ## Set in services/adguardhome.nix
+        ## if adguard is disabled, this is set to 53 to make it the default DNS
+        # port = 53530;
         interface = [
           "127.0.0.1"
           "::1"

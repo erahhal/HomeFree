@@ -5,7 +5,7 @@
   #-----------------------------------------------------------------------------------------------------
 
   services.adguardhome = {
-    enable = true;
+    enable = config.homefree.services.adguard.enable;
     openFirewall = true;
     port = 3000;
     settings = {
@@ -155,4 +155,23 @@
       schema_version = 28;
     };
   };
+
+  homefree.proxied-hosts = if config.homefree.services.adguard.enable == true then [
+    {
+      label = "adguard";
+      subdomains = [ "adguard" ];
+      http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
+      https-domains = [ config.homefree.system.domain ];
+      port = 3000;
+      public = config.homefree.services.adguard.public;
+    }
+  ] else [];
+
+  ## Make Unbound default DNS server if adguard is disabled
+  services.unbound.settings.server.port = if config.homefree.services.adguard.enable == true
+  then
+    53530
+  else
+    53
+  ;
 }
