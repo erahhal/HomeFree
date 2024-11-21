@@ -2,6 +2,29 @@
 let
   lan-interface = config.homefree.network.lan-interface;
   wan-interface = config.homefree.network.wan-interface;
+  localDomain = config.homefree.system.localDomain;
+  dhcp-script = pkgs.writeShellScript "dhcp-script" ''
+    # $1 = action (add, del, old)
+    # $2 = MAC address
+    # $3 = IP address
+    # $4 = hostname
+
+    if [ "$1" = "add" ]; then
+      ${pkgs.dnsutils}/bin/nsupdate -l <<EOF
+      server 127.0.0.1
+      zone ${localDomain}
+      update delete $4.${localDomain} A
+      update add $4.${localDomain} 3600 A $3
+      send
+    EOF
+      ${pkgs.dnsutils}/bin/nsupdate -l <<EOF
+      server 127.0.0.1
+      update delete $4 A
+      update add $4 3600 A $3
+      send
+    EOF
+    fi
+  '';
 in
 {
   services.dnsmasq = {
@@ -44,8 +67,7 @@ in
         # "lan,10.0.0.100,10.0.0.254,255.255.255.0,8h"
         # "iot,10.2.1.100,10.2.1.254,255.255.255.0,8h"
         # "guest,10.3.1.100,10.3.1.254,255.255.255.0,8h"
-        "tag:${lan-interface},::1,constructor:${lan-interface},ra-names,slaac,12h"    #ipv6
-        # "::,constructor:${lan-interface},ra-stateless"                              # ipv6
+        "tag:${lan-interface},::1,constructor:${lan-interface},ra-names,slaac,12h"    # ipv6
         "${lan-interface},10.0.0.100,10.0.0.254,255.255.255.0,8h"                     # ipv4
       ];
 
@@ -63,41 +85,12 @@ in
       dhcp-host = lib.map (ip-config:
         "${ip-config.mac-address},${ip-config.hostname},${ip-config.ip},${config.homefree.network.static-ip-expiration}")
         config.homefree.network.static-ips;
+
+      dhcp-script = "${dhcp-script}";
     };
   };
 
   ## dhcpd6 is obsolete
   # services.dhcpd6 = {};
-
-  # services.kea.dhcp6 = {
-  #   enable = true;
-  #   settings = {
-  #     interfaces-config = {
-  #       interfaces = [
-  #         lan-interface
-  #       ];
-  #     };
-  #     lease-database = {
-  #       name = "/var/lib/kea/dhcp6.leases";
-  #       persist = true;
-  #       type = "memfile";
-  #     };
-  #     preferred-lifetime = 3000;
-  #     rebind-timer = 2000;
-  #     renew-timer = 1000;
-  #     subnet6 = [
-  #       {
-  #         id = 1;
-  #         subnet = "2001:db8:1::/64";
-  #         pools = [
-  #           {
-  #             pool = "2001:db8:1::1-2001:db8:1::ffff";
-  #           }
-  #         ];
-  #       }
-  #     ];
-  #     valid-lifetime = 4000;
-  #   };
-  # };
 }
 

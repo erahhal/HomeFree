@@ -4,6 +4,19 @@ let
   zones = [config.homefree.system.domain] ++ config.homefree.system.additionalDomains;
   preStart = ''
     touch /run/unbound/include.conf
+    cat > /run/unbound/dynamic.zone<< EOF
+    \$ORIGIN ${config.homefree.system.localDomain}.
+    \$TTL 3600
+    @       IN      SOA     localhost. root.localhost. (
+                            2023100101 ; serial
+                            3600       ; refresh
+                            1800       ; retry
+                            604800     ; expire
+                            86400      ; minimum
+                            )
+            IN      NS      localhost.
+    EOF
+    # cp /run/unbound/dynamic.zone /tmp
   '';
 in
 {
@@ -221,6 +234,16 @@ in
         #   ];
         # }
       ];
+
+      ## Enable dynamic updates from dnsmasq
+      auth-zone = {
+        name = "\"${config.homefree.system.localDomain}\"";
+        master = "yes";
+        allow-notify = "no";
+        for-downstream = "no";
+        for-upstream = "yes";
+        zonefile = "\"/run/unbound/dynamic.zone\"";
+      };
 
       remote-control.control-enable = true;
     };
