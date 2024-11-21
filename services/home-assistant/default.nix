@@ -22,7 +22,7 @@ in
   ];
 
   services.home-assistant = {
-    enable = true;
+    enable = config.homefree.services.homeassistant.enable;
 
     # Enable Postgres
     package = (pkgs.home-assistant.override {
@@ -410,4 +410,15 @@ in
       ensureDBOwnership = true;
     }];
   };
+
+  homefree.proxied-hosts = if config.homefree.services.homeassistant.enable == true then [
+    {
+      label = "homeassistant";
+      subdomains = [ "homeassistant" "ha" ];
+      http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
+      https-domains = [ config.homefree.system.domain ];
+      port = 8123;
+      public = config.homefree.services.homeassistant.public;
+    }
+  ] else [];
 }

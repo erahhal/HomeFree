@@ -5,7 +5,7 @@
   ];
 
   services.authentik = {
-    enable = true;
+    enable = config.homefree.services.authentik.enable;
     # Deployed SOPS file
     environmentFile = "/run/secrets/authentik/authentik-env";
     ## @TODO: make these configurable from module
@@ -59,6 +59,17 @@
       sopsFile = ../secrets/authentik.yaml;
     };
   };
+
+  homefree.proxied-hosts = if config.homefree.services.authentik.enable == true then [
+    {
+      label = "auth";
+      subdomains = [ "authentik" "auth" ];
+      http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
+      https-domains = [ config.homefree.system.domain ];
+      port = 9000;
+      public = config.homefree.services.authentik.public;
+    }
+  ] else [];
 
   # # Set the authentik postgresql password
   # systemd.services.postgresql.postStart = let

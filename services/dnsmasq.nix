@@ -40,15 +40,16 @@ in
       ## Don't listen to anything on wan interface
       except-interface = wan-interface;
 
-      ## Don't send bogus requests to internet
+      ## Never forward addresses in the non-routed address spaces (don't send bogus requests to internet)
       bogus-priv = true;
 
       ## Enable Router Advertising for ipv6
       enable-ra = true;
 
       ## Ipv6
-      ## ra-param = "${lan-interface},0,0";  ## This disables router-advertisements
-      ra-param = "${lan-interface},10,300";
+      # ra-param = "${lan-interface},0,0";  ## This disables router-advertisements
+      ## Send out advertisements every 10 seconds, and make sure they are valid for 7200 seconds (2h)
+       ra-param = "${lan-interface},10,7200";
 
       ## DNS servers to pass to clients
       ## @TODO: Make this based on configured gateway IP
@@ -67,6 +68,11 @@ in
         # "lan,10.0.0.100,10.0.0.254,255.255.255.0,8h"
         # "iot,10.2.1.100,10.2.1.254,255.255.255.0,8h"
         # "guest,10.3.1.100,10.3.1.254,255.255.255.0,8h"
+        ## "constructor" gets the ipv6 range from the WAN interface since it's dynamic can't be hard coded here.
+        ## "ra-names" includes the hostname in router advertisement messages for local name resolution
+        ## "slaac" specifies how addresses are allocated. In this case, it tells clients to create
+        ## their own address by using the advertised prefix + MAC address, and then the clients send
+        ## a message to validate that it's not a duplicate with another address.
         "tag:${lan-interface},::1,constructor:${lan-interface},ra-names,slaac,12h"    # ipv6
         "${lan-interface},10.0.0.100,10.0.0.254,255.255.255.0,8h"                     # ipv4
       ];
