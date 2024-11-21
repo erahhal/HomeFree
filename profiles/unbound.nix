@@ -161,11 +161,12 @@ in
         (lib.map (zone: "\"${config.homefree.system.hostName}.${zone} IN AAAA 2600:1700:ab00:465f:2e0:67ff:fe22:3e64\"") zones)
         ++
         (lib.map (ip-config:
+        "\"${ip-config.hostname} IN A ${ip-config.ip}\"")
+        config.homefree.network.static-ips)
+        ++
+        (lib.map (ip-config:
         "\"${ip-config.hostname}.${config.homefree.system.localDomain} IN A ${ip-config.ip}\"")
         config.homefree.network.static-ips)
-
-        ## @TODO: Add caddy domains to zones, e.g.:
-        ## "auth.rahh.al IN A 10.0.0.1"
         ;
 
         local-data-ptr = [
@@ -173,11 +174,13 @@ in
           "\"127.0.0.1 localhost\""
         ]
         ++
-        (lib.concatLists
-          (lib.map (zone:
-            (lib.map (ip-config: "\"${ip-config.ip} ${ip-config.hostname}.${zone}\"") config.homefree.network.static-ips)
-          ) zones)
-        )
+        (lib.map (ip-config:
+        "\"${ip-config.ip} ${ip-config.hostname}\"")
+        config.homefree.network.static-ips)
+        ++
+        (lib.map (ip-config:
+        "\"${ip-config.ip} ${ip-config.hostname}.${config.homefree.system.localDomain}\"")
+        config.homefree.network.static-ips)
 
         ## @TODO: Add caddy domains to zones, e.g.:
         ## "10.0.0.1 auth.rahh.al"
