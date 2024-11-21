@@ -32,13 +32,15 @@ in
 
     # source: https://github.com/mdlayher/homelab/blob/master/nixos/routnerr-3/configuration.nix#L46[]
     # By default, not automatically configure any IPv6 addresses.
-    "net.ipv6.conf.all.accept_ra" = 0;
-    "net.ipv6.conf.all.autoconf" = 0;
-    "net.ipv6.conf.all.use_tempaddr" = 0;
+    # "net.ipv6.conf.all.accept_ra" = 0;
+    # "net.ipv6.conf.all.autoconf" = 0;
+    # "net.ipv6.conf.all.use_tempaddr" = 0;
 
     # On WAN, allow IPv6 autoconfiguration and tempory address use.
     "net.ipv6.conf.${wan-interface}.accept_ra" = 2;
     "net.ipv6.conf.${wan-interface}.autoconf" = 1;
+    "net.ipv6.conf.${lan-interface}.accept_ra" = 2;
+    "net.ipv6.conf.${lan-interface}.autoconf" = 1;
   };
 
   systemd.network = {
@@ -174,6 +176,9 @@ in
 
             ## Allow for ipv6 route advertisements
             icmpv6 type { echo-request, nd-neighbor-solicit, nd-neighbor-advert, nd-router-solicit, nd-router-advert, mld-listener-query } accept;
+
+            # DHCPv6
+            ip6 saddr fe80::/10 ip6 daddr fe80::/10 udp sport 547 udp dport 546 accept
 
             iifname { "lo" } accept comment "Allow localhost to access the router"
             iifname { "${lan-interface}" } accept comment "Allow local network to access the router"
