@@ -8,10 +8,8 @@ in
 {
 
   systemd.services.caddy = {
-    serviceConfig = {
-      After = [ "network.target" "network-online.target" "unbound.service" ];
-      Requires = [ "network-online.target" "unbound.service" ];
-    };
+    after = [ "network.target" "network-online.target" "unbound.service" ];
+    requires = [ "network-online.target" "unbound.service" ];
   };
 
   services.caddy = {
