@@ -1,0 +1,16 @@
+{
+    "author": "Ellis Rahhal",
+    "authorUri": "https://homefree.host",
+    "languages": [ "en" ],
+    "languageLabels": {
+        "en": "English"
+    },
+    "title": {
+        "en": "Homefree Self Hosting"
+    },
+    "baseUrl": "http://localhost:8080",
+    "keywords": {
+        "en": "homefree, self-hosting, libre, homelab, router, nixos"
+    }
+}
+
