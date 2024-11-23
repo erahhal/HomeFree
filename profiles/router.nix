@@ -45,13 +45,27 @@ in
 
   systemd.network = {
     networks = {
+      # "01-${wan-interface}" = {
+      #   name = wan-interface;
+      #   networkConfig = {
+      #     DHCP = "yes";
+      #     IPv6AcceptRA = "yes";
+      #     ## systemd-networkd will assign an address to the LAN interface
+      #     IPv6SendRA = "no";
+      #     IPv6PrivacyExtensions = "kernel";
+      #   };
+      #   dhcpV6Config = {
+      #     PrefixDelegation = "yes";
+      #     Without = "WithoutPrefixDelegation";
+      #   };
+      # };
       "01-${lan-interface}" = {
         name = lan-interface;
         networkConfig = {
           Description = "LAN link";
           Address = "10.0.0.1/24";
           LinkLocalAddressing = "yes";
-          IPv6AcceptRA = "yes";
+          IPv6AcceptRA = "no";
           # Announce a prefix here and act as a router.
           IPv6SendRA = "yes";
           # Use a DHCPv6-PD delegated prefix (DHCPv6PrefixDelegation.SubnetId)
@@ -63,6 +77,13 @@ in
           EmitDNS = "no";
           EmitDomains = "no";
         };
+        ipv6Prefixes = [
+          {
+            ipv6PrefixConfig = {
+              Prefix = "::/64";
+            };
+          }
+        ];
       };
     };
   };

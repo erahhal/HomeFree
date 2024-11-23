@@ -1,0 +1,95 @@
+---
+title: HomeFree Quick Start
+layout: base.html
+---
+<div class="quick-start container">
+  <h1>Quick Start Guide</h1>
+  <p class="quick-start-intro">
+  NOTE: HomeFree is still under heavy development, and not yet ready for use by non-technical users. This guide is
+  for users and developers comfortable installing and configuring software on Linux.
+  </p>
+
+  <div class="step">
+    <h2><span class="step-number">1</span>Acquire Hardware</h2>
+    <p>HomeFree has been tested on AMD and Intel-based x86 hardware. The minimum requirements are still in flux,
+    but you'll want a device that has at least 8Gb of memory and a decent CPU, since it will be running many
+    services. It also MUST have two ethernet ports, one for the WAN/connection to the public internet, and one
+    for your LAN/intranet.</p>
+    <p>This instance is running on an <a href="https://www.tomsguide.com/reviews/intel-NUC-9-Pro" target="_blank">Intel NUC 9 Pro NUC9VXQNX</a>,
+    but it surely will run on less expensive hardware.</b>
+  </div>
+
+  <div class="step">
+    <h2><span class="step-number">2</span>Get a Nix environment set up on your host machine.</h2>
+    <p>HomeFree must be deployed from another machine with Nix installed. If you are on NixOS, you should be good to go.
+    If you are on a different distribution of Linux, follow the <a href="https://nixos.org/download/" target="_blank">instructions</a> on how
+    to install and use Nix.</p>
+  </div>
+
+  <div class="step">
+    <h2><span class="step-number">3</span>Get the code</h2>
+    <p>Download the <a href="https://git.homefree.host/homefree/sample-config" target="_blank">sample host config</a> to your workstation.</p>
+    <div class="code-block">
+      <code>git clone https://git.homefree.host/homefree/sample-config</code>
+    </div>
+  </div>
+
+  <div class="step">
+    <h2><span class="step-number">4</span>Prepare the configuration</h2>
+    <p>Update configuration.nix with your preferred settings. More details TBD.</p>
+  </div>
+
+  <div class="step">
+    <h2><span class="step-number">5</span>Get the IP address of the target machine</h2>
+    <p>Create a bootable USB flash drive of the minimal NixOS ISO image. Simple instructions can be found <a href="https://nixos.wiki/wiki/NixOS_Installation_Guide/Unetbootin" target="_blank">here</a>.</p>
+    <p>Boot the target machine with the USB flash drive</p>
+  </div>
+
+  <div class="step">
+    <h2><span class="step-number">6</span>Hardware Preparation</h2>
+    <p>Disable secure boot in the BIOS of the target machine.</p>
+    <p>Plug the machine into an ethernet cable.</p>
+    <div class="note">
+      <strong>Note:</strong> Installation currently does not work over WiFi.
+    </div>
+  </div>
+
+  <div class="step">
+    <h2><span class="step-number">7</span>Create NixOS bootable flash drive and boot up machine</h2>
+    <p>After the machine is has booted the minimal NixOS image and you are logged in, get the IP address with the following:</p>
+    <div class="code-block">
+      <code>
+        ifconfig
+      </code>
+    </div>
+  </div>
+
+  <div class="step">
+    <h2><span class="step-number">8</span>Install HomeFree</h2>
+    <p>Run the installation script. Again, make sure the target computer is connected to an ethernet cable.</p>
+    <p>Enter the IP of the target machine as directed.</p>
+    <div class="code-block">
+      <code>
+        ./install.sh
+      </code>
+    </div>
+  </div>
+
+  <div class="step">
+    <h2><span class="step-number">9</span>Next Steps</h2>
+    <p>Now that you have a running instance, you should be able to log in with:</p>
+    <div class="code-block">
+      <code>ssh [adminUsername]@10.0.0.1</code>
+    </div>
+    <p>You might want to:</p>
+    <ul style="list-style-position: inside; margin-top: 1rem;">
+      <li>Browse to https://www.[your domain]</li>
+      <li>Explore the configuration options</li>
+      <li>Set up authentication</li>
+      <li>Verify that DDNS is configured properly and your domain is pointing at your server</li>
+    </ul>
+    <div class="note" style="margin-top: 1.5rem;">
+      <strong>Need help?</strong> Check out the documentation or get in touch for support.
+    </div>
+  </div>
+</div>

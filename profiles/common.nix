@@ -252,6 +252,7 @@
     neofetch
     nil
     nix-index
+    nodejs
     openssl
     # openjdk16-bootstrap
     p7zip

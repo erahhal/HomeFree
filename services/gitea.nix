@@ -14,6 +14,12 @@
         START_SSH_SERVER = true;
         SSH_PORT = 3022;
       };
+      migrations = {
+        ALLOWED_DOMAINS = "*";
+        ALLOW_LOCALNETWORKS = true;
+        SKIP_TLS_VERIFY = true;
+      };
+      # service.DISABLE_REGISTRATION = true;
     };
   };
 

@@ -1,0 +1,405 @@
+
+:root {
+  --bg-primary: #0f1922;  /* Darker blue-green */
+  --bg-secondary: #1a2a32;  /* Dark blue-green */
+  --text-primary: #e2e8e0;  /* Slightly green-tinted white */
+  --text-secondary: #94b8a8;  /* Muted sage */
+  --accent: #10b981;  /* Emerald green */
+  --max-width: 1200px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "SF Pro Display", -apple-system, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+/* Update link styling */
+a:not(.button) {
+  color: var(--accent);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+}
+
+a:not(.button):hover {
+  color: #34d399;  /* Lighter green for hover */
+  border-bottom: 1px solid currentColor;
+}
+
+/* Override default visited state */
+a:visited {
+  color: var(--accent);  /* Keep same as normal state */
+}
+
+a:visited:hover {
+  color: #34d399;  /* Keep same as normal hover state */
+}
+
+.self-hosted-banner {
+  background: linear-gradient(90deg, #065f46, #10b981);  /* Dark to light green gradient */
+  color: #ffffff;
+  text-align: center;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.self-hosted-banner strong {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* Rest of the styles remain the same, just updating colors */
+header {
+  background-color: var(--bg-secondary);
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 100;
+}
+
+a.button {
+  display: inline-block;
+  padding: 0.875rem 2.5rem;
+  background-color: var(--accent);
+  color: white;
+  text-decoration: none;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s;
+  font-weight: 500;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  border-bottom: none;
+}
+
+a.button:hover,
+a.button:visited {
+  color: white;
+  border-bottom: none;
+}
+
+a.button:hover {
+  background-color: #059669;  /* Slightly darker green */
+}
+
+/* All other styles remain exactly the same */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.75rem;
+  font-weight: 500;
+  color: var(--accent);
+  letter-spacing: -0.04em;
+  text-decoration: none;
+  border-bottom: none;
+}
+
+nav ul {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+}
+
+/* Keep the nav links and buttons clean without underlines */
+nav a,
+.button {
+  border-bottom: none;
+}
+
+nav a:hover,
+.button:hover {
+  border-bottom: none;
+}
+
+nav a {
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.2s;
+  font-weight: 400;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+}
+
+nav a:hover {
+  color: var(--accent);
+}
+
+.hero {
+  padding: 6rem 0;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  line-height: 1.1;
+}
+
+.hero p {
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  max-width: 700px;
+  margin: 0 auto;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.features {
+  padding: 4rem 0;
+  background-color: var(--bg-secondary);
+}
+
+.features h2 {
+  font-size: 2.5rem;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.feature-card {
+  padding: 2rem;
+  background-color: var(--bg-primary);
+  border-radius: 0.5rem;
+  transition: transform 0.2s;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.feature-card h3 {
+  margin-bottom: 1rem;
+  color: var(--accent);
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.feature-card p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.cta {
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.code-bg {
+  --code-bg: #151f28;  /* Add this to your :root if not already present */
+}
+
+.quick-start {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 4rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.quick-start .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.quick-start h1 {
+  font-size: 3rem;
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  background: linear-gradient(90deg, var(--accent), #34d399);  /* Green gradient */
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 2px 10px rgba(16, 185, 129, 0.1);  /* Subtle glow using accent color */
+}
+
+.quick-start-intro {
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  max-width: 800px;
+  margin-bottom: 3rem;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.quick-start > h1,
+.quick-start > .quick-start-intro,
+.quick-start > .step {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.step {
+  margin-bottom: 2rem;
+  max-width: 800px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.step:last-child {
+  margin-bottom: 0;
+}
+
+.step h2 {
+  font-size: 1.75rem;
+  font-weight: 500;
+  color: var(--accent);
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: left;
+  gap: 1rem;
+}
+
+.step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: var(--bg-secondary);
+  border-radius: 50%;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.step p,
+.step .code-block,
+.step .note,
+.step ul {
+  width: 100%;
+  text-align: left;
+}
+
+.step p {
+  margin-top: 1rem;
+}
+
+.code-block {
+  background-color: #1e1e1e;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+  font-family: 'SF Mono', Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9rem;
+  position: relative;
+  border: 1px solid #333;       /* Subtle border */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);  /* Depth effect */
+  z-index: 1;
+}
+
+.code-block code {
+  color: #e2e8f0;
+  display: block;
+  line-height: 1.5;
+  margin-top: 1.5rem;
+}
+
+/* Optional: Add a terminal-like top bar */
+.code-block::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2rem;
+  background: #2a2a2a;         /* Slightly lighter than main background */
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  border-bottom: 1px solid #333;
+}
+
+/* Add terminal circles */
+.code-block::after {
+  content: '• • •';
+  position: absolute;
+  top: 0.6rem;
+  left: 1rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.3rem;
+  color: #666;
+}
+
+.note {
+  background-color: var(--bg-secondary);
+  padding: 1rem 1.5rem;
+  border-left: 4px solid var(--accent);
+  border-radius: 0.25rem;
+  margin: 1rem 0;
+}
+
+.note strong {
+  color: var(--accent);
+}
+
+footer {
+  background-color: var(--bg-secondary);
+  margiun-top: 4rem;
+  padding: 2rem 0;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 3rem;
+  }
+
+  nav ul {
+    gap: 1.5rem;
+  }
+
+  .quick-start h1 {
+    font-size: 2.5rem;
+  }
+
+  .step h2 {
+    font-size: 1.5rem;
+  }
+}
+

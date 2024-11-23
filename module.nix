@@ -1,7 +1,7 @@
 ## @TODO: Look at the following for a VM test setup
 ## https://github.com/nix-community/disko/blob/master/module.nix
 
-{ config, lib, extendModules, ... }:
+{ config, lib, pkgs, extendModules, ... }:
 
 # let
 #   vmVariantWithHomefree = extendModules {
@@ -453,6 +453,14 @@
           };
         };
       });
+    };
+
+    landing-page = {
+      path = lib.mkOption {
+        type = lib.types.str;
+        default = "${pkgs.homefree-site}/lib/node_modules/homefree-site/public";
+        description = "Path to landing page";
+      };
     };
   };
 

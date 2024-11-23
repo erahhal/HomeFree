@@ -2,10 +2,14 @@
   "name": "homefree-site",
   "version": "0.0.1",
   "private": true,
+  "type": "module",
   "dependencies": {
-    "@11ty/eleventy": "^3.0.0"
+    "@11ty/eleventy": "^3.0.0",
+    "@11ty/eleventy-plugin-rss": "^2.0.2",
+    "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.0"
   },
   "scripts": {
-    "build": "eleventy"
+    "build": "eleventy",
+    "watch": "eleventy --serve"
   }
 }

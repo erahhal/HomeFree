@@ -4,9 +4,17 @@ let
     respond "Hello, world! I am being accessed from {scheme}."
   '';
   proxiedHostConfig = config.homefree.proxied-hosts;
-  site = pkgs.callPackage  ../site { };
+  homefree-site = pkgs.callPackage  ../site { };
 in
 {
+
+  ## add homefree default site as a package
+  nixpkgs.overlays = [
+    (final: prev: {
+      homefree-site = homefree-site;
+    })
+  ];
+
   systemd.services.caddy = {
     after = [ "network.target" "network-online.target" "unbound.service" ];
     requires = [ "network-online.target" "unbound.service" ];
@@ -65,11 +73,11 @@ in
       {
         "http://localhost, https://localhost, https://${config.homefree.system.domain}, https://www.${config.homefree.system.domain}" = {
           logFormat = ''
-            output file ${config.services.caddy.logDir}/access-homefree-site.log
+            output file ${config.services.caddy.logDir}/access-landing-page.log
           '';
           extraConfig = ''
             bind 10.0.0.1 192.168.2.1 ${config.homefree.system.domain}
-            root * ${site}/lib/node_modules/homefree-site/_site/
+            root * ${config.homefree.landing-page.path}
             file_server
           '';
         };
