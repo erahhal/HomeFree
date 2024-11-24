@@ -1,0 +1,250 @@
+---
+title: HomeFree FAQs
+layout: base.html
+---
+<div class="container">
+  <div class="section-header">
+    <h1>Frequently Asked Questions</h1>
+    <!--
+    <p>Find answers to common questions about ProjectName, from basic setup to advanced features.</p>
+    <div class="faq-categories">
+      <button class="category-button active">All</button>
+      <button class="category-button">Reliability</button>
+      <button class="category-button">Security</button>
+      <button class="category-button">Deployment</button>
+      <button class="category-button">Troubleshooting</button>
+    </div>
+    -->
+  </div>
+
+  <div class="faq-section">
+    <div class="faq-item">
+      <div class="faq-question">
+        What exactly is HomeFree?
+      </div>
+      <div class="faq-answer">
+        <p>
+        HomeFree is a project with a singular goal: to allow you to control your own data by drastically reducing your
+        dependence on big centralized corporate services. The way this is accomplished to to own your own device and host
+        your own services. This has been possible for a long time but required a lot of experience and months or years of
+        effort to get anywhere close to making this work in a reliable and usable way.
+        </p>
+        <p>
+        In the process of building a self-hosted setup at home, the realiztion dawned that all the pieces are now
+        available and commoditized, but there is no easy way to stitch them together and no easy way to configure them.
+        HomeFree aims to solve this by being very specific about choosing the right configuration and curating a
+        set of applications to cut through the endless choice and inconsistency of currently available systems, and
+        adding a single UI with a standard design language and single login to access them all.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        How does it differ from other available solutions?
+      </div>
+      <div class="faq-answer">
+        <p>
+        There are similar systems out there but they are all missing important pieces of the puzzles to make a self-hosted
+        system simple and turnkey. A goal is to be able to provide a elegant Apple-like design experience in a small box with
+        built-in battery backup and redundant storage that you plug directly into your modem and replaces your
+        router, NAS, home server, and WiFi access point, all through a short installation process to be up and running in minutes.
+        </p>
+        <p>
+        For a detailed comparison with other products, check out the <a href="/comparison">product comparison page</a>.
+        </p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        What types of things can I do with HomeFree?
+      </div>
+      <div class="faq-answer">
+        Almost everything that is provided by Google and other large tech companies could be a target for inclusion
+        in HomeFree. Services that are already included or are in work:
+        <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+          <li>Photo hosting</li>
+          <li>Calendar</li>
+          <li>Contacts</li>
+          <li>Office Suite</li>
+          <li>File Storage</li>
+          <li>Video and Audio Serving</li>
+          <li>Home Automation</li>
+          <li>Video surveilance</li>
+          <li>Website/Blog</li>
+          <li>Ad Blocking</li>
+          <li>Password Managemenet</li>
+          <li>Browser Bookmark Sync</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        Can I access my server away from home?
+      </div>
+      <div class="faq-answer">
+        Yes! That's one of the core goals of HomeFree - to provide public facing services and access so that
+        you don't have to rely on large centralized services. You can configure various services to be private
+        to your home or open to the internet. For services that are private, you can access them remotely by
+        connecting to HomeFree through a built-in VPN.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        What are more cutting edge ideas that could be implemented?
+      </div>
+      <div class="faq-answer">
+        Anything that could run on a computer or be run as a service could be hosted by HomeFree. The goal is to make
+        adding modules standard and plug-and-play. AI, privacy, and decentralization are themes that could be explored.
+        <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+          <li>External GPU plugin for AI services. Could cluster GPUs with friends, family, or even strangers</li>
+          <li>Decentralized social media nodes such as Bluesky and Mastadon</li>
+          <li>Decentralized CDNs for high traffic sites and services</li>
+          <li>Shared back-up services between friends and family</li>
+          <li>Cryptocurrency (though nothing about HomeFree is currently related to or dependency on a blockchain)</li>
+          <li>Pluggable DNA sequencing module for those who don't want to use a public DNA sequencing service</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        Is HomeFree FREE?
+      </div>
+      <div class="faq-answer">
+        Yes, it is free in both major senses of the word - it is open source, so you can install and modify it
+        as you please. It is also free to use, without payment.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        A stated goal of HomeFree is to be easy to set up. How can this be with the complexities around domain registration,
+        dynamically allocated IPs, and the complexities of various ISP deployments?
+      </div>
+      <div class="faq-answer">
+        Making these easy are core goals of the project, and the vision is to make them as automatic as possible.  The easiest route
+        would be a web-gui or phone app based configuration that does the following:
+        <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+          <li>Detect the ISP and automatically configure appropriately</li>
+          <li>Provide simple insructions on any changes required to the modem configuration, if necessary</li>
+          <li>Longer term, look at spearheading a movement for zero-config ISP/modem setup for self hosting</li>
+          <li>Provide a dynamic DNS service with subdomains at homefree.host for zero-effort setup</li>
+          <li>If a personal domain is desired, provide a simple step-by-tep UI-based config</li>
+          <li>For personal domains, detect the registrar, and offer custom instructions for setting up dynamic dns</li>
+          <li>Longer term, look at protocols/APIs for automatically configuring registrars</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        What about email? Isn't that very hard to self-host?
+      </div>
+      <div class="faq-answer">
+        It's well know among the self-hosting community that email can be fragile and difficult to self-host for various reasons. The
+        great thing about HomeFree is that it's not all or nothing. You can progressively decide which services you want to host and
+        which you want to continue to use elsewhere.  But there are still plans to offer the ability to host an email server if you
+        so wish. For an example of a simple US for setting up a custom domain for secure and reliable email, look at Proton Mail's
+        domain configuration UI.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        What is preventing me from losing all my data if the hardware fails or my house burns down?
+      </div>
+      <div class="faq-answer">
+        The system is designed to store all data in a way that is easy to bundle and back-up to another machine
+        in your location and off-site as well.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        What if I am in the process of moving or don't want to host a server at my location anymore?
+      </div>
+      <div class="faq-answer">
+        The backup data bundle is in a standard format and can easily be moved to another HomeFree server or
+        an online HomeFree-compatible service if you do not want to continue hosting yourself.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        How do I ensure that access to my services is reliable when I am using it away from home?
+      </div>
+      <div class="faq-answer">
+        This problem is still under consideration. One potential solution is to share load across multiple HomeFree
+        servers, either through friends and family, or a more open anonymous distributed CDN of some sort. Also,
+        paid-for services could be offered that provide a back-up in case your server goes down or is otherwise
+        out of service.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        How can I contribute to the project?
+      </div>
+      <div class="faq-answer">
+        We welcome contributions of all kinds! You can:
+        <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+          <li>Submit bug reports and feature requests on our <a href="https://git.homefree.host/homefree">git instance</a></li>
+          <li>Improve documentation</li>
+          <li>Submit pull requests</li>
+          <li>Help others in our community forums</li>
+        </ul>
+        Check our <a href="#contribution-guide">contribution guidelines [TBD]</a> to get started.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        What's the license and usage policy?
+      </div>
+      <div class="faq-answer">
+        HomeFree is currently built and copyrighted by Ellis Rahhal. I am currently in the process of evaluating which open source license
+        to release the project under. Most likely it will be a BSD-based license with limited restrictions to encourage wide adoption.
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  // Simple toggle for FAQ items
+  document.querySelectorAll('.faq-question').forEach(question => {
+    question.addEventListener('click', () => {
+      const answer = question.nextElementSibling;
+      const isOpen = answer.style.display === 'block';
+
+      // Close all answers
+      document.querySelectorAll('.faq-answer').forEach(a => {
+        a.style.display = 'none';
+      });
+      document.querySelectorAll('.faq-question').forEach(q => {
+        q.style.removeProperty('background-color');
+      });
+
+      // Toggle clicked answer
+      if (!isOpen) {
+        answer.style.display = 'block';
+        question.style.backgroundColor = 'rgba(16, 185, 129, 0.1)';
+      }
+
+      // Update plus/minus
+      document.querySelectorAll('.faq-question').forEach(q => {
+        q.style.setProperty('--content', '"+"');
+      });
+
+      if (!isOpen) {
+        question.style.setProperty('--content', '"-"');
+      }
+    });
+  });
+
+  // Hide all answers initially except the first one
+  document.querySelectorAll('.faq-answer').forEach((answer, index) => {
+    answer.style.display = index === 0 ? 'block' : 'none';
+  });
+</script>

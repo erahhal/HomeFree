@@ -1,0 +1,83 @@
+---
+title: HomeFree Product Comparison
+layout: base.html
+---
+<div class="container">
+  <div class="section-header">
+    <h1>Product Comparison</h1>
+  </div>
+
+  <div class="section">
+    There are similar systems out there but they are all missing important pieces of the puzzles to make a self-hosted
+    system simple and turnkey. A goal is to be able to provide a elegant Apple-like design experience in a small box with
+    built-in battery backup and redundant storage that you plug into your modem instead of a router, and go through a
+    short installation process and be up and running in minutes. There is currently no other product that does all of
+    the following out of the box without heavy technical lifting.
+    <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+      <li>Router/Gateway</li>
+      <li>Firewall</li>
+      <li>Wireless Access Point</li>
+      <li>Ad Blocking</li>
+      <li>Dynamic DNS</li>
+      <li>Reverse Proxy with automatic certificate management</li>
+      <li>Full Application Suite</li>
+      <li>Single Sign-On</li>
+      <li>NAS</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>OPNSense/PFSense</h2>
+    <p>
+      <a href="https://opnsense.org/" target="_blank">OPNSense</a> and <a href="https://www.pfsense.org/" target="_blank">PFSense</a>
+      are popular Open Source router products that can replace a typical router/access point provided
+      by an ISP, with a lot of additional functionality like firewall functionality, ad blocking, intrusion detection,
+      etc. These products can be used at home, but are rather technical and complicated, requiring a lot of configuration.
+      They are also not very suitable for serving general applications.
+    </p>
+  </div>
+  <div class="section">
+    <h2>Ubiquiti Dream Machine Pro</h2>
+    <p>
+      The <a href="https://store.ui.com/us/en/products/udm-pro" target="_blank">Ubiquiti Dream Machine Pro</a> is a
+      similar product to OPNSense, but with a highly polished front-end.  It is a corporate product, and as such is
+      not free, nor is it open source. It also does not work well with other network hardware that is not part of the
+      Ubiquiti ecosystem. It is also a relatively complex product that requires a level of technical understanding.
+    </p>
+  </div>
+  <div class="section">
+    <h2>Synology</h2>
+    <p>
+      <a href="https://www.synology.com" target="_blank">Synology</a> offers a wide range of products that began with
+      NAS (Network-Attached Storage) but has extended into offering the ability to run applications in docker containers.
+      Since they are first and formost network storage devices, they often don't come with much memory and CPU power,
+      so are not well suited to heavy application usage. Thye also are expensive and not open source, and not purpose
+      built as routers for WAN facing applications.
+    </p>
+  </div>
+  <div class="section">
+    <h2>TrueNAS</h2>
+    <p>
+      <a href="https://www.truenas.com/" target="_blank">TrueNAS</a> TrueNAS covers a similar NAS space to Synology,
+      but with an open source offering. Being open source, it can be run on better hardware and can more suitably serve
+      applications, but is not purpose built as a router, and would require heavy configuration to work as one.
+    </p>
+  </div>
+  <div class="section">
+    <h2>CasaOS and Umbrel</h2>
+    <p>
+      <a href="https://casaos.io/" target="_blank">CasaOS</a> and <a href="https://umbrel.com/" target="_blank">Umbrel</a>
+      are focused on serving applications as a first class concern, but less capable in routing
+      and gateway capability, which would need to be configured separately. From a user experience perspective though,
+      they are closer to what HomeFree is trying to achieve.
+    </p>
+  </div>
+  <div class="section">
+    <h2>NextCloud and YunoHost</h2>
+    <p>
+      <a href="https://nextcloud.com/" target="_blank">NextCloud</a> and <a href="https://yunohost.org/" target="_blank">YunoHost</a>
+      are heavy multi-purpose web platforms with a built-in suite of applications. They serve a more narrow niche than CasaOS
+      and Umbrel as they cannot run arbitrary applications, but rather those built specifically for the NextCloud ecosystem.
+    </p>
+  </div>
+</div>

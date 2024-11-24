@@ -16,7 +16,7 @@
   homefree.proxied-hosts = if config.homefree.services.radicale.enable == true then [
     {
       label = "radicale";
-      subdomains = [ "radicale" "webdav" "caldav" "carddav" ];
+      subdomains = [ "radicale" "dav" "webdav" "caldav" "carddav" ];
       http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
       https-domains = [ config.homefree.system.domain ];
       port = 5232;
