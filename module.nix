@@ -318,6 +318,26 @@
         };
       };
 
+      cryptpad = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "enable Cryptpad Document service";
+        };
+
+        public = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Open to public on WAN port";
+        };
+
+        adminKeys = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [];
+          description = "Public keys that have access to admin panel";
+        };
+      };
+
       homeassistant = {
         enable = lib.mkOption {
           type = lib.types.bool;
@@ -337,6 +357,20 @@
           type = lib.types.bool;
           default = false;
           description = "enable Gitea git service";
+        };
+
+        public = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Open to public on WAN port";
+        };
+      };
+
+      jellyfin = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "enable Jellyfin media server";
         };
 
         public = lib.mkOption {

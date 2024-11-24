@@ -45,11 +45,12 @@ in
           ## @TODO: Remove headers and check if still works
           extraConfig = ''
             header {
+              # Add general security headers
               Strict-Transport-Security "max-age=31536000; includeSubdomains"
-              X-XSS-Protection "1; mode=block"
               X-Content-Type-Options "nosniff"
               X-Frame-Options "SAMEORIGIN"
-              Referrer-Policy "same-origin"
+              Referrer-Policy "strict-origin-when-cross-origin"
+              X-XSS-Protection "1; mode=block"
             }
           '' + (if entry.public == false then ''
             bind 10.0.0.1 192.168.2.1
@@ -76,17 +77,67 @@ in
             output file ${config.services.caddy.logDir}/access-landing-page.log
           '';
           extraConfig = ''
-            header {
-              Cache-Control: no-cache, no-store, must-revalidate
-              Strict-Transport-Security "max-age=31536000; includeSubdomains"
-              X-XSS-Protection "1; mode=block"
-              X-Content-Type-Options "nosniff"
-              X-Frame-Options "SAMEORIGIN"
-              Referrer-Policy "same-origin"
-            }
             bind 10.0.0.1 192.168.2.1 ${config.homefree.system.domain}
             root * ${config.homefree.landing-page.path}
             file_server
+
+            # Enable Gzip compression
+            encode gzip
+
+            # HTML files - No caching to ensure fresh content
+            @html {
+            file
+              path *.html
+            }
+            header @html {
+              # Disable caching for HTML
+              Cache-Control "no-cache, must-revalidate"
+              # Add ETag for conditional requests
+              ETag
+              # Add Last-Modified header
+              +Last-Modified
+            }
+
+            # CSS files - Aggressive caching with revalidation
+            @css {
+              file
+              path *.css
+            }
+            header @css {
+              # Cache for 1 year, but allow revalidation
+              Cache-Control "public, max-age=31536000, stale-while-revalidate=86400"
+              ETag
+              +Last-Modified
+              Vary Accept-Encoding
+            }
+
+            # Assets (CSS, JS, images)
+            @assets {
+              file
+              path *.js *.png *.jpg *.jpeg *.gif *.svg *.woff *.woff2
+            }
+            header @assets {
+              # Cache for 1 hour, but allow revalidation
+              Cache-Control "public, max-age=3600, must-revalidate"
+              # Add ETag for conditional requests
+              ETag
+              # Add Last-Modified header
+              +Last-Modified
+              # Add Vary header to handle different client capabilities
+              Vary Accept-Encoding
+            }
+
+            # General headers
+            header {
+              # Remove Server header for security
+              -Server
+              # Add general security headers
+              Strict-Transport-Security "max-age=31536000; includeSubdomains"
+              X-Content-Type-Options "nosniff"
+              X-Frame-Options "SAMEORIGIN"
+              Referrer-Policy "strict-origin-when-cross-origin"
+              X-XSS-Protection "1; mode=block"
+            }
           '';
         };
       }

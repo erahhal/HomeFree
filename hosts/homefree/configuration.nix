@@ -1,6 +1,7 @@
 { config, lib, ... }:
 {
   imports = [
+    ../../profiles/acme.nix
     ../../profiles/common.nix
     ../../profiles/config-editor.nix
     ../../profiles/git.nix
@@ -13,10 +14,12 @@
 
     ../../services/adguardhome.nix
     ../../services/authentik.nix
+    ../../services/cryptpad.nix
     ../../services/ddclient.nix
     ../../services/dnsmasq.nix
     ../../services/home-assistant
     ../../services/gitea.nix
+    ../../services/jellyfin.nix
     ../../services/postgres.nix
     ../../services/radicale.nix
     ../../services/unbound.nix
