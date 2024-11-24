@@ -44,13 +44,13 @@ in
           '';
           ## @TODO: Remove headers and check if still works
           extraConfig = ''
-            # header {
-            #   Strict-Transport-Security "max-age=31536000; includeSubdomains"
-            #   X-XSS-Protection "1; mode=block"
-            #   X-Content-Type-Options "nosniff"
-            #   X-Frame-Options "SAMEORIGIN"
-            #   Referrer-Policy "same-origin"
-            # }
+            header {
+              Strict-Transport-Security "max-age=31536000; includeSubdomains"
+              X-XSS-Protection "1; mode=block"
+              X-Content-Type-Options "nosniff"
+              X-Frame-Options "SAMEORIGIN"
+              Referrer-Policy "same-origin"
+            }
           '' + (if entry.public == false then ''
             bind 10.0.0.1 192.168.2.1
           '' else ''
@@ -76,6 +76,14 @@ in
             output file ${config.services.caddy.logDir}/access-landing-page.log
           '';
           extraConfig = ''
+            header {
+              Cache-Control: no-cache, no-store, must-revalidate
+              Strict-Transport-Security "max-age=31536000; includeSubdomains"
+              X-XSS-Protection "1; mode=block"
+              X-Content-Type-Options "nosniff"
+              X-Frame-Options "SAMEORIGIN"
+              Referrer-Policy "same-origin"
+            }
             bind 10.0.0.1 192.168.2.1 ${config.homefree.system.domain}
             root * ${config.homefree.landing-page.path}
             file_server
