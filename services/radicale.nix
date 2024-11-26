@@ -4,9 +4,12 @@
     enable =  config.homefree.services.radicale.enable;
     settings = {
       server.hosts = [ "10.0.0.1:5232" ];
+      auth = {
+        type = "http_x_remote_user";
+      };
       # auth = {
       #   type = "htpasswd";
-      #   htpasswd_filename = "/path/to/htpasswd/file/radicale_users";
+      #   htpasswd_filename = "/var/lib/radicale/htpasswd";
       #   # hash function used for passwords. May be `plain` if you don't want to hash the passwords
       #   htpasswd_encryption = "bcrypt";
       # };
@@ -21,6 +24,7 @@
       https-domains = [ config.homefree.system.domain ];
       port = 5232;
       public = config.homefree.services.radicale.public;
+      basic-auth = true;
     }
   ] else [];
 }

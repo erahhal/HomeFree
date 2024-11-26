@@ -52,21 +52,32 @@ in
               Referrer-Policy "strict-origin-when-cross-origin"
               X-XSS-Protection "1; mode=block"
             }
-          '' + (if entry.public == false then ''
+          '' + (if entry.basic-auth == true then ''
+            basic_auth {
+              # <username> <hash created with caddy hash-password>
+            }
+          '' else "")
+          + (if entry.public == false then ''
             bind 10.0.0.1 192.168.2.1
           '' else ''
             bind 10.0.0.1 192.168.2.1 ${config.homefree.system.domain}
           '')
+          + ''
+            reverse_proxy ${if entry.ssl == true then  "https" else "http"}://${entry.host}:${toString entry.port} {
+          ''
           + (if entry.ssl == true && entry.ssl-no-verify then ''
-            reverse_proxy https://${entry.host}:${toString entry.port} {
               transport http {
                 tls
                 tls_insecure_skip_verify
               }
+          '' else "")
+          + (if entry.basic-auth == true then ''
+              header_up X-remote-user {http.auth.user.id}
+          '' else "")
+          +
+          ''
             }
-          '' else ''
-            reverse_proxy ${if entry.ssl == true then  "https" else "http"}://${entry.host}:${toString entry.port}
-          '');
+          '';
         };
       }
       ) proxiedHostConfig))

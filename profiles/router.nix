@@ -79,9 +79,7 @@ in
         };
         ipv6Prefixes = [
           {
-            ipv6PrefixConfig = {
-              Prefix = "::/64";
-            };
+            Prefix = "::/64";
           }
         ];
       };
@@ -173,6 +171,9 @@ in
 
     ## @TODO: Look into nftables Nix DSL: https://github.com/chayleaf/notnft
     ##        https://www.reddit.com/r/NixOS/comments/14copvu/notnft_write_nftables_rules_in_nix/
+    ##
+    ##        ipv6 reference:
+    ##        https://superuser.com/questions/1617415/how-to-use-ipv6-internet-addresses-on-linux-with-systemd-networkd
     nftables = {
       enable = true;
       ruleset = ''
@@ -196,21 +197,22 @@ in
             udp dport { ${toString wireguard-port} } ct state new accept;
 
             ## Allow for ipv6 route advertisements
-            # icmpv6 type { echo-request, nd-neighbor-solicit, nd-neighbor-advert, nd-router-solicit, nd-router-advert, mld-listener-query } accept;
+            icmpv6 type { echo-request, echo-reply, nd-neighbor-solicit, nd-neighbor-advert, nd-router-solicit, nd-router-advert, nd-redirect, ind-neighbor-solicit, ind-neighbor-advert, router-renumbering, mld-listener-query, mld-listener-report, mld-listener-done, mld-listener-reduction, mld2-listener-report } accept;
             meta l4proto ipv6-icmp accept comment "Accept ICMPv6"
             meta l4proto icmp accept comment "Accept ICMP"
             ip protocol igmp accept comment "Accept IGMP"
 
             # DHCPv6
-            # ip6 saddr fe80::/10 ip6 daddr fe80::/10 udp sport 547 udp dport 546 accept
+            ip6 saddr fe80::/10 ip6 daddr fe80::/10 udp sport 547 udp dport 546 accept
 
             iifname { "lo" } accept comment "Allow localhost to access the router"
             iifname { "${lan-interface}" } accept comment "Allow local network to access the router"
             iifname { "wg0" } accept comment "Allow wireguard network to access the router"
+            iifname { "podman0" } accept comment "Allow podman network to access the router"
 
             iifname "${wan-interface}" ct state { established, related } accept comment "Allow established traffic"
             iifname "${wan-interface}" icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
-            iifname "${wan-interface}" counter drop comment "Drop all other unsolicited traffic from wan"
+            iifname "${wan-interface}" counter log prefix "WAN_DROP: " drop comment "Drop all other unsolicited traffic from wan"
           }
 
           ## allow packets from LAN to WAN, and WAN to LAN if LAN initiated the connection

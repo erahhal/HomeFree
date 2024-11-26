@@ -2,8 +2,7 @@
   description = "HomeFree Self-Hosting Platform";
 
   inputs = {
-    # nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
@@ -11,7 +10,6 @@
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
     nixvim = {
-      # url = "github:nix-community/nixvim/nixos-24.05";
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };

@@ -101,7 +101,7 @@
     isNormalUser  = true;
     home  = "/home/${config.homefree.system.adminUsername}";
     description  = "Homefree Admin";
-    extraGroups  = [ "wheel" ];
+    extraGroups  = [ "wheel" "docker" ];
     openssh.authorizedKeys.keys= config.homefree.system.authorizedKeys;
     hashedPassword = config.homefree.system.adminHashedPassword;
   };
@@ -258,6 +258,7 @@
     p7zip
     pciutils
     powertop
+    sops
     sshpass
     steampipe
     tmux
