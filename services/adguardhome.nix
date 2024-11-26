@@ -10,7 +10,7 @@
     port = 3000;
     settings = {
       http = {
-        address = "0.0.0.0:3000";
+        address = "10.0.0.1:3000";
         session_ttl = "720h";
       };
       users = [
@@ -24,7 +24,8 @@
       block_auth_min = 15;
       theme = "auto";
       dns = {
-        bind_hosts = [ "0.0.0.0" ];
+        ## Must specify interfaces, otherwise it conflicts with podman
+        bind_hosts = [ "10.0.0.1" "127.0.0.1" ];
         port = 53;
         anonymize_client_ip = false;
         ratelimit = 20;

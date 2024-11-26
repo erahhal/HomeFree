@@ -318,6 +318,20 @@
         };
       };
 
+      baikal = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "enable Baikal WebDAV/CalDAV/CardDAV service";
+        };
+
+        public = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Open to public on WAN port";
+        };
+      };
+
       cryptpad = {
         enable = lib.mkOption {
           type = lib.types.bool;
@@ -371,6 +385,20 @@
           type = lib.types.bool;
           default = false;
           description = "enable Jellyfin media server";
+        };
+
+        public = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Open to public on WAN port";
+        };
+      };
+
+      linkwarden = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "enable Linkwarden bookmarks service";
         };
 
         public = lib.mkOption {
@@ -484,6 +512,12 @@
             type = lib.types.bool;
             default = false;
             description = "Whether to verify certificate of upstream service";
+          };
+
+          basic-auth = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = "Whether to enable basic auth headers";
           };
         };
       });

@@ -8,18 +8,21 @@
     ../../profiles/hardware-configuration.nix
     ../../profiles/hosting.nix
     ../../profiles/nixvim.nix
+    ../../profiles/podman.nix
     # ../../profiles/radvd.nix
     ../../profiles/router.nix
     ../../profiles/traffic-shaping.nix
 
     ../../services/adguardhome.nix
     ../../services/authentik.nix
+    ../../services/baikal.nix
     ../../services/cryptpad.nix
     ../../services/ddclient.nix
     ../../services/dnsmasq.nix
     ../../services/home-assistant
     ../../services/gitea.nix
     ../../services/jellyfin.nix
+    ../../services/linkwarden.nix
     ../../services/postgres.nix
     ../../services/radicale.nix
     ../../services/unbound.nix
