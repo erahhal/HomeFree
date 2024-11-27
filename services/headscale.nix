@@ -1,7 +1,7 @@
 { config, ... }:
 {
   services.headscale = {
-    enable = true;
+    enable = config.homefree.services.headscale.enable;
     port = 8087;
     address = "10.0.0.1";
     settings = {
