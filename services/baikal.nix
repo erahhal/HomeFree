@@ -16,7 +16,6 @@ in
 
       extraOptions = [
         "--pull=always"
-        # "--pod=baikal"
       ];
 
       ports = [
