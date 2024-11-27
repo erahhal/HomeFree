@@ -17,7 +17,7 @@
       subdomains = [ "headscale" ];
       http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
       https-domains = [ config.homefree.system.domain ];
-      port = 3007;
+      port = 8087;
       public = config.homefree.services.headscale.public;
     }
   ] else [];
