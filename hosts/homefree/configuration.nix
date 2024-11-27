@@ -19,6 +19,7 @@
     ../../services/cryptpad.nix
     ../../services/ddclient.nix
     ../../services/dnsmasq.nix
+    ../../services/headscale.nix
     ../../services/home-assistant
     ../../services/gitea.nix
     ../../services/jellyfin.nix
