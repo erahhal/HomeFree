@@ -4,6 +4,11 @@
     enable = true;
     port = 8087;
     address = "10.0.0.1";
+    settings = {
+      dns = {
+        base_domain = config.homefree.system.domain;
+      };
+    };
   };
 
   homefree.proxied-hosts = if config.homefree.services.headscale.enable == true then [
