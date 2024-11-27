@@ -24,7 +24,7 @@
       https-domains = [ config.homefree.system.domain ];
       port = 5232;
       public = config.homefree.services.radicale.public;
-      basic-auth = true;
+      # basic-auth = true;
     }
   ] else [];
 }
