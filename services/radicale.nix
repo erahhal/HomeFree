@@ -4,9 +4,11 @@
     enable =  config.homefree.services.radicale.enable;
     settings = {
       server.hosts = [ "10.0.0.1:5232" ];
-      auth = {
-        type = "http_x_remote_user";
-      };
+
+      # auth = {
+      #   type = "http_x_remote_user";
+      # };
+
       # auth = {
       #   type = "htpasswd";
       #   htpasswd_filename = "/var/lib/radicale/htpasswd";
