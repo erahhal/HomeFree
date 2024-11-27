@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 {
   services.headscale = {
     enable = true;
