@@ -2,7 +2,7 @@
 {
   virtualisation.oci-containers.containers = if config.homefree.services.headscale-ui.enable == true then {
     headscale-ui = {
-      image = "headscale/headscale:stable";
+      image = "ghcr.io/gurucomputing/headscale-ui:latest";
 
       autoStart  = true;
 
