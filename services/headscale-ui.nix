@@ -1,7 +1,7 @@
 { config, pkgs, hostParams, userParams, ... }:
 {
   virtualisation.oci-containers.containers = if config.homefree.services.headscale-ui.enable == true then {
-    baikal = {
+    headscale-ui = {
       image = "headscale/headscale:stable";
 
       autoStart  = true;
