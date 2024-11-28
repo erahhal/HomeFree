@@ -83,7 +83,7 @@ in
       ) proxiedHostConfig))
       {
         ## Needed so as to host ui and headscale enpoint on separate domains
-        "https://headscale.${onfig.homefree.system.domain}" = {
+        "https://headscale.${config.homefree.system.domain}" = {
           logFormat = ''
             output file ${config.services.caddy.logDir}/access-headscale.log
           '';
