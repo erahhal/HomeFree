@@ -22,6 +22,7 @@
     ../../services/gitea.nix
     ../../services/headscale.nix
     ../../services/home-assistant
+    ../../services/headscale.nix
     ../../services/headscale-ui.nix
     ../../services/jellyfin.nix
     ../../services/linkwarden.nix
