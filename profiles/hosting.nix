@@ -7,7 +7,6 @@ let
   homefree-site = pkgs.callPackage  ../site { };
 in
 {
-
   ## add homefree default site as a package
   nixpkgs.overlays = [
     (final: prev: {
@@ -62,6 +61,7 @@ in
           '' else ''
             bind 10.0.0.1 192.168.2.1 ${config.homefree.system.domain}
           '')
+          ## @TODO: throw an error if more than one host is using the same port
           + ''
             reverse_proxy ${if entry.ssl == true then  "https" else "http"}://${entry.host}:${toString entry.port} {
           ''
@@ -81,6 +81,38 @@ in
         };
       }
       ) proxiedHostConfig))
+      {
+        ## Needed so as to host ui and headscale enpoint on separate domains
+        "https://headscale.${onfig.homefree.system.domain}" = {
+          logFormat = ''
+            output file ${config.services.caddy.logDir}/access-headscale.log
+          '';
+          extraConfig = ''
+            @headscale-options {
+              host headscale.${config.homefree.system.domain}
+              method OPTIONS
+            }
+            @headscale-other {
+              host headscale.${config.homefree.system.domain}
+            }
+            handle @headscale-options {
+              header {
+                Access-Control-Allow-Origin https://headscale-ui.${config.homefree.system.domain}
+                Access-Control-Allow-Headers *
+                Access-Control-Allow-Methods "POST, GET, OPTIONS, DELETE"
+              }
+              respond 204
+            }
+            handle @headscale-other {
+              reverse_proxy http://10.0.0.1:8087 {
+                header_down Access-Control-Allow-Origin https://headscale-ui.${config.homefree.system.domain}
+                header_down Access-Control-Allow-Methods "POST, GET, OPTIONS, DELETE"
+                header_down Access-Control-Allow-Headers *
+              }
+            }
+          '';
+        };
+      }
       ## Static root site
       {
         "http://localhost, https://localhost, https://${config.homefree.system.domain}, https://www.${config.homefree.system.domain}" = {
