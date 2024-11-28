@@ -394,6 +394,20 @@
         };
       };
 
+      headscale-ui = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "enable Headscale UI service";
+        };
+
+        public = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Open to public on WAN port";
+        };
+      };
+
       jellyfin = {
         enable = lib.mkOption {
           type = lib.types.bool;

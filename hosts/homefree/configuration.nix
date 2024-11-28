@@ -19,9 +19,10 @@
     ../../services/cryptpad.nix
     ../../services/ddclient.nix
     ../../services/dnsmasq.nix
+    ../../services/gitea.nix
     ../../services/headscale.nix
     ../../services/home-assistant
-    ../../services/gitea.nix
+    ../../services/headscale-ui.nix
     ../../services/jellyfin.nix
     ../../services/linkwarden.nix
     ../../services/postgres.nix
