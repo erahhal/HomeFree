@@ -5,6 +5,7 @@ in
 {
   nixpkgs.overlays = with pkgs; [( final: prev: { linkwarden = linkwarden; }) ];
   imports = [
+    ../provisional/linkwarden/overlays.nix
     ../provisional/linkwarden/module.nix
   ];
 

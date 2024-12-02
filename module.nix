@@ -40,15 +40,6 @@
         description = "local lan domain";
       };
 
-      ## @TODO: Deduplicate this with localDomain
-      ## recursive?
-      searchDomainsLocal = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        ## @TODO: Should this be "local"?
-        default = [ "localdomain" ];
-        description = "Search domain for the system";
-      };
-
       domain = lib.mkOption {
         type = lib.types.str;
         default = "homefree.host";
@@ -436,6 +427,20 @@
         };
       };
 
+      nextcloud = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "enable Nextcloud media server";
+        };
+
+        public = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Open to public on WAN port";
+        };
+      };
+
       radicale = {
         enable = lib.mkOption {
           type = lib.types.bool;
@@ -522,6 +527,12 @@
           port = lib.mkOption {
             type = lib.types.int;
             description = "port of service on lan network";
+          };
+
+          subdir = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            description = "subdir at which service is served";
+            default = null;
           };
 
           public = lib.mkOption {

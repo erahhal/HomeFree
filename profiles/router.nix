@@ -30,12 +30,6 @@ in
     # enable ipv6 forwarding
     "net.ipv6.conf.all.forwarding" = true;
 
-    # source: https://github.com/mdlayher/homelab/blob/master/nixos/routnerr-3/configuration.nix#L46[]
-    # By default, not automatically configure any IPv6 addresses.
-    # "net.ipv6.conf.all.accept_ra" = 0;
-    # "net.ipv6.conf.all.autoconf" = 0;
-    # "net.ipv6.conf.all.use_tempaddr" = 0;
-
     # On WAN, allow IPv6 autoconfiguration and tempory address use.
     "net.ipv6.conf.${wan-interface}.accept_ra" = 2;
     "net.ipv6.conf.${wan-interface}.autoconf" = 1;
@@ -43,22 +37,9 @@ in
     "net.ipv6.conf.${lan-interface}.autoconf" = 1;
   };
 
+  ## @TODO: Is this overlapping/conflicting with "interfaces" settings?
   systemd.network = {
     networks = {
-      # "01-${wan-interface}" = {
-      #   name = wan-interface;
-      #   networkConfig = {
-      #     DHCP = "yes";
-      #     IPv6AcceptRA = "yes";
-      #     ## systemd-networkd will assign an address to the LAN interface
-      #     IPv6SendRA = "no";
-      #     IPv6PrivacyExtensions = "kernel";
-      #   };
-      #   dhcpV6Config = {
-      #     PrefixDelegation = "yes";
-      #     Without = "WithoutPrefixDelegation";
-      #   };
-      # };
       "01-${lan-interface}" = {
         name = lan-interface;
         networkConfig = {
@@ -95,9 +76,6 @@ in
     ## @TODO: Base on config for lan gateway
     nameservers = [ "10.0.0.1" ];
 
-    # resolvconf = {
-    # };
-
     ## Define VLANS
     ## https://www.breakds.org/post/vlan-configuration-by-examples/
     # vlans = {
@@ -129,10 +107,6 @@ in
           address = "10.0.0.1";
           prefixLength = 24;
         }];
-        # ipv6.addresses = [{
-        #   address = "2001:DB8::";
-        #   prefixLength = 64;
-        # }];
       };
 
       # Handle the VLANs
@@ -163,17 +137,11 @@ in
     # Firewall
     #-----------------------------------------------------------------------------------------------------
 
-    ## @TODO: Evaluate this
-    # nat.enable = false;
-
-    ## @TODO: Evaluate this
+    ## Use explicit firewall rules
     firewall.enable = false;
 
-    ## @TODO: Look into nftables Nix DSL: https://github.com/chayleaf/notnft
-    ##        https://www.reddit.com/r/NixOS/comments/14copvu/notnft_write_nftables_rules_in_nix/
-    ##
-    ##        ipv6 reference:
-    ##        https://superuser.com/questions/1617415/how-to-use-ipv6-internet-addresses-on-linux-with-systemd-networkd
+    ## ipv6 reference:
+    ## https://superuser.com/questions/1617415/how-to-use-ipv6-internet-addresses-on-linux-with-systemd-networkd
     nftables = {
       enable = true;
       ruleset = ''
@@ -196,6 +164,12 @@ in
             ## Allow wireguard connections
             udp dport { ${toString wireguard-port} } ct state new accept;
 
+            ## Headscale connections
+            udp dport { 41641 } ct state new accept;
+
+            ## Allow Headscale DERP connections
+            udp dport { 3478 } ct state new accept;
+
             ## Allow for ipv6 route advertisements
             icmpv6 type { echo-request, echo-reply, nd-neighbor-solicit, nd-neighbor-advert, nd-router-solicit, nd-router-advert, nd-redirect, ind-neighbor-solicit, ind-neighbor-advert, router-renumbering, mld-listener-query, mld-listener-report, mld-listener-done, mld-listener-reduction, mld2-listener-report } accept;
             meta l4proto ipv6-icmp accept comment "Accept ICMPv6"
@@ -205,9 +179,13 @@ in
             # DHCPv6
             ip6 saddr fe80::/10 ip6 daddr fe80::/10 udp sport 547 udp dport 546 accept
 
+            # DHCP client traffic (for WAN interface to get IP address from modem)
+            iifname "${wan-interface}" udp sport 67 udp dport 68 accept comment "Allow DHCP from WAN"
+
             iifname { "lo" } accept comment "Allow localhost to access the router"
             iifname { "${lan-interface}" } accept comment "Allow local network to access the router"
             iifname { "wg0" } accept comment "Allow wireguard network to access the router"
+            iifname { "tailscale0" } accept comment "Allow wireguard network to access the router"
             iifname { "podman0" } accept comment "Allow podman network to access the router"
 
             iifname "${wan-interface}" ct state { established, related } accept comment "Allow established traffic"
@@ -232,6 +210,14 @@ in
             ## Wireguard-LAN
             iifname { "wg0" } oifname { "${lan-interface}" } accept comment "Allow trusted wireguard to LAN"
             iifname { "${lan-interface}" } oifname { "wg0" } ct state established, related accept comment "Allow established back to wireguard"
+
+            ## Headscale-WAN
+            iifname { "tailscale0" } oifname { "${wan-interface}" } accept comment "Allow trusted wireguard to WAN"
+            iifname { "${wan-interface}" } oifname { "tailscale0" } ct state established, related accept comment "Allow established back to wireguard"
+
+            ## Headscale-LAN
+            iifname { "tailscale0" } oifname { "${lan-interface}" } accept comment "Allow trusted wireguard to LAN"
+            iifname { "${lan-interface}" } oifname { "tailscale0" } ct state established, related accept comment "Allow established back to wireguard"
           }
         }
 
@@ -245,7 +231,7 @@ in
           # for all packets to WAN, after routing, replace source address with primary IP of WAN interface
           chain postrouting {
             type nat hook postrouting priority 100; policy accept;
-            ## This handles both wg0 and the lan interface
+            ## This handles tailscale0, wg0 and the lan interface
             oifname "${wan-interface}" masquerade
           }
         }
@@ -253,31 +239,11 @@ in
     };
   };
 
-  # systemd.services.block-wan-traffic = {
-  #   wantedBy = [ "multi-user.target" ];
-  #   enable = true;
-  #   serviceConfig = {
-  #     User = "root";
-  #     Group = "root";
-  #   };
-  #   script = ''
-  #     IPTABLES=${pkgs.iptables}/bin/iptables
-  #
-  #     $IPTABLES -A INPUT -i ${wan-interface} -p tcp -m tcp -m multiport --dports 80,443 -j ACCEPT
-  #     $IPTABLES -A INPUT -i ${wan-interface} -p tcp -m tcp -m multiport --dports ${toString config.homefree.wireguard.listenPort} -j ACCEPT
-  #     $IPTABLES -A INPUT -i ${wan-interface} -m conntrack -j ACCEPT  --ctstate RELATED,ESTABLISHED
-  #     $IPTABLES -A INPUT -i ${wan-interface} -j DROP
-  #     # $IPTABLES -A OUTPUT -o ${wan-interface} -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-  #     # $IPTABLES -A OUTPUT -o ${wan-interface} -j DROP
-  #     # $IPTABLES -A FORWARD -i ${wan-interface} -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-  #     # $IPTABLES -A FORWARD -i ${wan-interface} -j DROP
-  #   '';
-  # };
-
   #-----------------------------------------------------------------------------------------------------
   # Performance Tuning
   #-----------------------------------------------------------------------------------------------------
 
+  ## @TODO: This was cargo-culted. Evaluate it for efficacy and correctness.
   systemd.services.tune-router-performance = {
     wantedBy = [ "multi-user.target" ];
     enable = true;
@@ -320,7 +286,7 @@ in
   #-----------------------------------------------------------------------------------------------------
 
   # See: https://nixos.wiki/wiki/Systemd-resolved
-  ## Disabled as it conflicts with dnsmasq
+  ## Disabled as Unbound + Adguard is used instead
   services.resolved = {
     enable = false;
     dnssec = "true";

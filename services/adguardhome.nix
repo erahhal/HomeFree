@@ -25,6 +25,7 @@
       theme = "auto";
       dns = {
         ## Must specify interfaces, otherwise it conflicts with podman
+        # bind_hosts = [ "10.0.0.1" "100.64.0.2" "192.168.2.1" "127.0.0.1" ];
         bind_hosts = [ "10.0.0.1" "127.0.0.1" ];
         port = 53;
         anonymize_client_ip = false;
@@ -167,12 +168,4 @@
       public = config.homefree.services.adguard.public;
     }
   ] else [];
-
-  ## Make Unbound default DNS server if adguard is disabled
-  services.unbound.settings.server.port = if config.homefree.services.adguard.enable == true
-  then
-    53530
-  else
-    53
-  ;
 }

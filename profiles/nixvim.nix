@@ -398,6 +398,10 @@
 
     plugins.lualine.enable = true;
 
+    plugins.nix.enable = true;
+
+    plugins.noice.enable = true;
+
     plugins.nvim-autopairs.enable = true;
 
     plugins.nvim-tree = {
@@ -473,11 +477,179 @@
     plugins.web-devicons.enable = true;
 
     ## ------------------------------------------------
+    ## LSP / Completion
+    ## ------------------------------------------------
+
+    plugins.lsp = {
+      enable = true;
+      servers = {
+        # Average webdev LSPs
+        # ts-ls.enable = true; # TS/JS
+        ts_ls.enable = true; # TS/JS
+        cssls.enable = true; # CSS
+        tailwindcss.enable = true; # TailwindCSS
+        html.enable = true; # HTML
+        astro.enable = true; # AstroJS
+        phpactor.enable = true; # PHP
+        svelte.enable = false; # Svelte
+        vuels.enable = false; # Vue
+        pyright.enable = true; # Python
+        marksman.enable = true; # Markdown
+        nil_ls.enable = true; # Nix
+        dockerls.enable = true; # Docker
+        bashls.enable = true; # Bash
+        clangd.enable = true; # C/C++
+        csharp_ls.enable = true; # C#
+        yamlls.enable = true; # YAML
+        ltex = {
+          enable = true;
+          settings = {
+            enabled = [ "astro" "html" "latex" "markdown" "text" "tex" "gitcommit" ];
+            completionEnabled = true;
+            language = "en-US de-DE nl";
+            # dictionary = {
+            #   "nl-NL" = [
+            #     ":/home/liv/.local/share/nvim/ltex/nl-NL.txt"
+            #   ];
+            #   "en-US" = [
+            #     ":/home/liv/.local/share/nvim/ltex/en-US.txt"
+            #   ];
+            #   "de-DE" = [
+            #     ":/home/liv/.local/share/nvim/ltex/de-DE.txt"
+            #   ];
+            # };
+          };
+        };
+        gopls = { # Golang
+          enable = true;
+          autostart = true;
+        };
+
+        lua_ls = { # Lua
+          enable = true;
+          settings.telemetry.enable = false;
+        };
+
+        # Rust
+        rust_analyzer = {
+          enable = true;
+          installRustc = true;
+          installCargo = true;
+        };
+      };
+    };
+
+    plugins.cmp = {
+      autoEnableSources = true;
+      settings = {
+        sources = [
+          { name = "nvim_lsp"; }
+          { name = "emoji"; }
+          {
+            name = "buffer"; # text within current buffer
+            option.get_bufnrs.__raw = "vim.api.nvim_list_bufs";
+            keywordLength = 3;
+          }
+          # { name = "copilot"; } # enable/disable copilot
+          {
+            name = "path"; # file system paths
+            keywordLength = 3;
+          }
+          {
+            name = "luasnip"; # snippets
+            keywordLength = 3;
+          }
+          { name = "cmdline"; }
+        ];
+
+        completion = {
+          completeopt = "menu,menuone,noinsert";
+        };
+
+        autoEnableSources = true;
+
+        experimental = { ghost_text = true; };
+
+        performance = {
+          debounce = 60;
+          fetchingTimeout = 200;
+          maxViewEntries = 30;
+        };
+
+        snippet = {
+          expand = ''
+            function(args)
+              require('luasnip').lsp_expand(args.body)
+            end
+          '';
+        };
+
+        formatting = { fields = [ "kind" "abbr" "menu" ]; };
+
+        window = {
+          completion = { border = "solid"; };
+          documentation = { border = "solid"; };
+        };
+
+        mapping = {
+          "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
+          "<C-j>" = "cmp.mapping.select_next_item()";
+          "<C-k>" = "cmp.mapping.select_prev_item()";
+          "<C-e>" = "cmp.mapping.abort()";
+          "<C-b>" = "cmp.mapping.scroll_docs(-4)";
+          "<C-f>" = "cmp.mapping.scroll_docs(4)";
+          "<C-Space>" = "cmp.mapping.complete()";
+          "<CR>" = "cmp.mapping.confirm({ select = true })";
+          "<S-CR>" = "cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })";
+          "<C-l>" = ''
+            cmp.mapping(function()
+              if luasnip.expand_or_locally_jumpable() then
+                luasnip.expand_or_jump()
+              end
+            end, { 'i', 's' })
+          '';
+          "<C-h>" = ''
+            cmp.mapping(function()
+              if luasnip.locally_jumpable(-1) then
+                luasnip.jump(-1)
+              end
+            end, { 'i', 's' })
+          '';
+        };
+      };
+    };
+
+    plugins.nvim-lightbulb = {
+      enable = true;
+    };
+        # config = ''
+        #   lua << EOF
+        #   require('nvim-lightbulb').setup({
+        #     float = {
+        #       -- "true" causes "invalid buffer id" error
+        #       enabled = false,
+        #     },
+        #     autocmd = {
+        #       enabled = true,
+        #     },
+        #   })
+        #   EOF
+        # '';
+    plugins.lsp-signature = {
+      enable = true;
+    };
+        # config = ''
+        #   lua << EOF
+        #   require("lsp_signature").setup()
+        #   EOF
+        # '';
+
+    ## ------------------------------------------------
     ## Extra Plugins
     ## ------------------------------------------------
 
     extraPlugins = with pkgs.vimPlugins; [
-      vim-nix
+      # vim-nix
       {
         plugin = vim-signify;
         config = ''

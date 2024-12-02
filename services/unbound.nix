@@ -40,7 +40,14 @@ in
     resolveLocalQueries = true;
 
     settings = {
+      ## Make Unbound default DNS server if adguard is disabled
       server = {
+        port = if config.homefree.services.adguard.enable == true
+        then
+          53530
+        else
+          53
+        ;
         include = [
           ## Leave ad-blocking to AdGuard, as it can be disabled by the client
           # "\"${adlist.unbound-adblockStevenBlack}\""
@@ -58,12 +65,14 @@ in
           "::1"
           "10.0.0.1"
           "192.168.2.1"     # wireguard
+          "100.64.0.2"       # headscale
         ];
         access-control = [
           "127.0.0.1/24 allow"
           "::1 allow"
           "10.0.0.1/24 allow"
           "192.168.2.1/24 allow"
+          "100.64.0.2/24 allow"
         ];
         # outgoing-interface = [
         #   ## @TODO: should be WAN IP - how to get this automatically?

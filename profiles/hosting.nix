@@ -5,6 +5,8 @@ let
   '';
   proxiedHostConfig = config.homefree.proxied-hosts;
   homefree-site = pkgs.callPackage  ../site { };
+  headscale-ui-config = lib.elemAt (lib.filter (proxy-config: proxy-config.label == "headscale-ui") config.homefree.proxied-hosts) 0;
+  trimTrailingSlash = s: lib.head (lib.match "(.*[^/])[/]*" s);
 in
 {
   ## add homefree default site as a package
@@ -53,14 +55,17 @@ in
             }
           '' + (if entry.basic-auth == true then ''
             basic_auth {
-              # <username> <hash created with caddy hash-password>
+              # <username> <hash created with "caddy hash-password">
             }
           '' else "")
           + (if entry.public == false then ''
-            bind 10.0.0.1 192.168.2.1
+            bind 10.0.0.1
           '' else ''
-            bind 10.0.0.1 192.168.2.1 ${config.homefree.system.domain}
+            bind 10.0.0.1 ${config.homefree.system.domain}
           '')
+          + (if entry.subdir != null then ''
+            rewrite / ${trimTrailingSlash entry.subdir}{uri}
+          '' else "")
           ## @TODO: throw an error if more than one host is using the same port
           + ''
             reverse_proxy ${if entry.ssl == true then  "https" else "http"}://${entry.host}:${toString entry.port} {
@@ -81,6 +86,29 @@ in
         };
       }
       ) proxiedHostConfig))
+      {
+        ## Needed so as to host ui and headscale enpoint on separate domains
+        "https://headscale.${config.homefree.system.domain}" = {
+          logFormat = ''
+            output file ${config.services.caddy.logDir}/access-headscale.log
+          '';
+          extraConfig = ''
+            header {
+              # Add general security headers
+              Strict-Transport-Security "max-age=31536000; includeSubdomains"
+              X-Content-Type-Options "nosniff"
+              X-Frame-Options "SAMEORIGIN"
+              Referrer-Policy "strict-origin-when-cross-origin"
+              X-XSS-Protection "1; mode=block"
+            }
+
+            reverse_proxy /web* http://10.0.0.1:3009
+            reverse_proxy * http://10.0.0.1:8087
+            bind 10.0.0.1 ${config.homefree.system.domain}
+          '';
+        };
+      }
+
       # {
       #   ## Needed so as to host ui and headscale enpoint on separate domains
       #   "https://headscale.${config.homefree.system.domain}" = {
@@ -109,10 +137,18 @@ in
       #           header_down Access-Control-Allow-Methods "POST, GET, OPTIONS, DELETE"
       #           header_down Access-Control-Allow-Headers *
       #         }
+      #     ''
+      #     + (if headscale-ui-config.public == false then ''
+      #         bind 10.0.0.1
+      #     '' else ''
+      #         bind 10.0.0.1 ${config.homefree.system.domain}
+      #     '')
+      #     + ''
       #       }
       #     '';
       #   };
       # }
+
       ## Static root site
       {
         "http://localhost, https://localhost, https://${config.homefree.system.domain}, https://www.${config.homefree.system.domain}" = {
@@ -120,7 +156,7 @@ in
             output file ${config.services.caddy.logDir}/access-landing-page.log
           '';
           extraConfig = ''
-            bind 10.0.0.1 192.168.2.1 ${config.homefree.system.domain}
+            bind 10.0.0.1 ${config.homefree.system.domain}
             root * ${config.homefree.landing-page.path}
             file_server
 
