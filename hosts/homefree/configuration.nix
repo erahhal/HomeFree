@@ -20,12 +20,12 @@
     ../../services/ddclient.nix
     ../../services/dnsmasq.nix
     ../../services/gitea.nix
-    ../../services/headscale.nix
     ../../services/home-assistant
     ../../services/headscale.nix
     ../../services/headscale-ui.nix
     ../../services/jellyfin.nix
     ../../services/linkwarden.nix
+    ../../services/nextcloud.nix
     ../../services/postgres.nix
     ../../services/radicale.nix
     ../../services/unbound.nix
@@ -80,9 +80,6 @@
     #   # Disable wpa_supplicant
     #   enable = false;
     # };
-    interfaces = {
-      "${config.homefree.network.wan-interface}".useDHCP = true;
-    };
   };
 
   # services.openssh.hostKeys = [
