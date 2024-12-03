@@ -14,6 +14,7 @@ in
     port = 8087;
     address = "10.0.0.1";
     settings = {
+      server_url = "https://headscale.${cfg.system.domain}:443";
       dns = {
         ## Must be different from server domain
         base_domain = "homefree.vpn";
@@ -23,32 +24,16 @@ in
       derp = {
         server = {
           enabled = true;
-          stun_listen_addr = "0.0.0.0:3478";
+          region_id = 999;
+          region_code = "headscale";
+          region_name = "headscale Embedded DERP";
+          stun_listen_addr = "0.0.0.0:${toString cfg.services.headscale.stun-port}";
+          automatically_add_embedded_derp_region = true;
         };
         ## Disable default DERP pointing at tailscale corporate servers
         urls = [ ];
-        paths = [
-          "/etc/headscale/derp.yaml"
-        ];
       };
     };
-  };
-
-  environment.etc = {
-    "headscale/derp.yaml".text = ''
-      regions:
-        900:
-          regionid: 900
-          regioncode: custom
-          regionname: Homefree
-          nodes:
-            - name: 900a
-              regionid: 900
-              hostname: headscale.${cfg.system.domain}
-              stunport: 3478
-              stunonly: false
-              derpport: 0
-    '';
   };
 
   services.tailscale = {
@@ -61,17 +46,9 @@ in
     useRoutingFeatures = "server";
     extraUpFlags = [
       "--advertise-routes=10.0.0.0/24,100.64.0.0/24"
-      # "--advertise-exit-node"
-      # "--exit-node-allow-lan-access"
-      # "--operator ${config.homefree.system.adminUsername}"
-      # "--ssh"
     ];
     extraSetFlags = [
-      "--advertise-routes=10.0.0.0/24"
-      # "--advertise-exit-node"
-      # "--exit-node-allow-lan-access"
-      # "--operator ${config.homefree.system.adminUsername}"
-      # "--ssh"
+      "--advertise-routes=10.0.0.0/24,100.64.0.0/24"
     ];
   };
 

@@ -383,6 +383,13 @@
           default = false;
           description = "Open to public on WAN port";
         };
+
+        stun-port = lib.mkOption {
+          type = lib.types.int;
+          description = "DERP STUN relay port";
+          ## Non-standard port to avoid conflict with Unifi Controller STUN listener
+          default = 3578;
+        };
       };
 
       headscale-ui = {
