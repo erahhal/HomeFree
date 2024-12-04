@@ -192,7 +192,9 @@ in
 
             iifname "${wan-interface}" ct state { established, related } accept comment "Allow established traffic"
             iifname "${wan-interface}" icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
-            iifname "${wan-interface}" counter log prefix "WAN_DROP: " drop comment "Drop all other unsolicited traffic from wan"
+            ## Logging is interesting but fills up dmesg. @TODO: log to another file, with reverse IP lookup and geoip
+            # iifname "${wan-interface}" counter log prefix "WAN_DROP: " drop comment "Drop all other unsolicited traffic from wan"
+            iifname "${wan-interface}" counter drop comment "Drop all other unsolicited traffic from wan"
           }
 
           ## allow packets from LAN to WAN, and WAN to LAN if LAN initiated the connection

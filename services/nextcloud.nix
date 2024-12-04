@@ -1,6 +1,8 @@
 { config, lib, ... }:
 let
   host = "nextcloud.${config.homefree.system.domain}";
+  countryCode = config.homefree.system.countryCode;
+  phoneRegion = if countryCode != null then (lib.toUpper countryCode) else null;
 in
 {
   environment.etc."nextcloud-admin-pass".text = "PWD";
@@ -10,16 +12,32 @@ in
     hostName = "localhost";
     ## Can't be changed, so admin username changing for homefree won't sync
     ## Default: root
-    ## @TODO: Sync up accounts
-    config.adminuser = config.homefree.system.adminUsername;
-    config.adminpassFile = "/run/secrets/nextcloud/admin-password";
+    ## @TODO: Sync accounts with Authentik
+    config = {
+      adminuser = config.homefree.system.adminUsername;
+      adminpassFile = "/run/secrets/nextcloud/admin-password";
+      ## To change the DB type:
+      ## 1. Export all relevant data
+      ## 2. Delete or move /var/lib/nextcloud/config/config.php
+      ## 3. Delete or move /var/lib/nextcloud/data
+      ## 4. Change database settings here.
+      ## 5. Rebuild nix config
+      ## 6. Might have to manually restart nextcloud-setup service
+      ##
+      ## NOTE: files to import with nextcloud-occ need to be visible to nextcloud user, e.g.
+      ##       cp deck.json /tmp/deck.json
+      ##       chmod 777 /tmp/deck.json
+      ##       nextcloud-occ deck:import /tmp/deck.json
+      ##       rm /tmp/deck.json
+      dbtype  = "pgsql";
+    };
+    database.createLocally = true;
     extraApps = {
       inherit (config.services.nextcloud.package.packages.apps) news contacts calendar tasks deck;
     };
     extraAppsEnable = true;
-    ## Also needs to be enabled in config.php
-    ## https://docs.nextcloud.com/server/14/admin_manual/configuration_server/caching_configuration.html
-    caching.redis = true;
+
+    configureRedis = true;
     settings = let
       prot = "https";
       dir = "";
@@ -29,22 +47,54 @@ in
       overwritehost = host;
       overwritewebroot = dir;
       overwrite.cli.url = "${prot}://${host}${dir}/";
+
       ## For nextcloud android app login
-      "csrf.optout" = [
+      csrf.optout = [
         "/Nextcloud-android/"
       ];
-      htaccess.RewriteBase = dir;
 
-      redis = {
-        host = "/run/redis/redis.sock";
-        port = 0;
-        dbindex = 0;
-        ## Contained in secretFile
-        # password = "secret";
-        timeout = 1.5;
-      };
+      ## To get rid of security warning on admin page
+      trusted_proxies = [
+        "10.0.0.1/24"
+      ];
+
+      ## To get rid of js map warning on admin page
+      trusted_domains = [
+        host
+      ];
+
+      ## Use phone numbers without a country code
+      default_phone_region = phoneRegion;
+
+      ## Start maintenance processes at 2am
+      maintenance_window_start = 2;
+
+      htaccess.RewriteBase = dir;
+    };
+    phpOptions = {
+      "opcache.interned_strings_buffer" = "32";
     };
     secretFile = "/run/secrets/nextcloud/secret-file";
+  };
+
+  systemd.services.nextcloud-config = {
+    after = [ "phpfpm-nextcloud.service" ];
+    enable = true;
+    serviceConfig = {
+      User = "root";
+      Group = "root";
+    };
+    # script = builtins.readFile ../scripts/tune_router_performance.sh;
+    script = ''
+      OCC=${config.services.nextcloud.occ}/bin/nextcloud-occ
+
+      ## Enabling the log reader results in the following system error:
+      ## "Failed to get an iterator for log entries: Logreader application only supports "file" log_type"
+      $OCC app:disable logreader
+
+      ## migrate data
+      $OCC maintenance:repair --include-expensive
+    '';
   };
 
   ## Nextcloud starts nginx
@@ -57,16 +107,19 @@ in
         extraConfig = ''
           absolute_redirect off;
           location ~ ^/\\.well-known/host-meta(?:\\.json)?$ {
-            return 301 /nextcloud/public.php?service=host-meta-json;
+            return 301 /public.php?service=host-meta-json;
           }
           location = /.well-known/carddav {
-            return 301 /nextcloud/remote.php/dav/;
+            return 301 /remote.php/dav/;
           }
           location = /.well-known/caldav {
-            return 301 /nextcloud/remote.php/dav/;
+            return 301 /remote.php/dav/;
           }
           location ~ ^/\\.well-known/(?!acme-challenge|pki-validation) {
-            return 301 /nextcloud/index.php$request_uri;
+            return 301 /index.php$request_uri;
+          }
+          location = /.well-known/webfinger {
+            return 301 /index.php/.well-known/webfinger;
           }
           try_files $uri $uri/ =404;
         '';
@@ -105,7 +158,6 @@ in
       restartUnits = [ "nextcloud.service" ];
     };
   };
-
 
   homefree.proxied-hosts = if config.homefree.services.nextcloud.enable == true then [
     {
