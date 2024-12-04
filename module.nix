@@ -19,11 +19,27 @@
         description = "Hostname for the system";
       };
 
-      ## @TODO: Detect during setup
+      ## @TODO: Detect or have user enter during setup
       timeZone = lib.mkOption {
-        type = lib.types.str;
-        default = "America/Los_Angeles";
-        description = "Timezone for the system";
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          Timezone for the system in tz database format.
+          See: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+
+          example: America/Los_Angeles
+        '';
+      };
+
+      countryCode = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          Country code in ISO-3166-1 two-letter code format.
+          See: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements
+
+          example: US
+        '';
       };
 
       ## @TODO: Detect during setup
