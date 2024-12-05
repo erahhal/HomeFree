@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 {
   services.radicale = {
     enable =  config.homefree.services.radicale.enable;
@@ -18,15 +18,23 @@
     };
   };
 
-  homefree.proxied-hosts = if config.homefree.services.radicale.enable == true then [
+  homefree.service-config = if config.homefree.services.radicale.enable == true then [
     {
       label = "radicale";
-      subdomains = [ "radicale" "dav" "webdav" "caldav" "carddav" ];
-      http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
-      https-domains = [ config.homefree.system.domain ];
-      port = 5232;
-      public = config.homefree.services.radicale.public;
-      # basic-auth = true;
+      reverse-proxy = {
+        enable = true;
+        subdomains = [ "radicale" "dav" "webdav" "caldav" "carddav" ];
+        http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
+        https-domains = [ config.homefree.system.domain ];
+        port = 5232;
+        public = config.homefree.services.radicale.public;
+        # basic-auth = true;
+      };
+      backup = {
+        paths = [
+          "/var/lib/radicale"
+        ];
+      };
     }
   ] else [];
 }

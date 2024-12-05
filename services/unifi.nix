@@ -9,16 +9,25 @@
     mongodbPackage = pkgs.mongodb-7_0;
   };
 
-  homefree.proxied-hosts = if config.homefree.services.unifi.enable == true then [
+  homefree.service-config = if config.homefree.services.unifi.enable == true then [
     {
       label = "unifi";
-      subdomains = [ "unifi" ];
-      http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
-      https-domains = [ config.homefree.system.domain ];
-      port = 8443;
-      ssl = true;
-      ssl-no-verify = true;
-      public = config.homefree.services.unifi.public;
+      reverse-proxy = {
+        enable = true;
+        subdomains = [ "unifi" ];
+        http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
+        https-domains = [ config.homefree.system.domain ];
+        port = 8443;
+        ssl = true;
+        ssl-no-verify = true;
+        public = config.homefree.services.unifi.public;
+      };
+      backup = {
+        paths = [
+          ## @TODO: how to programmatically set backup frequency? Unifi UI defaults to monthly.
+          "/var/lib/unifi/data/backup"
+        ];
+      };
     }
   ] else [];
 }

@@ -15,14 +15,22 @@
     };
   };
 
-  homefree.proxied-hosts = if config.homefree.services.cryptpad.enable == true then [
+  homefree.service-config = if config.homefree.services.cryptpad.enable == true then [
     {
       label = "cryptpad";
-      subdomains = [ "cryptpad" "cryptpad-sandbox" "cryptpad-ui" ];
-      http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
-      https-domains = [ config.homefree.system.domain ];
-      port = 3004;
-      public = config.homefree.services.cryptpad.public;
+      reverse-proxy = {
+        enable = true;
+        subdomains = [ "cryptpad" "cryptpad-sandbox" "cryptpad-ui" ];
+        http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
+        https-domains = [ config.homefree.system.domain ];
+        port = 3004;
+        public = config.homefree.services.cryptpad.public;
+      };
+      backup = {
+        paths = [
+          "/var/lib/private/cryptpad"
+        ];
+      };
     }
   ] else [];
 }

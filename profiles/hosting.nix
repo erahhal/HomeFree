@@ -3,9 +3,9 @@ let
   hostConfig = ''
     respond "Hello, world! I am being accessed from {scheme}."
   '';
-  proxiedHostConfig = config.homefree.proxied-hosts;
+  proxiedHostConfig = lib.filter (service-config: service-config.reverse-proxy.enable == true) config.homefree.service-config;
   homefree-site = pkgs.callPackage  ../site { };
-  headscale-ui-config = lib.elemAt (lib.filter (proxy-config: proxy-config.label == "headscale-ui") config.homefree.proxied-hosts) 0;
+  headscale-ui-config = lib.elemAt (lib.filter (service-config: service-config.label == "headscale-ui") config.homefree.service-config) 0;
   trimTrailingSlash = s: lib.head (lib.match "(.*[^/])[/]*" s);
 in
 {
@@ -31,17 +31,18 @@ in
     # acmeCA = "https://acme-staging-v02.api.letsencrypt.org/directory";
 
     virtualHosts = lib.mkMerge [
-      (lib.listToAttrs (lib.map (entry:
+      (lib.listToAttrs (lib.map (service-config:
       let
-        http-urls = lib.flatten (lib.map (subdomain: (lib.map (domain: "http://${subdomain}.${domain}") entry.http-domains)) entry.subdomains);
-        https-urls = lib.flatten (lib.map (subdomain: (lib.map (domain: "https://${subdomain}.${domain}") entry.https-domains)) entry.subdomains);
+        reverse-proxy-config = service-config.reverse-proxy;
+        http-urls = lib.flatten (lib.map (subdomain: (lib.map (domain: "http://${subdomain}.${domain}") reverse-proxy-config.http-domains)) reverse-proxy-config.subdomains);
+        https-urls = lib.flatten (lib.map (subdomain: (lib.map (domain: "https://${subdomain}.${domain}") reverse-proxy-config.https-domains)) reverse-proxy-config.subdomains);
         urls = http-urls ++ https-urls;
         host-string = lib.concatStringsSep ", " urls;
       in {
         name = host-string;
         value = {
           logFormat = ''
-            output file ${config.services.caddy.logDir}/access-${entry.label}.log
+            output file ${config.services.caddy.logDir}/access-${service-config.label}.log
           '';
           ## @TODO: Remove headers and check if still works
           extraConfig = ''
@@ -53,30 +54,30 @@ in
               Referrer-Policy "strict-origin-when-cross-origin"
               X-XSS-Protection "1; mode=block"
             }
-          '' + (if entry.basic-auth == true then ''
+          '' + (if reverse-proxy-config.basic-auth == true then ''
             basic_auth {
               # <username> <hash created with "caddy hash-password">
             }
           '' else "")
-          + (if entry.public == false then ''
+          + (if reverse-proxy-config.public == false then ''
             bind 10.0.0.1
           '' else ''
             bind 10.0.0.1 ${config.homefree.system.domain}
           '')
-          + (if entry.subdir != null then ''
-            rewrite / ${trimTrailingSlash entry.subdir}{uri}
+          + (if reverse-proxy-config.subdir != null then ''
+            rewrite / ${trimTrailingSlash reverse-proxy-config.subdir}{uri}
           '' else "")
           ## @TODO: throw an error if more than one host is using the same port
           + ''
-            reverse_proxy ${if entry.ssl == true then  "https" else "http"}://${entry.host}:${toString entry.port} {
+            reverse_proxy ${if reverse-proxy-config.ssl == true then  "https" else "http"}://${reverse-proxy-config.host}:${toString reverse-proxy-config.port} {
           ''
-          + (if entry.ssl == true && entry.ssl-no-verify then ''
+          + (if reverse-proxy-config.ssl == true && reverse-proxy-config.ssl-no-verify then ''
               transport http {
                 tls
                 tls_insecure_skip_verify
               }
           '' else "")
-          + (if entry.basic-auth == true then ''
+          + (if reverse-proxy-config.basic-auth == true then ''
               header_up X-remote-user {http.auth.user.id}
           '' else "")
           +

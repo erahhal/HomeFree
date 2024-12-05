@@ -19,7 +19,15 @@ in
         ## Must be different from server domain
         base_domain = "homefree.vpn";
         search_domains = search-domains;
-        nameservers.global = [ "10.0.0.1" ];
+        ## Add
+        nameservers.global = [
+          ## Internal DNS, has local domain names
+          "10.0.0.1"
+          ## Backup in case internal DNS not accessible due to connectivity issues
+          "9.9.9.10"
+          ## Secondary backup
+          "1.1.1.1"
+        ];
       };
       derp = {
         server = {
@@ -63,14 +71,17 @@ in
     };
   };
 
-  # homefree.proxied-hosts = if config.homefree.services.headscale.enable == true then [
+  # homefree.service-config = if config.homefree.services.headscale.enable == true then [
   #   {
   #     label = "headscale";
-  #     subdomains = [ "headscale" ];
-  #     http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
-  #     https-domains = [ config.homefree.system.domain ];
-  #     port = 8087;
-  #     public = config.homefree.services.headscale.public;
+  #     reverse-proxy = {
+  #       enable = true;
+  #       subdomains = [ "headscale" ];
+  #       http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
+  #       https-domains = [ config.homefree.system.domain ];
+  #       port = 8087;
+  #       public = config.homefree.services.headscale.public;
+  #     };
   #   }
   # ] else [];
 }

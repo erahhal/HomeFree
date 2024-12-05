@@ -39,6 +39,21 @@ in
 
   ## @TODO: Is this overlapping/conflicting with "interfaces" settings?
   systemd.network = {
+    links = {
+      "01-${wan-interface}" = {
+        matchConfig.Name = wan-interface;
+        linkConfig = {
+          ## @TODO: Make this configurable, or automatically detectable
+          ## @TODO: Determine if this is even necessary, or the lost carrier issues were due to a bad cable.
+          Advertise = "1000baset-full";
+          AutoNegotiation = "yes";
+          TransmitQueues = 128;
+          ReceiveQueues = 128;
+          RxBufferSize = 2048;
+          TxBufferSize = 2048;
+        };
+      };
+    };
     networks = {
       "01-${lan-interface}" = {
         name = lan-interface;
@@ -52,6 +67,7 @@ in
           # Use a DHCPv6-PD delegated prefix (DHCPv6PrefixDelegation.SubnetId)
           # from the pool and assigns one /64 to this network.
           DHCPPrefixDelegation = "yes";
+          ConfigureWithoutCarrier = "no";
         };
         ipv6SendRAConfig = {
           # Currently dnsmasq manages DNS servers.
@@ -205,6 +221,10 @@ in
             iifname { "${lan-interface}" } oifname { "${wan-interface}" } accept comment "Allow trusted LAN to WAN"
             iifname { "${wan-interface}" } oifname { "${lan-interface}" } ct state established, related accept comment "Allow established back to LANs"
 
+            ## podman-LAN
+            iifname { "podman0" } oifname { "${lan-interface}" } accept comment "Allow trusted LAN to WAN"
+            iifname { "${lan-interface}" } oifname { "podman0" } ct state established, related accept comment "Allow established back to LANs"
+
             ## @TODO: Confirm which, if any, of these are needed.
 
             ## Wireguard-WAN
@@ -247,10 +267,29 @@ in
   # Performance Tuning
   #-----------------------------------------------------------------------------------------------------
 
+  systemd.services.configure-ethernet = {
+    wantedBy = [ "multi-user.target" ];
+    ## Disabled as it should be handled by systemd.network.links above
+    enable = false;
+    serviceConfig = {
+      User = "root";
+      Group = "root";
+    };
+    # script = builtins.readFile ../scripts/tune_router_performance.sh;
+    script = ''
+      ETHTOOL=${pkgs.ethtool}/bin/ethtool
+
+      # In case interface is plugged into port that is faster than 1Gbps
+      $ETHTOOL -s ${wan-interface} speed 1000 duplex full autoneg on
+      $ETHTOOL -s ${wan-interface} rx 2048 tx 2048
+    '';
+  };
+
   ## @TODO: This was cargo-culted. Evaluate it for efficacy and correctness.
   systemd.services.tune-router-performance = {
     wantedBy = [ "multi-user.target" ];
-    enable = true;
+    ## CURRENTLY DISABLED - Need to stabilize network first before enabling this
+    enable = false;
     serviceConfig = {
       User = "root";
       Group = "root";

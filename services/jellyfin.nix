@@ -34,14 +34,17 @@
     )
   ];
 
-  homefree.proxied-hosts = if config.homefree.services.jellyfin.enable == true then [
+  homefree.service-config = if config.homefree.services.jellyfin.enable == true then [
     {
       label = "jellyfin";
-      subdomains = [ "jellyfin" ];
-      http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
-      https-domains = [ config.homefree.system.domain ];
-      port = 8096;
-      public = config.homefree.services.jellyfin.public;
+      reverse-proxy = {
+        enable = true;
+        subdomains = [ "jellyfin" ];
+        http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
+        https-domains = [ config.homefree.system.domain ];
+        port = 8096;
+        public = config.homefree.services.jellyfin.public;
+      };
     }
   ] else [];
 

@@ -32,14 +32,22 @@ in
     };
   };
 
-  homefree.proxied-hosts = if config.homefree.services.linkwarden.enable == true then [
+  homefree.service-config = if config.homefree.services.linkwarden.enable == true then [
     {
       label = "linkwarden";
-      subdomains = [ "linkwarden" ];
-      http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
-      https-domains = [ config.homefree.system.domain ];
-      port = 3005;
-      public = config.homefree.services.linkwarden.public;
+      reverse-proxy = {
+        enable = true;
+        subdomains = [ "linkwarden" ];
+        http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
+        https-domains = [ config.homefree.system.domain ];
+        port = 3005;
+        public = config.homefree.services.linkwarden.public;
+      };
+      backup = {
+        postgres-databases = [
+          "linkwarden"
+        ];
+      };
     }
   ] else [];
 }
