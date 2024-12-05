@@ -13,6 +13,7 @@
         # Required for containers under podman-compose to be able to talk to each other.
         dns_enabled = true;
         ipv6_enabled = true;
+        subnet = "10.88.0.0/16";
       };
     };
   };

@@ -1,7 +1,7 @@
 ## @TODO: Look at the following for a VM test setup
 ## https://github.com/nix-community/disko/blob/master/module.nix
 
-{ config, lib, pkgs, extendModules, ... }:
+{ config, options, lib, pkgs, extendModules, ... }:
 
 # let
 #   vmVariantWithHomefree = extendModules {
@@ -241,14 +241,15 @@
             };
 
             passwordFile = lib.mkOption {
-              type = lib.types.str;
-              description = "String path to password file";
+              type = lib.types.path;
+              description = "Path to password file";
             };
           };
         });
       };
     };
 
+    ## @TODO: Rename to VPN
     wireguard = {
       listenPort = lib.mkOption {
         type = lib.types.int;
@@ -422,6 +423,55 @@
         };
       };
 
+      frigate = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "enable Frigate video recording service";
+        };
+
+        public = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Open to public on WAN port";
+        };
+
+        cameras = lib.mkOption {
+          description = "list of cameras";
+          type = with lib.types; listOf (submodule {
+            options = {
+              enable = lib.mkOption {
+                type = lib.types.bool;
+                default = true;
+                description = "Camera enabled";
+              };
+
+              name = lib.mkOption {
+                type = lib.types.str;
+                description = "Camera name";
+              };
+
+              path = lib.mkOption {
+                type = lib.types.str;
+                description = "URL / path to camera";
+              };
+
+              width = lib.mkOption {
+                type = lib.types.int;
+                default = 1920;
+                description = "Width in pixels";
+              };
+
+              height = lib.mkOption {
+                type = lib.types.int;
+                default = 1080;
+                description = "Height in pixels";
+              };
+            };
+          });
+        };
+      };
+
       jellyfin = {
         enable = lib.mkOption {
           type = lib.types.bool;
@@ -507,79 +557,103 @@
       };
     };
 
-    proxied-hosts = lib.mkOption {
-      description = "List of hosts on lan to proxy";
+    service-config = lib.mkOption {
+      description = "Detailed config for services";
       type = with lib.types; listOf (submodule {
         options = {
+          ## @TODO: ensure this is unique
           label = lib.mkOption {
             type = lib.types.str;
             default = "";
-            description = "label of proxy config";
+            description = "Unique label for service";
           };
 
-          description = lib.mkOption {
-            type = lib.types.str;
-            default = "";
-            description = "description of proxy config";
+          reverse-proxy = {
+            enable = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = "Enable reverse proxy for service";
+            };
+
+            description = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = "description of proxy config";
+            };
+
+            subdomains = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [];
+              description = "list of subdomains";
+            };
+
+            http-domains = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [];
+              description = "list of http domains";
+            };
+
+            https-domains = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [];
+              description = "list of https domains";
+            };
+
+            host = lib.mkOption {
+              type = lib.types.str;
+              default = "10.0.0.1";
+              description = "host name or address of service to proxy";
+            };
+
+            port = lib.mkOption {
+              type = lib.types.int;
+              description = "port of service on lan network";
+            };
+
+            subdir = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              description = "subdir at which service is served";
+              default = null;
+            };
+
+            public = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = "Whether to expose on WAN interface";
+            };
+
+            ssl = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = "Whether upstream service is using TLS";
+            };
+
+            ssl-no-verify = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = "Whether to verify certificate of upstream service";
+            };
+
+            basic-auth = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = "Whether to enable basic auth headers";
+            };
+
           };
 
-          subdomains = lib.mkOption {
-            type = lib.types.listOf lib.types.str;
-            default = [];
-            description = "list of subdomains";
-          };
+          backup = {
+            paths = lib.mkOption {
+              type = lib.types.listOf lib.types.path;
+              default = [];
+              description = "list of paths to backup";
+            };
 
-          http-domains = lib.mkOption {
-            type = lib.types.listOf lib.types.str;
-            default = [];
-            description = "list of http domains";
-          };
-
-          https-domains = lib.mkOption {
-            type = lib.types.listOf lib.types.str;
-            default = [];
-            description = "list of https domains";
-          };
-
-          host = lib.mkOption {
-            type = lib.types.str;
-            default = "10.0.0.1";
-            description = "host name or address of service to proxy";
-          };
-
-          port = lib.mkOption {
-            type = lib.types.int;
-            description = "port of service on lan network";
-          };
-
-          subdir = lib.mkOption {
-            type = lib.types.nullOr lib.types.str;
-            description = "subdir at which service is served";
-            default = null;
-          };
-
-          public = lib.mkOption {
-            type = lib.types.bool;
-            default = false;
-            description = "Whether to expose on WAN interface";
-          };
-
-          ssl = lib.mkOption {
-            type = lib.types.bool;
-            default = false;
-            description = "Whether upstream service is using TLS";
-          };
-
-          ssl-no-verify = lib.mkOption {
-            type = lib.types.bool;
-            default = false;
-            description = "Whether to verify certificate of upstream service";
-          };
-
-          basic-auth = lib.mkOption {
-            type = lib.types.bool;
-            default = false;
-            description = "Whether to enable basic auth headers";
+            postgres-databases = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [];
+              description = "list of databases to backup";
+            };
           };
         };
       });
@@ -587,11 +661,121 @@
 
     landing-page = {
       path = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "${pkgs.homefree-site}/lib/node_modules/homefree-site/public";
         description = "Path to landing page";
       };
     };
+
+    backups = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Enable backups";
+      };
+
+      to-path = lib.mkOption {
+        type = lib.types.path;
+        default = "/var/lib/backups";
+        description = "Path to store backups";
+      };
+
+      extra-from-paths = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
+        default = [];
+        description = "Extra list of custom paths to backup";
+      };
+
+      ignore-links = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Whether to ignore symlinks";
+      };
+    };
+  };
+
+  config = {
+    assertions =
+      let
+        elemInList = x: xs: lib.foldl' (acc: el: acc || el == x) false xs;
+        unique = list:
+          if list == [] then []
+          else let
+            x = builtins.head list;
+            xs = builtins.tail list;
+          in
+            if elemInList x xs
+            then unique xs
+            else [x] ++ (unique xs);
+
+        # Returns a list of labels that have duplicates (preserving original case)
+        findDuplicateLabels = service-config:
+          let
+            # Create a list of label+lowercase pairs to preserve original case
+            labelPairs = map (entry: {
+              original = entry.label;
+              lower = lib.toLower entry.label;
+            }) service-config;
+
+            # Helper to count occurrences of a label
+            countOccurrences = label: builtins.foldl'
+              (acc: pair: if pair.lower == label then acc + 1 else acc)
+              0
+              labelPairs;
+
+            # Get unique lowercase labels
+            lowerLabels = unique (map (pair: pair.lower) labelPairs);
+
+            # Filter for labels that appear multiple times
+            duplicateLowerLabels = builtins.filter
+              (label: countOccurrences label > 1)
+              lowerLabels;
+
+            # Get first occurrence of original case for each duplicate
+            getDuplicateOriginal = lowerLabel:
+              (builtins.head (builtins.filter
+                (pair: pair.lower == lowerLabel)
+                labelPairs)).original;
+          in
+            map getDuplicateOriginal duplicateLowerLabels;
+
+        duplicateLabels = findDuplicateLabels config.homefree.service-config;
+      in
+    [
+      {
+        ## Make sure that two service configs don't use the same label
+        assertion = lib.length duplicateLabels == 0;
+        message = "Multiple homefree.service-config entries with the same label: ${lib.concatStringsSep ", " duplicateLabels}";
+      }
+    ];
+
+    warnings =
+      (if config.homefree.backups.enable == false then [
+        ''
+          Backups not enabled. Set:module
+
+            homefree.backups.enable = true;
+        ''
+      ] else [])
+    ++
+      (if config.homefree.backups.to-path == options.homefree.backups.to-path.default then [
+        ''
+          Backups being written locally to the default path of "${config.homefree.backups.path}".
+          You should backup to an off-machine location, e.g. to an NFS mounted path. To change
+          the backup path:
+
+            homefree.backups.to-path = "<backup path>";
+        ''
+      ] else [])
+    ++
+      (if config.homefree.landing-page.path == options.homefree.landing-page.path.default then [
+        ''
+          Landing page is set to the default Homefree project landing page.
+
+            homefree.landing-page.path = "<path to html root>";
+        ''
+      ] else [])
+    ;
   };
 
   # options.virtualisation.vmVariantWithHomefree = lib.mkOption {

@@ -15,16 +15,19 @@
 
     ../../services/adguardhome.nix
     ../../services/authentik.nix
+    ../../services/backup.nix
     ../../services/baikal.nix
     ../../services/cryptpad.nix
     ../../services/ddclient.nix
     ../../services/dnsmasq.nix
+    ../../services/frigate-podman.nix
     ../../services/gitea.nix
     ../../services/home-assistant
     ../../services/headscale.nix
     ../../services/headscale-ui.nix
     ../../services/jellyfin.nix
     ../../services/linkwarden.nix
+    ../../services/mqtt.nix
     ../../services/nextcloud.nix
     ../../services/postgres.nix
     ../../services/radicale.nix

@@ -411,14 +411,22 @@ in
     }];
   };
 
-  homefree.proxied-hosts = if config.homefree.services.homeassistant.enable == true then [
+  homefree.service-config = if config.homefree.services.homeassistant.enable == true then [
     {
       label = "homeassistant";
-      subdomains = [ "homeassistant" "ha" ];
-      http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
-      https-domains = [ config.homefree.system.domain ];
-      port = 8123;
-      public = config.homefree.services.homeassistant.public;
+      reverse-proxy = {
+        enable = true;
+        subdomains = [ "homeassistant" "ha" ];
+        http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
+        https-domains = [ config.homefree.system.domain ];
+        port = 8123;
+        public = config.homefree.services.homeassistant.public;
+      };
+      backup = {
+        postgres-databases = [
+          "hass"
+        ];
+      };
     }
   ] else [];
 }

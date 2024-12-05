@@ -158,14 +158,17 @@
     };
   };
 
-  homefree.proxied-hosts = if config.homefree.services.adguard.enable == true then [
+  homefree.service-config = if config.homefree.services.adguard.enable == true then [
     {
       label = "adguard";
-      subdomains = [ "adguard" ];
-      http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
-      https-domains = [ config.homefree.system.domain ];
-      port = 3000;
-      public = config.homefree.services.adguard.public;
+      reverse-proxy = {
+        enable = true;
+        subdomains = [ "adguard" ];
+        http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
+        https-domains = [ config.homefree.system.domain ];
+        port = 3000;
+        public = config.homefree.services.adguard.public;
+      };
     }
   ] else [];
 }

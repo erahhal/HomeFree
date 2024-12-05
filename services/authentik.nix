@@ -60,14 +60,22 @@
     };
   };
 
-  homefree.proxied-hosts = if config.homefree.services.authentik.enable == true then [
+  homefree.service-config = if config.homefree.services.authentik.enable == true then [
     {
       label = "auth";
-      subdomains = [ "authentik" "auth" ];
-      http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
-      https-domains = [ config.homefree.system.domain ];
-      port = 9000;
-      public = config.homefree.services.authentik.public;
+      reverse-proxy = {
+        enable = true;
+        subdomains = [ "authentik" "auth" ];
+        http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
+        https-domains = [ config.homefree.system.domain ];
+        port = 9000;
+        public = config.homefree.services.authentik.public;
+      };
+      backup = {
+        postgres-databases = [
+          "authentik"
+        ];
+      };
     }
   ] else [];
 

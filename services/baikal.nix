@@ -1,4 +1,4 @@
-{ config, pkgs, hostParams, userParams, ... }:
+{ config, pkgs, ... }:
 let
   containerDataPath = "/var/lib/baikal";
 
@@ -39,14 +39,23 @@ in
     };
   };
 
-  homefree.proxied-hosts = if config.homefree.services.baikal.enable == true then [
+  homefree.service-config = if config.homefree.services.baikal.enable == true then [
     {
       label = "baikal";
-      subdomains = [ "baikal" ];
-      http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
-      https-domains = [ config.homefree.system.domain ];
-      port = 3007;
-      public = config.homefree.services.baikal.public;
+      reverse-proxy = {
+        enable = true;
+        subdomains = [ "baikal" ];
+        http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
+        https-domains = [ config.homefree.system.domain ];
+        port = 3007;
+        public = config.homefree.services.baikal.public;
+      };
+      backup = {
+        paths = [
+          "${containerDataPath}/config"
+          "${containerDataPath}/Specific"
+        ];
+      };
     }
   ] else [];
 }

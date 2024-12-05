@@ -259,6 +259,7 @@
     # openjdk16-bootstrap
     p7zip
     pciutils
+    podman-tui
     powertop
     sops
     sshpass

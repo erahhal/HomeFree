@@ -159,15 +159,26 @@ in
     };
   };
 
-  homefree.proxied-hosts = if config.homefree.services.nextcloud.enable == true then [
+  homefree.service-config = if config.homefree.services.nextcloud.enable == true then [
     {
       label = "nextcloud";
-      subdomains = [ "nextcloud" ];
-      http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
-      https-domains = [ config.homefree.system.domain ];
-      port = 3010;
-      subdir = "/nextcloud/";
-      public = config.homefree.services.nextcloud.public;
+      reverse-proxy = {
+        enable = true;
+        subdomains = [ "nextcloud" ];
+        http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
+        https-domains = [ config.homefree.system.domain ];
+        port = 3010;
+        subdir = "/nextcloud/";
+        public = config.homefree.services.nextcloud.public;
+      };
+      backup = {
+        paths = [
+          "/var/lib/nextcloud/data"
+        ];
+        postgres-databases = [
+          "nextcloud"
+        ];
+      };
     }
   ] else [];
 }

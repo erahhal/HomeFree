@@ -1,6 +1,7 @@
 { homefree-inputs, config, lib, pkgs, ... }:
 let
   adlist = homefree-inputs.adblock-unbound.packages.${pkgs.system};
+  proxiedHostConfig = lib.filter (service-config: service-config.reverse-proxy.enable == true) config.homefree.service-config;
   zones = [config.homefree.system.domain] ++ config.homefree.system.additionalDomains;
   preStart = ''
     touch /run/unbound/include.conf
@@ -115,13 +116,13 @@ in
         (lib.map
           (fqn: "\"${fqn} IN A 10.0.0.1\"")
           ## Flatten to single list
-          ## e.g. [ "hij.lmnop" "hij".xyz" "abc.lmnop" "abc.xyz"  "def.lmnop" "def.xyz" ]
+          ## e.g. [ "hij.lmnop" "hij.xyz" "abc.lmnop" "abc.xyz"  "def.lmnop" "def.xyz" ]
           (lib.flatten
             ## Map across all proxy configs
             ## creating list of lists
-            ## e.g. [ [ "hij.lmnop" "hij".xyz" ] [ "abc.lmnop" "abc.xyz"  "def.lmnop" "def.xyz" ] ]
+            ## e.g. [ [ "hij.lmnop" "hij.xyz" ] [ "abc.lmnop" "abc.xyz"  "def.lmnop" "def.xyz" ] ]
             (lib.map
-              (proxy-config:
+              (service-config:
                 ## Flatten subdomain-domain combinations for individual proxy into single list
                 ## e.g. [ "abc.lmnop" "abc.xyz"  "def.lmnop" "def.xyz" ]
                 lib.flatten
@@ -132,16 +133,16 @@ in
                     # Create <subdomain>.<domain> fqn string
                     (lib.map
                       (domain: "${subdomain}.${domain}")
-                      (proxy-config.http-domains ++ proxy-config.https-domains)
+                      (service-config.reverse-proxy.http-domains ++ service-config.reverse-proxy.https-domains)
                     )
                   )
-                  proxy-config.subdomains
+                  service-config.reverse-proxy.subdomains
                 )
               )
               ## @TODO: Get rid of this filter
               ## See: https://caddy.community/t/caddy-not-handling-requests-when-listening-on-all-interfaces-serving-a-hostname-mapped-to-an-internal-ip/26384
-              # (lib.filter (proxy-config: proxy-config.public == false) config.homefree.proxied-hosts)
-              config.homefree.proxied-hosts
+              # (lib.filter (proxy-config: proxy-config.public == false) proxiedHostConfig)
+              proxiedHostConfig
             )
           )
         )
