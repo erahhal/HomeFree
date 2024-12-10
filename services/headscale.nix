@@ -29,6 +29,11 @@ in
           "1.1.1.1"
         ];
       };
+      prefixes = {
+        ## Some VPNs use addresses that overlap. Reduce the size of the network
+        ## from 10.64.0.0/10
+        v4 = "100.64.0.0/16";
+      };
       derp = {
         server = {
           enabled = true;
