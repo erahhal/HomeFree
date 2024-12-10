@@ -62,7 +62,7 @@
 
   homefree.service-config = if config.homefree.services.authentik.enable == true then [
     {
-      label = "auth";
+      label = "authentik";
       reverse-proxy = {
         enable = true;
         subdomains = [ "authentik" "auth" ];
