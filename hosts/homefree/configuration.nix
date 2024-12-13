@@ -9,7 +9,6 @@
     ../../profiles/hosting.nix
     ../../profiles/nixvim.nix
     ../../profiles/podman.nix
-    # ../../profiles/radvd.nix
     ../../profiles/router.nix
     ../../profiles/traffic-shaping.nix
 
@@ -34,7 +33,6 @@
     ../../services/unbound.nix
     ../../services/unifi.nix
     ../../services/vaultwarden.nix
-    ../../services/wireguard.nix
   ];
 
   # --------------------------------------------------------------------------------------

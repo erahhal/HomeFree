@@ -65,14 +65,12 @@ in
           "127.0.0.1"
           "::1"
           "10.0.0.1"
-          "192.168.2.1"     # wireguard
           "100.64.0.2"       # headscale
         ];
         access-control = [
           "127.0.0.1/24 allow"
           "::1 allow"
           "10.0.0.1/24 allow"
-          "192.168.2.1/24 allow"
           "100.64.0.2/24 allow"
         ];
         # outgoing-interface = [
@@ -150,20 +148,12 @@ in
         ## router lan ip with public domains
         (lib.map (zone: "\"${config.homefree.system.hostName}.${zone} IN A 10.0.0.1\"") zones)
         ++
-        ## router vpn ip with public domains
-        (lib.map (zone: "\"${config.homefree.system.hostName}.${zone} IN A 192.168.2.1\"") zones)
-        ++
         ## @TODO: Move to config for gateway IP
         [
           ## router lan IP
           "\"${config.homefree.system.hostName} IN A 10.0.0.1\""
           ## router lan IP with local domain
           "\"${config.homefree.system.hostName}.${config.homefree.system.localDomain} IN A 10.0.0.1\""
-
-          ## router vpn IP
-          "\"${config.homefree.system.hostName} IN A 192.168.2.1\""
-          ## router vpn IP with local domain
-          "\"${config.homefree.system.hostName}.${config.homefree.system.localDomain} IN A 192.168.2.1\""
         ]
         ++
         ## @TODO: How to configure these at runtime?

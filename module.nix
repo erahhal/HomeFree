@@ -249,54 +249,6 @@
       };
     };
 
-    ## @TODO: Rename to VPN
-    wireguard = {
-      listenPort = lib.mkOption {
-        type = lib.types.int;
-        default = 64210;
-        description = "External listening port for clients";
-      };
-      peers = lib.mkOption {
-        description = "List of wireguard peers";
-        example = ''
-          [
-            # List of allowed peers.
-            { # Feel free to give a meaning full name
-              # Public key of the peer (not a file path).
-              publicKey = "{client public key}";
-              # List of IPs assigned to this peer within the tunnel subnet. Used to configure routing.
-              allowedIPs = [ "10.100.0.2/32" ];
-            }
-            { # John Doe
-              publicKey = "{john doe's public key}";
-              allowedIPs = [ "10.100.0.3/32" ];
-            }
-          ];
-        '';
-        type = with lib.types; listOf (submodule {
-          options = {
-            name = lib.mkOption {
-              type = lib.types.str;
-              default = "";
-              description = "Name of peer";
-            };
-
-            publicKey = lib.mkOption {
-              type = lib.types.str;
-              default = "";
-              description = "Public key for peer";
-            };
-
-            allowedIPs = lib.mkOption {
-              type = lib.types.listOf lib.types.str;
-              default = [];
-              description = "List of IPs assigned to this peer within the tunnel subnet. Used to configure routing.";
-            };
-          };
-        });
-      };
-    };
-
     services = {
       adguard = {
         enable = lib.mkOption {
@@ -323,6 +275,18 @@
           type = lib.types.bool;
           default = false;
           description = "Open to public on WAN port";
+        };
+
+        secrets = {
+          environment = lib.mkOption {
+            type = lib.types.path;
+            description = "Location of Authentik environment variables file. Should not be a file included in your source repo.";
+          };
+
+          ldap-environment = lib.mkOption {
+            type = lib.types.path;
+            description = "Location of Authentik LDAP environment variables file. Should not be a file included in your source repo.";
+          };
         };
       };
 
@@ -406,6 +370,13 @@
           description = "DERP STUN relay port";
           ## Non-standard port to avoid conflict with Unifi Controller STUN listener
           default = 3578;
+        };
+
+        secrets = {
+          tailscale-key = lib.mkOption {
+            type = lib.types.path;
+            description = "Location of Tailscale client key for server. Should not be a file included in your source repo.";
+          };
         };
       };
 
@@ -498,6 +469,13 @@
           default = false;
           description = "Open to public on WAN port";
         };
+
+        secrets = {
+          environment = lib.mkOption {
+            type = lib.types.path;
+            description = "Location of Linkwarden environment variables file. Should not be a file included in your source repo.";
+          };
+        };
       };
 
       nextcloud = {
@@ -511,6 +489,18 @@
           type = lib.types.bool;
           default = false;
           description = "Open to public on WAN port";
+        };
+
+        secrets = {
+          admin-password = lib.mkOption {
+            type = lib.types.path;
+            description = "Location of Nextcloud admin password file. Should not be a file included in your source repo.";
+          };
+
+          secret-file = lib.mkOption {
+            type = lib.types.path;
+            description = "Location of Nextcloud secrets file. Should not be a file included in your source repo.";
+          };
         };
       };
 
@@ -690,6 +680,13 @@
         type = lib.types.bool;
         default = true;
         description = "Whether to ignore symlinks";
+      };
+
+      secrets = {
+        restic-password = lib.mkOption {
+          type = lib.types.path;
+          description = "Location of Restic passworde file. Should not be a file included in your source repo.";
+        };
       };
     };
   };

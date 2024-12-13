@@ -4,7 +4,6 @@ let
   # @TODO: How to determine interface names?
   wan-interface = config.homefree.network.wan-interface;
   lan-interface = config.homefree.network.lan-interface;
-  wireguard-port = config.homefree.wireguard.listenPort;
   vlan-wan-id = 100;
   vlan-lan-id = 200;
   vlan-iot-id = 201;
@@ -178,9 +177,6 @@ in
             ## http is needed for headscale relaying
             tcp dport { http, https } ct state new accept;
 
-            ## Allow wireguard connections
-            udp dport { ${toString wireguard-port} } ct state new accept;
-
             ## Headscale connections
             udp dport { 41641 } ct state new accept;
 
@@ -202,8 +198,7 @@ in
 
             iifname { "lo" } accept comment "Allow localhost to access the router"
             iifname { "${lan-interface}" } accept comment "Allow local network to access the router"
-            iifname { "wg0" } accept comment "Allow wireguard network to access the router"
-            iifname { "tailscale0" } accept comment "Allow wireguard network to access the router"
+            iifname { "tailscale0" } accept comment "Allow tailscale network to access the router"
             iifname { "podman0" } accept comment "Allow podman network to access the router"
 
             iifname "${wan-interface}" ct state { established, related } accept comment "Allow established traffic"
@@ -227,21 +222,13 @@ in
 
             ## @TODO: Confirm which, if any, of these are needed.
 
-            ## Wireguard-WAN
-            iifname { "wg0" } oifname { "${wan-interface}" } accept comment "Allow trusted wireguard to WAN"
-            iifname { "${wan-interface}" } oifname { "wg0" } ct state established, related accept comment "Allow established back to wireguard"
-
-            ## Wireguard-LAN
-            iifname { "wg0" } oifname { "${lan-interface}" } accept comment "Allow trusted wireguard to LAN"
-            iifname { "${lan-interface}" } oifname { "wg0" } ct state established, related accept comment "Allow established back to wireguard"
-
             ## Headscale-WAN
-            iifname { "tailscale0" } oifname { "${wan-interface}" } accept comment "Allow trusted wireguard to WAN"
-            iifname { "${wan-interface}" } oifname { "tailscale0" } ct state established, related accept comment "Allow established back to wireguard"
+            iifname { "tailscale0" } oifname { "${wan-interface}" } accept comment "Allow trusted tailscale to WAN"
+            iifname { "${wan-interface}" } oifname { "tailscale0" } ct state established, related accept comment "Allow established back to tailscale"
 
             ## Headscale-LAN
-            iifname { "tailscale0" } oifname { "${lan-interface}" } accept comment "Allow trusted wireguard to LAN"
-            iifname { "${lan-interface}" } oifname { "tailscale0" } ct state established, related accept comment "Allow established back to wireguard"
+            iifname { "tailscale0" } oifname { "${lan-interface}" } accept comment "Allow trusted tailscale to LAN"
+            iifname { "${lan-interface}" } oifname { "tailscale0" } ct state established, related accept comment "Allow established back to tailscale"
           }
         }
 
@@ -255,7 +242,7 @@ in
           # for all packets to WAN, after routing, replace source address with primary IP of WAN interface
           chain postrouting {
             type nat hook postrouting priority 100; policy accept;
-            ## This handles tailscale0, wg0 and the lan interface
+            ## This handles tailscale0 and the lan interface
             oifname "${wan-interface}" masquerade
           }
         }

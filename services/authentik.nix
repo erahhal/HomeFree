@@ -7,7 +7,7 @@
   services.authentik = {
     enable = config.homefree.services.authentik.enable;
     # Deployed SOPS file
-    environmentFile = "/run/secrets/authentik/authentik-env";
+    environmentFile = config.homefree.services.authentik.secrets.environment;
     ## @TODO: make these configurable from module
     settings = {
       email = {
@@ -26,39 +26,13 @@
   services.authentik-ldap = {
     enable = true;
     # Deployed SOPS file
-    environmentFile = "/run/secrets/authentik/authentik-ldap-env";
+    environmentFile = config.homefree.services.authentik.secrets.ldap-environment;
   };
 
   networking.firewall.allowedTCPPorts = [
     # 3389    # LDAP
     9000   # Web GUI
   ];
-
-  sops.secrets = {
-    "authentik/authentik-env" = {
-      format = "yaml";
-      # @TODO: Move secrets to this folder
-      sopsFile = ../secrets/authentik.yaml;
-
-      owner = config.homefree.system.adminUsername;
-      path = "/run/secrets/authentik/authentik-env";
-      restartUnits = [ "authentik.service" ];
-    };
-    "authentik/authentik-ldap-env" = {
-      format = "yaml";
-      # @TODO: Move secrets to this folder
-      sopsFile = ../secrets/authentik.yaml;
-
-      owner = config.homefree.system.adminUsername;
-      path = "/run/secrets/authentik/authentik-ldap-env";
-      restartUnits = [ "authentik-ldap.service" ];
-    };
-    "authentik/postgres-password" = {
-      format = "yaml";
-      # @TODO: Move secrets to this folder
-      sopsFile = ../secrets/authentik.yaml;
-    };
-  };
 
   homefree.service-config = if config.homefree.services.authentik.enable == true then [
     {
@@ -81,7 +55,7 @@
 
   # # Set the authentik postgresql password
   # systemd.services.postgresql.postStart = let
-  #   password_file_path = config.sops.secrets."authentik/postgres-password".path;
+  #   password_file_path = config.homefree.services.authentik.secrets.postgres-password;
   # in ''
   #   $PSQL -tA <<'EOF'
   #     DO $$
