@@ -60,10 +60,12 @@ in
     extraUpFlags = [
       # "--advertise-routes=10.0.0.0/24,100.64.0.0/24"
       "--advertise-routes=10.0.0.0/24"
+      # "--netfilter-mode=nodivert"
     ];
     extraSetFlags = [
       # "--advertise-routes=10.0.0.0/24,100.64.0.0/24"
       "--advertise-routes=10.0.0.0/24"
+      # "--netfilter-mode=nodivert"
     ];
   };
 

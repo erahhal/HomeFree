@@ -478,6 +478,37 @@
         };
       };
 
+      matrix = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "enable Matrix chat service";
+        };
+
+        public = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Open to public on WAN port";
+        };
+
+        admin-account = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          description = "Admin user for matrix synapse server";
+        };
+
+        secrets = {
+          registration-shared-secret = lib.mkOption {
+            type = lib.types.path;
+            description = "Location of Matrix Synapse shared secret file. Should not be a file included in your source repo.";
+          };
+          admin-account-password = lib.mkOption {
+            type = lib.types.path;
+            description = "Location of admin account password. Should not be a file included in your source repo.";
+          };
+        };
+      };
+
       nextcloud = {
         enable = lib.mkOption {
           type = lib.types.bool;
@@ -629,7 +660,6 @@
               default = false;
               description = "Whether to enable basic auth headers";
             };
-
           };
 
           backup = {

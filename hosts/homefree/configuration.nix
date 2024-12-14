@@ -10,7 +10,8 @@
     ../../profiles/nixvim.nix
     ../../profiles/podman.nix
     ../../profiles/router.nix
-    ../../profiles/traffic-shaping.nix
+    # ../../profiles/traffic-shaping.nix
+    ../../profiles/traffic-control.nix
 
     ../../services/adguardhome.nix
     ../../services/authentik.nix
@@ -26,6 +27,7 @@
     ../../services/headscale-ui.nix
     ../../services/jellyfin.nix
     ../../services/linkwarden.nix
+    ../../services/matrix.nix
     ../../services/mqtt.nix
     ../../services/nextcloud.nix
     ../../services/postgres.nix

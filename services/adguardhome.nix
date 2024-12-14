@@ -29,12 +29,13 @@
         bind_hosts = [ "10.0.0.1" "127.0.0.1" ];
         port = 53;
         anonymize_client_ip = false;
-        ratelimit = 20;
+        ratelimit = 0;
         ratelimit_subnet_len_ipv4 = 24;
         ratelimit_subnet_len_ipv6 = 56;
         ratelimit_whitelist = [];
         refuse_any = true;
         upstream_dns = [
+          # "127.0.0.1:53530"
           "10.0.0.1:53530"
           # "https://dns10.quad9.net/dns-query"
         ];
@@ -44,7 +45,7 @@
           "2620:fe::10"
           "2620:fe::fe:10"
         ];
-        upstream_mode = "load_balance";
+        upstream_mode = "parallel";
         fastest_timeout = "1s";
         blocked_hosts = [
           "version.bind"
@@ -55,10 +56,10 @@
           "127.0.0.0/8"
           "::1/128"
         ];
-        cache_size = 4194304;
-        cache_ttl_min = 0;
-        cache_ttl_max = 0;
-        cache_optimistic = false;
+        cache_size = 128000000;
+        cache_ttl_min = 3600;
+        cache_ttl_max = 86400;
+        cache_optimistic = true;
         aaaa_disabled = false;
         enable_dnssec = false;
         edns_client_subnet = {
@@ -66,7 +67,7 @@
           enabled = false;
           use_custom = false;
         };
-        max_goroutines = 300;
+        max_goroutines = 2000;
         handle_ddr = true;
         ipset = [];
         ipset_file = "";
@@ -97,7 +98,8 @@
         }
       ];
       whitelist_filters = [];
-      user_rules = [];
+      user_rules = [
+      ];
       dhcp = {
         enabled = false;
       };
@@ -155,6 +157,13 @@
         verbose = false;
       };
       schema_version = 28;
+    };
+  };
+
+  systemd.services.adguardhome = {
+    serviceConfig = {
+      ## Bump ulimit
+      LimitNOFILE = 65535;
     };
   };
 

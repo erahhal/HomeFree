@@ -163,6 +163,11 @@ in
             # Enable Gzip compression
             encode gzip
 
+            # Matrix Synapse settings
+            respond /.well-known/matrix/server `{"m.server": "matrix.${config.homefree.system.domain}:443"}`
+            # respond /.well-known/matrix/client `{"m.homeserver":{"base_url":"https://matrix.${config.homefree.system.domain}"},"m.identity_server":{"base_url":"https://identity.${config.homefree.system.domain}"}}`
+            respond /.well-known/matrix/client `{"m.homeserver":{"base_url":"https://matrix.${config.homefree.system.domain}"}}`
+
             # HTML files - No caching to ensure fresh content
             @html {
             file

@@ -184,6 +184,10 @@ in
             udp dport { ${toString config.homefree.services.headscale.stun-port} } ct state new accept;
             tcp dport { ${toString config.homefree.services.headscale.stun-port} } ct state new accept;
 
+            ## Matrix
+            udp dport { 3478, 5349, 49000-50000 } ct state new accept;
+            tcp dport { 3478, 5349 } ct state new accept;
+
             ## Allow for ipv6 route advertisements
             icmpv6 type { echo-request, echo-reply, nd-neighbor-solicit, nd-neighbor-advert, nd-router-solicit, nd-router-advert, nd-redirect, ind-neighbor-solicit, ind-neighbor-advert, router-renumbering, mld-listener-query, mld-listener-report, mld-listener-done, mld-listener-reduction, mld2-listener-report } accept;
             meta l4proto ipv6-icmp accept comment "Accept ICMPv6"
