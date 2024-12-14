@@ -5,52 +5,9 @@ liberate you from giant cloud providers.
 
 ## Installing
 
-Install NixOS directly, or use a deployment system such as [NixOS Anywhere](https://github.com/nix-community/nixos-anywhere)
-
-Update system's configuration to look like something in [example-flake.nix](./example-flake.nix)
+See the [sample config repo](https://git.homefree.host/homefree/sample-config) for installation instructions
 
 Configure system by setting up values as defined in the [HomeFree module](./module.nix)
-
-## Adding a secret
-
-```
-nix-shell -p sops --run "sops secrets/authentik.yaml"
-```
-
-Then add a key or keys, e.g.
-
-```
-env-vars: |
-     VAR1 = abc
-     VAR2 = def
-```
-
-Then reference in Nix config as follows:
-
-```
-config.sops.secrets.app.env-vars.path
-```
-
-Or point directly to the path, e.g.
-```
-sops.secrets."app" = {
-  owner = "homefree";
-  path = "/run/secrets/app/env-vars";
-  restartUnits = [ "app.service" ];
-};
-```
-and reference the path in config
-
-## Getting server key
-
-After starting the vm using `make run`, run `make generate-sops-config`
-
-Then, within the VM:
-
-```
-cd ~/nixcfg
-make build
-```
 
 ## Initializing Authentik
 
@@ -61,10 +18,6 @@ http://ha.homefree.lan:9000/if/flow/initial-setup/
 ## Changing password for Authentik
 
 ak create_recovery_key 10 akadmin
-
-## Setting up HAProxy to transparently proxy TSL requests to Caddy
-
-https://forum.opnsense.org/index.php?topic=18538.msg84958#msg84958
 
 ## Don't passively use the Feed. Cultivate the Seed.
 
