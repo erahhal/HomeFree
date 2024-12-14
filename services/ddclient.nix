@@ -1,4 +1,4 @@
-{ config, inputs, pkgs, lib, ... }:
+{ config, lib, ... }:
 let
   cfg = config.homefree.dynamic-dns;
 in
@@ -20,17 +20,5 @@ in
       domains = zone.domains;
       passwordFile = zone.passwordFile;
     }) cfg.zones;
-  };
-
-  ## @TODO: Move to host config
-  sops.secrets = {
-    "ddclient/ddclient-password" = {
-      format = "yaml";
-      sopsFile = ../secrets/ddclient.yaml;
-
-      owner = config.homefree.system.adminUsername;
-      path = "/run/secrets/ddclient/ddclient-password";
-      restartUnits = [ "ddclient.service" ];
-    };
   };
 }

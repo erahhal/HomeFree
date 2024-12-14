@@ -77,7 +77,7 @@ in
       name = "local-${entry.label}";
       value = {
         initialize = true;
-        passwordFile = "/run/secrets/backup/restic-password";
+        passwordFile = config.homefree.backups.secrets.restic-password;
         # What to backup
         paths = entry.paths;
         # the name of the repository
@@ -150,16 +150,5 @@ in
     };
   }
   ) backup-from-paths);
-
-  sops.secrets = {
-    "backup/restic-password" = {
-      format = "yaml";
-      sopsFile = ../secrets/backup.yaml;
-
-      owner = config.homefree.system.adminUsername;
-      path = "/run/secrets/backup/restic-password";
-      restartUnits = [ "restic.service" ];
-    };
-  };
 }
 

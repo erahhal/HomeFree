@@ -25,7 +25,7 @@
       theme = "auto";
       dns = {
         ## Must specify interfaces, otherwise it conflicts with podman
-        # bind_hosts = [ "10.0.0.1" "100.64.0.2" "192.168.2.1" "127.0.0.1" ];
+        # bind_hosts = [ "10.0.0.1" "100.64.0.2" "127.0.0.1" ];
         bind_hosts = [ "10.0.0.1" "127.0.0.1" ];
         port = 53;
         anonymize_client_ip = false;

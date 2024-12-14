@@ -51,7 +51,7 @@ in
 
   services.tailscale = {
     enable = true;
-    authKeyFile = "/run/secrets/tailscale/key";
+    authKeyFile = config.homefree.services.headscale.secrets.tailscale-key;
     authKeyParameters = {
       preauthorized = true;
       baseURL = "https://headscale.${config.homefree.system.domain}";
@@ -65,17 +65,6 @@ in
       # "--advertise-routes=10.0.0.0/24,100.64.0.0/24"
       "--advertise-routes=10.0.0.0/24"
     ];
-  };
-
-  sops.secrets = {
-    "tailscale/key" = {
-      format = "yaml";
-      sopsFile = ../secrets/tailscale.yaml;
-
-      owner = config.homefree.system.adminUsername;
-      path = "/run/secrets/tailscale/key";
-      restartUnits = [ "tailscale.service" ];
-    };
   };
 
   # homefree.service-config = if config.homefree.services.headscale.enable == true then [

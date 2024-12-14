@@ -15,20 +15,9 @@ in
     host = "10.0.0.1";
     port = 3005;
     openFirewall = true;
-    secretsFile = "/run/secrets/linkwarden/env";
+    secretsFile = config.homefree.services.linkwarden.secrets.environment;
     database = {
       user = "linkwarden";
-    };
-  };
-
-  sops.secrets = {
-    "linkwarden/env" = {
-      format = "yaml";
-      sopsFile = ../secrets/linkwarden.yaml;
-
-      owner = config.homefree.system.adminUsername;
-      path = "/run/secrets/linkwarden/env";
-      restartUnits = [ "linkwarden.service" ];
     };
   };
 

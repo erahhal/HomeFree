@@ -15,7 +15,7 @@ in
     ## @TODO: Sync accounts with Authentik
     config = {
       adminuser = config.homefree.system.adminUsername;
-      adminpassFile = "/run/secrets/nextcloud/admin-password";
+      adminpassFile = config.homefree.services.nextcloud.secrets.admin-password;
       ## To change the DB type:
       ## 1. Export all relevant data
       ## 2. Delete or move /var/lib/nextcloud/config/config.php
@@ -74,7 +74,7 @@ in
     phpOptions = {
       "opcache.interned_strings_buffer" = "32";
     };
-    secretFile = "/run/secrets/nextcloud/secret-file";
+    secretFile = config.homefree.services.nextcloud.secrets.secret-file;
   };
 
   systemd.services.nextcloud-config = {
@@ -137,25 +137,6 @@ in
           proxy_redirect off;
         '';
       };
-    };
-  };
-
-  sops.secrets = {
-    "nextcloud/admin-password" = {
-      format = "yaml";
-      sopsFile = ../secrets/nextcloud.yaml;
-
-      owner = "nextcloud";
-      path = "/run/secrets/nextcloud/admin-password";
-      restartUnits = [ "nextcloud.service" ];
-    };
-    "nextcloud/secret-file" = {
-      format = "yaml";
-      sopsFile = ../secrets/nextcloud.yaml;
-
-      owner = "nextcloud";
-      path = "/run/secrets/nextcloud/secret-file";
-      restartUnits = [ "nextcloud.service" ];
     };
   };
 
