@@ -13,6 +13,7 @@
         MINIMUM_KEY_SIZE_CHECK = false;
         START_SSH_SERVER = true;
         SSH_PORT = 3022;
+        ROOT_URL = "https://git.${config.homefree.system.domain}";
       };
       migrations = {
         ALLOWED_DOMAINS = "*";
@@ -25,7 +26,7 @@
 
   homefree.service-config = if config.homefree.services.gitea.enable == true then [
     {
-      label = "git";
+      label = "gitea";
       reverse-proxy = {
         enable = true;
         subdomains = [ "git" ];
