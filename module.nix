@@ -324,17 +324,52 @@
         };
       };
 
-      homeassistant = {
+      frigate = {
         enable = lib.mkOption {
           type = lib.types.bool;
           default = false;
-          description = "enable Home Assistant Home Automation";
+          description = "enable Frigate video recording service";
         };
 
         public = lib.mkOption {
           type = lib.types.bool;
           default = false;
           description = "Open to public on WAN port";
+        };
+
+        cameras = lib.mkOption {
+          description = "list of cameras";
+          type = with lib.types; listOf (submodule {
+            options = {
+              enable = lib.mkOption {
+                type = lib.types.bool;
+                default = true;
+                description = "Camera enabled";
+              };
+
+              name = lib.mkOption {
+                type = lib.types.str;
+                description = "Camera name";
+              };
+
+              path = lib.mkOption {
+                type = lib.types.str;
+                description = "URL / path to camera";
+              };
+
+              width = lib.mkOption {
+                type = lib.types.int;
+                default = 1920;
+                description = "Width in pixels";
+              };
+
+              height = lib.mkOption {
+                type = lib.types.int;
+                default = 1080;
+                description = "Height in pixels";
+              };
+            };
+          });
         };
       };
 
@@ -394,11 +429,11 @@
         };
       };
 
-      frigate = {
+      homeassistant = {
         enable = lib.mkOption {
           type = lib.types.bool;
           default = false;
-          description = "enable Frigate video recording service";
+          description = "enable Home Assistant Home Automation";
         };
 
         public = lib.mkOption {
@@ -406,40 +441,19 @@
           default = false;
           description = "Open to public on WAN port";
         };
+      };
 
-        cameras = lib.mkOption {
-          description = "list of cameras";
-          type = with lib.types; listOf (submodule {
-            options = {
-              enable = lib.mkOption {
-                type = lib.types.bool;
-                default = true;
-                description = "Camera enabled";
-              };
+      immich = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "enable Immich photo management service";
+        };
 
-              name = lib.mkOption {
-                type = lib.types.str;
-                description = "Camera name";
-              };
-
-              path = lib.mkOption {
-                type = lib.types.str;
-                description = "URL / path to camera";
-              };
-
-              width = lib.mkOption {
-                type = lib.types.int;
-                default = 1920;
-                description = "Width in pixels";
-              };
-
-              height = lib.mkOption {
-                type = lib.types.int;
-                default = 1080;
-                description = "Height in pixels";
-              };
-            };
-          });
+        public = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Open to public on WAN port";
         };
       };
 

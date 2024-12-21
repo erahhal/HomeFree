@@ -25,6 +25,7 @@
     ../../services/home-assistant
     ../../services/headscale.nix
     ../../services/headscale-ui.nix
+    ../../services/immich.nix
     ../../services/jellyfin.nix
     ../../services/linkwarden.nix
     ../../services/matrix.nix

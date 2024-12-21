@@ -20,6 +20,19 @@ let
     name = entry.label;
     value = entry.backup.postgres-databases;
   }) config.homefree.service-config);
+  quoted-backup-path-list = lib.concatStringsSep " " (lib.map (entry: ''"${backup-to-path}/${entry.label}"'') backup-from-paths);
+  backup-cli = pkgs.writeShellScriptBin "backup-cli" ''
+    RESTIC_PASSWORD=$(cat /run/secrets/backup/restic-password)
+    export RESTIC_PASSWORD
+
+    backup_paths=(${quoted-backup-path-list})
+
+    for backup_path in "''\${backup_paths[@]}"
+    do
+      export RESTIC_REPOSITORY="''\${backup_path}"
+      sudo --preserve-env=RESTIC_REPOSITORY --preserve-env=RESTIC_PASSWORD restic ls latest
+    done
+  '';
 in
 {
   ## Typical rsync command
@@ -31,6 +44,7 @@ in
   environment.systemPackages = [
     pkgs.restic
     pkgs.rclone
+    backup-cli
   ];
 
   # --------------------------------------------------------------------------------------
@@ -147,7 +161,6 @@ in
       };
     } else {})
   ]);
-
 
   # Create mount point
   systemd.tmpfiles.rules = [
