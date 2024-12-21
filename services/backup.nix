@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 let
-  backup-to-path = config.homefree.backups.to-path;
+  trimTrailingSlash = s: lib.head (lib.match "(.*[^/])[/]*" s);
+  backup-to-path = trimTrailingSlash config.homefree.backups.to-path;
   ## Combine service backup paths to extra custom paths into an array of { label = "label"; paths = []; }
   backup-from-paths-all =
     (lib.map (entry: {
@@ -230,7 +231,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         User = "root";
-        ExecStart = "${pkgs.rsync}/bin/rsync -av --delete ${backup-to-path} /mnt/backup-backblaze";
+        ExecStart = "${pkgs.rsync}/bin/rsync -av --delete ${backup-to-path}/ /mnt/backup-backblaze";
       };
     };
   }
