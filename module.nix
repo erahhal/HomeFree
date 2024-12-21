@@ -706,16 +706,47 @@
         description = "Extra list of custom paths to backup";
       };
 
-      ignore-links = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Whether to ignore symlinks";
+      backblaze = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Whether to enable Backblaze backups";
+        };
+
+        bucket = lib.mkOption {
+          type = lib.types.str;
+          description = "Bucket name";
+        };
       };
 
       secrets = {
         restic-password = lib.mkOption {
           type = lib.types.path;
-          description = "Location of Restic passworde file. Should not be a file included in your source repo.";
+          description = "Location of Restic password file. Should not be a file included in your source repo.";
+        };
+
+        restic-environment = lib.mkOption {
+          type = lib.types.path;
+          description = ''
+            Location of Restic environment variables.
+
+            If using Backblaze, put in your ID and key in here, e.g.:
+
+            B2_ACCOUNT_ID=<id>
+            B2_ACCOUNT_KEY=<key>
+
+            Should not be a file included in your source repo.";
+          '';
+        };
+
+        backblaze-id = lib.mkOption {
+          type = lib.types.path;
+          description = "Location of file with Backblaze ID. Should not be a file included in your source repo.";
+        };
+
+        backblaze-key = lib.mkOption {
+          type = lib.types.path;
+          description = "Location of file with Backblaze key. Should not be a file included in your source repo.";
         };
       };
     };

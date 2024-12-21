@@ -27,7 +27,10 @@ in
   ## To see files in backup
   ## sudo restic ls latest -r local:<backup path>
 
-  environment.systemPackages = [ pkgs.restic ];
+  environment.systemPackages = [
+    pkgs.restic
+    pkgs.rclone
+  ];
 
   # --------------------------------------------------------------------------------------
   # Postgres Dumps
@@ -95,17 +98,41 @@ in
       };
     }
     ) backup-from-paths))
-    (lib.listToAttrs (lib.map (entry:
-    {
-      name = "backblaze-${entry.label}";
-      value = {
+    # (lib.listToAttrs (lib.map (entry:
+    # {
+    #   name = "backblaze-${entry.label}";
+    #   value = {
+    #     initialize = true;
+    #     passwordFile = "/run/secrets/backup/restic-password";
+    #     environmentFile = "/run/secrets/backup/restic-environment";
+    #     # What to backup
+    #     paths = entry.paths;
+    #     # the name of the repository
+    #     repository = "b2:${entry.label}";
+    #     timerConfig = {
+    #       OnCalendar = "daily";
+    #     };
+    #
+    #     # Keep 7 daily, 5 weekly, and 10 annual backups
+    #     pruneOpts = [
+    #       "--keep-daily 7"
+    #       "--keep-weekly 5"
+    #       "--keep-yearly 10"
+    #     ];
+    #   };
+    # }
+    # ) backup-from-paths))
+    (if config.homefree.backups.backblaze.enable then {
+      "backblaze-${config.homefree.backups.backblaze.bucket}" = {
         initialize = true;
         passwordFile = "/run/secrets/backup/restic-password";
-        # environmentFile = "/run/secrets/backup/restic-env";
+        environmentFile = "/run/secrets/backup/restic-environment";
         # What to backup
-        paths = entry.paths;
+        paths = [
+          backup-to-path
+        ];
         # the name of the repository
-        repository = "b2:${entry.label}";
+        repository = "b2:${config.homefree.backups.backblaze.bucket}";
         timerConfig = {
           OnCalendar = "daily";
         };
@@ -117,11 +144,16 @@ in
           "--keep-yearly 10"
         ];
       };
-    }
-    ) backup-from-paths))
+    } else {})
   ]);
 
-  systemd.services = lib.listToAttrs (lib.map (entry: {
+
+  # Create mount point
+  systemd.tmpfiles.rules = [
+    "d /mnt/backup-backblaze 0750 root root -"
+  ];
+
+  systemd.services = lib.listToAttrs ((lib.map (entry: {
     name = "restic-backups-local-${entry.label}";
     value = {
       serviceConfig =
@@ -149,6 +181,72 @@ in
       };
     };
   }
-  ) backup-from-paths);
-}
+  ) backup-from-paths)
+  ++ (if config.homefree.backups.backblaze.enable == true then [
+  {
+    name = "rclone-backblaze";
+    value = {
+      description = "Mount Backblaze B2 bucket";
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
 
+      serviceConfig = {
+        Type = "notify";
+        ExecStartPre = [
+          "${pkgs.writeShellScript "create-rclone-config" ''
+            mkdir -p /root/.config/rclone
+            cat > /root/.config/rclone/rclone.conf << EOF
+            [b2]
+            type = b2
+            account = $(cat ${config.homefree.backups.secrets.backblaze-id})
+            key = $(cat ${config.homefree.backups.secrets.backblaze-key})
+            EOF
+          ''}"
+        ];
+        ExecStart = ''
+          ${pkgs.rclone}/bin/rclone mount \
+            --config /root/.config/rclone/rclone.conf \
+            --vfs-cache-mode full \
+            --vfs-cache-max-age 24h \
+            --log-level INFO \
+            --log-file /var/log/rclone.log \
+            b2:${config.homefree.backups.backblaze.bucket} /mnt/backup-backblaze
+        '';
+        ExecStop = "${pkgs.fuse}/bin/fusermount -u /mnt/backup-backblaze";
+        Restart = "on-failure";
+        RestartSec = "10s";
+        User = "root";
+      };
+    };
+  }
+  {
+    name = "restic-backblaze-rsync";
+    value = {
+      description = "Sync local restic backup to Backblaze";
+      after = [ "rclone-backblaze.service" ];
+      requires = [ "rclone-backblaze.service" ];
+
+      serviceConfig = {
+        Type = "oneshot";
+        User = "root";
+        ExecStart = "${pkgs.rsync}/bin/rsync -av --delete ${backup-to-path} /mnt/backup-backblaze";
+      };
+    };
+  }
+  ] else []));
+
+  systemd.timers = if config.homefree.backups.backblaze.enable == true then {
+    restic-backblaze-sync = {
+      wantedBy = [ "timers.target" ];
+      after = [ "rclone-backblaze.service" ];
+      requires = [ "rclone-backblaze.service" ];
+
+      timerConfig = {
+        OnCalendar = "03:00";
+        RandomizedDelaySec = "30m";
+        Persistent = true;
+      };
+    };
+  } else {};
+}
