@@ -26,7 +26,7 @@ in
       label = "linkwarden";
       reverse-proxy = {
         enable = true;
-        subdomains = [ "linkwarden" "links" ];
+        subdomains = [ "links" "linkwarden" ];
         http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
         https-domains = [ config.homefree.system.domain ];
         host = "10.0.0.1";
