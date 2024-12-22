@@ -56,16 +56,15 @@
     #   turn_user_lifetime = "1h";
     # };
     settings = {
+      ## server_name is used for user logins, e.g. @user:homefree.host, rather than @user:matrix.homefree.host
       server_name = config.homefree.system.domain;
-      # The public base URL value must match the `base_url` value set in `clientConfig` above.
-      # The default value here is based on `server_name`, so if your `server_name` is different
-      # from the value of `fqdn` above, you will likely run into some mismatched domain names
-      # in client applications.
-
-      ## @TODO: There are custom lines for .well-known responses in the root
-      ##        Caddy config, which may be hard to locate for maintainers.
       public_baseurl = "https://matrix.${config.homefree.system.domain}";
       serve_server_wellknown = true;
+      extra_well_known_server_content = {
+        m.homeserver = {
+          base_url = "https://matrix.${config.homefree.system.domain}";
+        };
+      };
       extra_well_known_client_content = {
         m.homeserver = {
           base_url = "https://matrix.${config.homefree.system.domain}";
@@ -208,7 +207,12 @@
         host = "10.0.0.1";
         port = 8008;
         public = config.homefree.services.matrix.public;
-        # basic-auth = true;
+        extraCaddyConfig = ''
+          # Matrix Synapse settings
+          respond /.well-known/matrix/server `{"m.server": "matrix.${config.homefree.system.domain}:443"}`
+          reverse_proxy /_matrix/* 10.0.0.1:8008
+          reverse_proxy /_synapse/client/* 10.0.0.1:8008
+        '';
       };
       backup = {
         paths = [

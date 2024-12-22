@@ -173,6 +173,18 @@ in
           chain input {
             type filter hook input priority 0; policy drop;
 
+            ## Allow for ipv6 route advertisements
+            icmpv6 type { echo-request, echo-reply, nd-neighbor-solicit, nd-neighbor-advert, nd-router-solicit, nd-router-advert, nd-redirect, ind-neighbor-solicit, ind-neighbor-advert, router-renumbering, mld-listener-query, mld-listener-report, mld-listener-done, mld-listener-reduction, mld2-listener-report } accept;
+            meta l4proto ipv6-icmp accept comment "Accept ICMPv6"
+            meta l4proto icmp accept comment "Accept ICMP"
+            ip protocol igmp accept comment "Accept IGMP"
+
+            ## Interface specific rules
+            iifname { "lo" } accept comment "Allow localhost to access the router"
+            iifname { "${lan-interface}" } accept comment "Allow local network to access the router"
+            iifname { "tailscale0" } accept comment "Allow tailscale network to access the router"
+            iifname { "podman0" } accept comment "Allow podman network to access the router"
+
             ## Allow for web traffic
             ## http is needed for headscale relaying
             tcp dport { http, https } ct state new accept;
@@ -188,22 +200,11 @@ in
             udp dport { 3478, 5349, 49000-50000 } ct state new accept;
             tcp dport { 3478, 5349 } ct state new accept;
 
-            ## Allow for ipv6 route advertisements
-            icmpv6 type { echo-request, echo-reply, nd-neighbor-solicit, nd-neighbor-advert, nd-router-solicit, nd-router-advert, nd-redirect, ind-neighbor-solicit, ind-neighbor-advert, router-renumbering, mld-listener-query, mld-listener-report, mld-listener-done, mld-listener-reduction, mld2-listener-report } accept;
-            meta l4proto ipv6-icmp accept comment "Accept ICMPv6"
-            meta l4proto icmp accept comment "Accept ICMP"
-            ip protocol igmp accept comment "Accept IGMP"
-
             # DHCPv6
             ip6 saddr fe80::/10 ip6 daddr fe80::/10 udp sport 547 udp dport 546 accept
 
             # DHCP client traffic (for WAN interface to get IP address from modem)
             iifname "${wan-interface}" udp sport 67 udp dport 68 accept comment "Allow DHCP from WAN"
-
-            iifname { "lo" } accept comment "Allow localhost to access the router"
-            iifname { "${lan-interface}" } accept comment "Allow local network to access the router"
-            iifname { "tailscale0" } accept comment "Allow tailscale network to access the router"
-            iifname { "podman0" } accept comment "Allow podman network to access the router"
 
             iifname "${wan-interface}" ct state { established, related } accept comment "Allow established traffic"
             iifname "${wan-interface}" icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"

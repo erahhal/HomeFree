@@ -9,6 +9,13 @@ See the [sample config repo](https://git.homefree.host/homefree/sample-config) f
 
 Configure system by setting up values as defined in the [HomeFree module](./module.nix)
 
+## Gateway-specific config
+
+### AT&T Fiber Router
+
+* Make sure to disable all packet filters on "Package Filter" tab
+* Absolutely make sure to disable all settings on "Firewall Advanced" tab
+
 ## Initializing Authentik
 
 Browse to:

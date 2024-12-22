@@ -23,9 +23,12 @@ in
         public = true;
         extraCaddyConfig = ''
           # Matrix Synapse settings
+          header /.well-known/matrix/* Content-Type application/json
+          header /.well-known/matrix/* Access-Control-Allow-Origin *
           respond /.well-known/matrix/server `{"m.server": "matrix.${config.homefree.system.domain}:443"}`
-          # respond /.well-known/matrix/client `{"m.homeserver":{"base_url":"https://matrix.${config.homefree.system.domain}"},"m.identity_server":{"base_url":"https://identity.${config.homefree.system.domain}"}}`
           respond /.well-known/matrix/client `{"m.homeserver":{"base_url":"https://matrix.${config.homefree.system.domain}"}}`
+          ## No identity server
+          # respond /.well-known/matrix/client `{"m.homeserver":{"base_url":"https://matrix.${config.homefree.system.domain}"},"m.identity_server":{"base_url":"https://identity.${config.homefree.system.domain}"}}`
         '';
       };
     }
