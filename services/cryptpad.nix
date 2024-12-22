@@ -7,8 +7,8 @@
       httpPort = 3004;
       httpAddress = "10.0.0.1";
       blockDailyCheck = true;
-      httpUnsafeOrigin = "https://cryptpad.${config.homefree.system.domain}";
-      httpSafeOrigin = "https://cryptpad-ui.${config.homefree.system.domain}";
+      httpUnsafeOrigin = "https://docs.${config.homefree.system.domain}";
+      httpSafeOrigin = "https://docs-ui.${config.homefree.system.domain}";
 
       # Add this after you've signed up in your Cryptpad instance and copy your public key:
       # adminKeys = [ "[user@cryptpad.example.com/Jil1apEPZ40j5M8nsjO1-deadbeefHkt+QExscMzKhs=]" ];
@@ -20,7 +20,8 @@
       label = "cryptpad";
       reverse-proxy = {
         enable = true;
-        subdomains = [ "docs" "cryptpad" "cryptpad-sandbox" "cryptpad-ui" ];
+        # subdomains = [ "cryptpad" "cryptpad-sandbox" "cryptpad-ui" ];
+        subdomains = [ "docs" "docs-sandbox" "docs-ui" ];
         http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
         https-domains = [ config.homefree.system.domain ];
         host = "10.0.0.1";
