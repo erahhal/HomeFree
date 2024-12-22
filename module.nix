@@ -52,8 +52,20 @@
       localDomain = lib.mkOption {
         type = lib.types.str;
         ## @TODO: Should this be "local"?
-        default = "localdomain";
-        description = "local lan domain";
+        default = "lan";
+        description = ''
+          local lan domain for internal devices and services.
+
+          Default is "lan". Don't choose "local", as this can conflict with Multicast DNS (mDNS) services,
+          such as Apple's Bonjour/Zeroconf. "local" is also a reserved TLD and some tools and browsers
+          might trigger cert warnings.
+
+          Other common localdomains you can use:
+          "localdomain"
+          "home"
+          "private"
+          "internal"
+        '';
       };
 
       domain = lib.mkOption {
@@ -396,7 +408,7 @@
 
         public = lib.mkOption {
           type = lib.types.bool;
-          default = false;
+          default = true;
           description = "Open to public on WAN port";
         };
 
@@ -616,6 +628,12 @@
               description = "description of proxy config";
             };
 
+            rootDomain = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = "Maps to root domain, i.e. no subdomain. Only one service can set this to true.";
+            };
+
             subdomains = lib.mkOption {
               type = lib.types.listOf lib.types.str;
               default = [];
@@ -635,14 +653,21 @@
             };
 
             host = lib.mkOption {
-              type = lib.types.str;
-              default = "10.0.0.1";
+              type = lib.types.nullOr lib.types.str;
+              default = null;
               description = "host name or address of service to proxy";
             };
 
             port = lib.mkOption {
-              type = lib.types.int;
+              type = lib.types.nullOr lib.types.int;
+              default = null;
               description = "port of service on lan network";
+            };
+
+            static-path = lib.mkOption {
+              type = lib.types.nullOr lib.types.path;
+              default = null;
+              description = "path to static files to serve. Do not set host or port if using this.";
             };
 
             subdir = lib.mkOption {
@@ -674,6 +699,12 @@
               default = false;
               description = "Whether to enable basic auth headers";
             };
+
+            extraCaddyConfig = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+              description = "custom caddy config";
+            };
           };
 
           backup = {
@@ -691,6 +722,14 @@
           };
         };
       });
+    };
+
+    admin-page = {
+      public = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Open to public on WAN port (not recommended)";
+      };
     };
 
     landing-page = {
@@ -812,12 +851,24 @@
             map getDuplicateOriginal duplicateLowerLabels;
 
         duplicateLabels = findDuplicateLabels config.homefree.service-config;
+        badServiceConfigs = builtins.filter (entry: (entry.reverse-proxy.host != null || entry.reverse-proxy.port != null) && entry.reverse-proxy.static-path != null) config.homefree.service-config;
+        badServiceConfigLabels = builtins.map (entry: entry.label) badServiceConfigs;
+        rootDomainConfigs = builtins.filter (entry: (entry.reverse-proxy.rootDomain == true)) config.homefree.service-config;
+        rootDomainConfigLabels = builtins.map (entry: entry.label) rootDomainConfigs;
       in
     [
       {
         ## Make sure that two service configs don't use the same label
         assertion = lib.length duplicateLabels == 0;
         message = "Multiple homefree.service-config entries with the same label: ${lib.concatStringsSep ", " duplicateLabels}";
+      }
+      {
+        assertion = lib.length badServiceConfigs == 0;
+        message = "homefree.service-config contains entries with both a host/port and static-path config; can only specify one: ${lib.concatStringsSep ", " badServiceConfigLabels}";
+      }
+      {
+        assertion = lib.length rootDomainConfigs <= 1;
+        message = "homefree.service-config contains more than one service with rootDomain = true: ${lib.concatStringsSep ", " rootDomainConfigLabels}";
       }
     ];
 

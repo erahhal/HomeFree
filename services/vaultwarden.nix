@@ -20,8 +20,9 @@ in
       reverse-proxy = {
         enable = true;
         subdomains = [ "vaultwarden" ];
-        http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
+        http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
         https-domains = [ config.homefree.system.domain ];
+        host = "10.0.0.1";
         port = 8222;
         public = config.homefree.services.vaultwarden.public;
       };

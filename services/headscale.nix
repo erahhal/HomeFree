@@ -69,17 +69,21 @@ in
     ];
   };
 
-  # homefree.service-config = if config.homefree.services.headscale.enable == true then [
-  #   {
-  #     label = "headscale";
-  #     reverse-proxy = {
-  #       enable = true;
-  #       subdomains = [ "headscale" ];
-  #       http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
-  #       https-domains = [ config.homefree.system.domain ];
-  #       port = 8087;
-  #       public = config.homefree.services.headscale.public;
-  #     };
-  #   }
-  # ] else [];
+  homefree.service-config = if config.homefree.services.headscale.enable == true then [
+    {
+      label = "headscale";
+      reverse-proxy = {
+        enable = true;
+        subdomains = [ "headscale" ];
+        http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
+        https-domains = [ config.homefree.system.domain ];
+        host = "10.0.0.1";
+        port = 8087;
+        public = config.homefree.services.headscale.public;
+        extraCaddyConfig = ''
+          reverse_proxy /web* http://10.0.0.1:3009
+        '';
+      };
+    }
+  ] else [];
 }

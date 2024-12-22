@@ -1,4 +1,4 @@
-{ config, inputs, pkgs, ... }:
+{ config, pkgs, ... }:
 
 let
   # automations = import ./automations.nix;
@@ -145,19 +145,19 @@ in
           switch = {
             name = "msi_desktop";
             unique_id = "msi-desktop";
-            command_state = "ping -c 2 -i 1 msi-desktop.localdomain";
+            command_state = "ping -c 2 -i 1 msi-desktop.${config.homefree.system.localDomain}";
             ## Hibernate
             # command_off = "ssh -i /run/agenix/msi-desktop-id_rsa -o 'StrictHostKeyChecking=no' erahhal@msi-desktop rundll32.exe powrprof.dll, SetSuspendState Sleep";
             command_on = "wakeonlan 2c:f0:5d:72:ac:ab";
             ## Suspend
-            command_off = "ssh -i /config/certs/msi_desktop-id_rsa -o ConnectTimeout=30 -o 'StrictHostKeyChecking=no' erahhal@msi-desktop.localdomain 'cd \"/mnt/c/Program Files/PSTools\"; ./psshutdown.exe -accepteula -d -t 0'";
+            command_off = "ssh -i /config/certs/msi_desktop-id_rsa -o ConnectTimeout=30 -o 'StrictHostKeyChecking=no' erahhal@msi-desktop.${config.homefree.system.localDomain} 'cd \"/mnt/c/Program Files/PSTools\"; ./psshutdown.exe -accepteula -d -t 0'";
           };
         }
         {
           switch = {
             name = "stream_vr";
             unique_id = "steam-vr";
-            command_on = "ssh -i /config/certs/msi_desktop-id_rsa -o ConnectTimeout=30 -o 'StrictHostKeyChecking=no' erahhal@msi-desktop.localdomain 'cd \"/mnt/c/Program Files (x86)/Steam/steamapps/common/SteamVR/bin/win64\"; ./vrstartup.exe'";
+            command_on = "ssh -i /config/certs/msi_desktop-id_rsa -o ConnectTimeout=30 -o 'StrictHostKeyChecking=no' erahhal@msi-desktop.${config.homefree.system.localDomain} 'cd \"/mnt/c/Program Files (x86)/Steam/steamapps/common/SteamVR/bin/win64\"; ./vrstartup.exe'";
           };
         }
       ];
@@ -417,7 +417,7 @@ in
       reverse-proxy = {
         enable = true;
         subdomains = [ "homeassistant" "ha" ];
-        http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
+        http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
         https-domains = [ config.homefree.system.domain ];
         port = 8123;
         public = config.homefree.services.homeassistant.public;

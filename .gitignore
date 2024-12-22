@@ -3,5 +3,7 @@ result
 *.qcow2
 homefree-image
 lan-client-image
-site/node_modules
-site/public
+site/default-landing-page/node_modules
+site/default-landing-page/public
+site/admin/node_modules
+site/admin/public

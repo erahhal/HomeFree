@@ -45,8 +45,9 @@ in
       reverse-proxy = {
         enable = true;
         subdomains = [ "baikal" ];
-        http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
+        http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
         https-domains = [ config.homefree.system.domain ];
+        host = "10.0.0.1";
         port = 3007;
         public = config.homefree.services.baikal.public;
       };

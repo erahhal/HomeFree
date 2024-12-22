@@ -23,8 +23,9 @@
       reverse-proxy = {
         enable = true;
         subdomains = [ "photos" "immich" ];
-        http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
+        http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
         https-domains = [ config.homefree.system.domain ];
+        host = "10.0.0.1";
         port = config.services.immich.port;
         public = config.homefree.services.immich.public;
       };

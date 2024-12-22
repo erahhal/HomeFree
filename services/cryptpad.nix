@@ -20,9 +20,10 @@
       label = "cryptpad";
       reverse-proxy = {
         enable = true;
-        subdomains = [ "cryptpad" "cryptpad-sandbox" "cryptpad-ui" ];
-        http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
+        subdomains = [ "docs" "cryptpad" "cryptpad-sandbox" "cryptpad-ui" ];
+        http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
         https-domains = [ config.homefree.system.domain ];
+        host = "10.0.0.1";
         port = 3004;
         public = config.homefree.services.cryptpad.public;
       };

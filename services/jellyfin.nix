@@ -39,9 +39,10 @@
       label = "jellyfin";
       reverse-proxy = {
         enable = true;
-        subdomains = [ "jellyfin" ];
-        http-domains = [ "homefree.${config.homefree.system.localDomain}" ];
+        subdomains = [ "jellyfin" "video" ];
+        http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
         https-domains = [ config.homefree.system.domain ];
+        host = "10.0.0.1";
         port = 8096;
         public = config.homefree.services.jellyfin.public;
       };

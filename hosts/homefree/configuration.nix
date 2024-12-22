@@ -6,17 +6,17 @@
     ../../profiles/config-editor.nix
     ../../profiles/git.nix
     ../../profiles/hardware-configuration.nix
-    ../../profiles/hosting.nix
     ../../profiles/nixvim.nix
     ../../profiles/podman.nix
     ../../profiles/router.nix
-    # ../../profiles/traffic-shaping.nix
     ../../profiles/traffic-control.nix
 
     ../../services/adguardhome.nix
+    ../../services/admin.nix
     ../../services/authentik.nix
     ../../services/backup.nix
     ../../services/baikal.nix
+    ../../services/caddy.nix
     ../../services/cryptpad.nix
     ../../services/ddclient.nix
     ../../services/dnsmasq.nix
@@ -27,6 +27,7 @@
     ../../services/headscale-ui.nix
     ../../services/immich.nix
     ../../services/jellyfin.nix
+    ../../services/landing-page.nix
     ../../services/linkwarden.nix
     ../../services/matrix.nix
     ../../services/mqtt.nix

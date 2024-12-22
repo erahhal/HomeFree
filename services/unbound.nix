@@ -215,7 +215,7 @@ in
       # range-lan = {
       #   start = "10.0.0.200";
       #   end = "10.0.0.254";
-      #   domain = "localdomain";
+      #   domain = config.homefree.system.localDomain;
       # };
 
       forward-zone = [

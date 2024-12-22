@@ -195,7 +195,7 @@
   # Networking
   # --------------------------------------------------------------------------------------
 
-  networking.search = [ "localdomain" ];
+  networking.search = [ config.homefree.system.localDomain ];
 
   # --------------------------------------------------------------------------------------
   # Base Packages
