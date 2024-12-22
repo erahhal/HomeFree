@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let
-  homefree-site = pkgs.callPackage ../site/default-landing-page { };
+  homefree-site = pkgs.callPackage ./site { };
 in
 {
   ## add homefree default site as a package

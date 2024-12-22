@@ -1,42 +1,42 @@
 { config, lib, ... }:
 {
   imports = [
-    ../../profiles/acme.nix
-    ../../profiles/common.nix
-    ../../profiles/config-editor.nix
-    ../../profiles/git.nix
-    ../../profiles/hardware-configuration.nix
-    ../../profiles/nixvim.nix
-    ../../profiles/podman.nix
-    ../../profiles/router.nix
-    ../../profiles/traffic-control.nix
+    ./profiles/acme.nix
+    ./profiles/common.nix
+    ./profiles/config-editor.nix
+    ./profiles/git.nix
+    ./profiles/hardware-configuration.nix
+    ./profiles/nixvim.nix
+    ./profiles/podman.nix
+    ./profiles/router.nix
+    ./profiles/traffic-control.nix
 
-    ../../services/adguardhome.nix
-    ../../services/admin.nix
-    ../../services/authentik.nix
-    ../../services/backup.nix
-    ../../services/baikal.nix
-    ../../services/caddy.nix
-    ../../services/cryptpad.nix
-    ../../services/ddclient.nix
-    ../../services/dnsmasq.nix
-    ../../services/frigate-podman.nix
-    ../../services/gitea.nix
-    ../../services/home-assistant
-    ../../services/headscale.nix
-    ../../services/headscale-ui.nix
-    ../../services/immich.nix
-    ../../services/jellyfin.nix
-    ../../services/landing-page.nix
-    ../../services/linkwarden.nix
-    ../../services/matrix.nix
-    ../../services/mqtt.nix
-    ../../services/nextcloud.nix
-    ../../services/postgres.nix
-    ../../services/radicale.nix
-    ../../services/unbound.nix
-    ../../services/unifi.nix
-    ../../services/vaultwarden.nix
+    ./services/adguardhome.nix
+    ./services/admin
+    ./services/authentik.nix
+    ./services/backup.nix
+    ./services/baikal.nix
+    ./services/caddy.nix
+    ./services/cryptpad.nix
+    ./services/ddclient.nix
+    ./services/dnsmasq.nix
+    ./services/frigate-podman.nix
+    ./services/gitea.nix
+    ./services/home-assistant
+    ./services/headscale.nix
+    ./services/headscale-ui.nix
+    ./services/immich.nix
+    ./services/jellyfin.nix
+    ./services/landing-page
+    ./services/linkwarden.nix
+    ./services/matrix.nix
+    ./services/mqtt.nix
+    ./services/nextcloud.nix
+    ./services/postgres.nix
+    ./services/radicale.nix
+    ./services/unbound.nix
+    ./services/unifi.nix
+    ./services/vaultwarden.nix
   ];
 
   # --------------------------------------------------------------------------------------
@@ -54,12 +54,6 @@
       canTouchEfiVariables = true;
     };
   };
-
-  # --------------------------------------------------------------------------------------
-  # File system
-  # --------------------------------------------------------------------------------------
-
-  # @TODO: Setup luks or some disk encryption (ZFS?)
 
   # --------------------------------------------------------------------------------------
   # Network

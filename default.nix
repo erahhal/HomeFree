@@ -12,6 +12,6 @@
     homefree-inputs.sops-nix.nixosModules.sops
     ./modules/ddclient-multi.nix
     ./module.nix
-    ./hosts/homefree/configuration.nix
+    ./configuration.nix
   ];
 }

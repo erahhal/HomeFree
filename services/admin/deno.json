@@ -1,0 +1,9 @@
+{
+  "tasks": {
+    "dev": "deno run --allow-net --allow-run --watch main.ts"
+  },
+  "imports": {
+    "hono": "npm:hono@3",
+    "graphql": "npm:graphql"
+  }
+}

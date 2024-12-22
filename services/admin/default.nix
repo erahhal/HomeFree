@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let
-  homefree-admin = pkgs.callPackage  ../site/admin { };
+  homefree-admin = pkgs.callPackage  ./site { };
 in
 {
   ## add homefree admin page as a package
@@ -22,5 +22,9 @@ in
         public = config.homefree.admin-page.public;
       };
     }
+  ];
+
+  environment.systemPackages = with pkgs; [
+    deno
   ];
 }
