@@ -2,6 +2,22 @@
 let
   cfg = config.homefree;
   search-domains = [ cfg.system.domain cfg.system.localDomain ] ++ cfg.system.additionalDomains;
+  ## See: https://headscale.net/stable/ref/acls/
+  ## @TODO: Doesn't seem to work
+  policy = pkgs.writeText "headscale-policy.json" ''
+  {
+    "hosts": {
+      "homefree.lan": "10.0.0.1/32"
+    },
+    "autoApprovers": {
+      "routes": {
+        "10.0.0.0/24": [
+          "homefree.lan"
+        ]
+      }
+    }
+  }
+  '';
 in
 {
   environment.systemPackages = [
@@ -15,6 +31,7 @@ in
     address = "10.0.0.1";
     settings = {
       server_url = "https://headscale.${cfg.system.domain}:443";
+      policy.path = policy;
       dns = {
         ## Must be different from server domain
         base_domain = "homefree.vpn";
@@ -67,6 +84,22 @@ in
       "--advertise-routes=10.0.0.0/24"
       # "--netfilter-mode=nodivert"
     ];
+  };
+
+  systemd.services.headscale-enable-routes = {
+    after = [ "network.target" "network-online.target" "tailscale.service" ];
+    requires = [ "network-online.target" "tailscaled.service" "tailscaled-set.service" "tailscaled-autoconnect.service" ];
+    enable = true;
+    serviceConfig = {
+      User = "headscale";
+    };
+    # script = builtins.readFile ../scripts/tune_router_performance.sh;
+    script = ''
+      HEADSCALE=${pkgs.headscale}/bin/headscale
+      GREP=${pkgs.gnugrep}/bin/grep
+      AWK=${pkgs.gawk}/bin/awk
+      $HEADSCALE routes enable -r $($HEADSCALE routes list | $GREP homefree | $GREP "10.0.0.0" | $AWK '{ print $1 }')
+    '';
   };
 
   homefree.service-config = if config.homefree.services.headscale.enable == true then [

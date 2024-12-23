@@ -52,7 +52,7 @@ in
           + (if reverse-proxy-config.public == false then ''
             bind 10.0.0.1
           '' else ''
-            bind 10.0.0.1 ${config.homefree.system.domain}
+            bind 10.0.0.1 ${config.homefree.system.domain} ::
           '')
           + (if reverse-proxy-config.subdir != null then ''
             rewrite / ${trimTrailingSlash reverse-proxy-config.subdir}{uri}

@@ -222,4 +222,3 @@ in
     meta.maintainers = with lib.maintainers; [ jvanbruegge ];
   };
 }
-

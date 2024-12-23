@@ -13,8 +13,14 @@ Configure system by setting up values as defined in the [HomeFree module](./modu
 
 ### AT&T Fiber Router
 
-* Make sure to disable all packet filters on "Package Filter" tab
-* Absolutely make sure to disable all settings on "Firewall Advanced" tab
+* Firewall Settings
+  * On "IP Passthrough" page, set
+    * Allocation Mode: "PassThrough"
+    * Default Server Internal Address: <empty>
+    * Passthrough Mode: "DHCPS-fixed"
+    * Passthrough Fixed MAC Address: Choose the MAC of the WAN interface of your HomeFree device
+  * Make sure to disable all packet filters on "Package Filter" tab
+  * Absolutely make sure to disable all settings on "Firewall Advanced" tab
 
 ## Initializing Authentik
 

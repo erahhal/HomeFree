@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 {
   services.immich = {
     enable = true;
@@ -16,6 +16,11 @@
 
   ## Enable VA-API support
   users.users.immich.extraGroups = [ "video" "render" ];
+
+  environment.systemPackages = [
+    pkgs.immich-cli
+    pkgs.immich-go
+  ];
 
   homefree.service-config = if config.homefree.services.immich.enable == true then [
     {
