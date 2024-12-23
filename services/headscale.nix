@@ -1,9 +1,9 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.homefree;
   search-domains = [ cfg.system.domain cfg.system.localDomain ] ++ cfg.system.additionalDomains;
   ## See: https://headscale.net/stable/ref/acls/
-  ## @TODO: Doesn't seem to work
+  ## @TODO: Doesn't seem to work, may even block all traffic not explicitly approved.
   policy = pkgs.writeText "headscale-policy.json" ''
   {
     "hosts": {
@@ -31,25 +31,40 @@ in
     address = "10.0.0.1";
     settings = {
       server_url = "https://headscale.${cfg.system.domain}:443";
-      policy.path = policy;
+      # policy.path = policy;
       dns = {
+        magic_dns = true;
         ## Must be different from server domain
         base_domain = "homefree.vpn";
-        search_domains = search-domains;
+        # search_domains = search-domains;
         ## Add
         nameservers.global = [
+          ## @TODO: It appears that these servers are round-robinned.
+          ##        Can 10.0.0.1 be set as default, and the rest as backups?
+          ##        Would be useful to support ad blocking over tailscale.
+
           ## Internal DNS, has local domain names
-          "10.0.0.1"
+          # "10.0.0.1"
+
           ## Backup in case internal DNS not accessible due to connectivity issues
           "9.9.9.10"
           ## Secondary backup
           "1.1.1.1"
         ];
+        nameservers.split = lib.listToAttrs (lib.map (domain:
+          {
+            name = domain;
+            value = [
+              "10.0.0.1"
+            ];
+          }
+        ) search-domains);
       };
       prefixes = {
         ## Some VPNs use addresses that overlap. Reduce the size of the network
         ## from 10.64.0.0/10
         v4 = "100.64.0.0/24";
+        v6 = "fd7a:115c:a1e0::/48";
       };
       derp = {
         server = {
@@ -116,6 +131,11 @@ in
         extraCaddyConfig = ''
           reverse_proxy /web* http://10.0.0.1:3009
         '';
+      };
+      backup = {
+        paths = [
+          "/var/lib/headscale"
+        ];
       };
     }
   ] else [];

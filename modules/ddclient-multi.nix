@@ -259,7 +259,9 @@ with lib;
         inherit StateDirectory;
         Type = "oneshot";
         ExecStartPre = [ "!${pkgs.writeShellScript "ddclient-prestart" preStart}" ];
-        ExecStart = "${lib.getExe cfg.package} -file /run/${RuntimeDirectory}/ddclient.conf";
+        ExecStart = ''
+          ${pkgs.bash}/bin/bash -c '${lib.getExe cfg.package} -file /run/${RuntimeDirectory}/ddclient.conf 2>&1 | ${pkgs.coreutils-full}/bin/tee >(${pkgs.gnugrep}/bin/grep -q "422" && exit 0); exit ''\${pipestatus[0]}'
+        '';
       };
     };
 
