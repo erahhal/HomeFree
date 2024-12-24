@@ -137,29 +137,29 @@ in
     #   };
     # }
     # ) backup-from-paths))
-    (if config.homefree.backups.backblaze.enable then {
-      "backblaze-${config.homefree.backups.backblaze.bucket}" = {
-        initialize = true;
-        passwordFile = "/run/secrets/backup/restic-password";
-        environmentFile = "/run/secrets/backup/restic-environment";
-        # What to backup
-        paths = [
-          backup-to-path
-        ];
-        # the name of the repository
-        repository = "b2:${config.homefree.backups.backblaze.bucket}";
-        timerConfig = {
-          OnCalendar = "daily";
-        };
-
-        # Keep 7 daily, 5 weekly, and 10 annual backups
-        pruneOpts = [
-          "--keep-daily 7"
-          "--keep-weekly 5"
-          "--keep-yearly 10"
-        ];
-      };
-    } else {})
+    # (if config.homefree.backups.backblaze.enable then {
+    #   "backblaze-${config.homefree.backups.backblaze.bucket}" = {
+    #     initialize = true;
+    #     passwordFile = "/run/secrets/backup/restic-password";
+    #     environmentFile = "/run/secrets/backup/restic-environment";
+    #     # What to backup
+    #     paths = [
+    #       backup-to-path
+    #     ];
+    #     # the name of the repository
+    #     repository = "b2:${config.homefree.backups.backblaze.bucket}";
+    #     timerConfig = {
+    #       OnCalendar = "daily";
+    #     };
+    #
+    #     # Keep 7 daily, 5 weekly, and 10 annual backups
+    #     pruneOpts = [
+    #       "--keep-daily 7"
+    #       "--keep-weekly 5"
+    #       "--keep-yearly 10"
+    #     ];
+    #   };
+    # } else {})
   ]);
 
   # Create mount point
