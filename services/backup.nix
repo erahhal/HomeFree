@@ -225,11 +225,13 @@ in
             --vfs-cache-max-age 24h \
             --log-level INFO \
             --log-file /var/log/rclone.log \
+            --allow-non-empty \
             b2:${config.homefree.backups.backblaze.bucket} /mnt/backup-backblaze
         '';
         ExecStop = "${pkgs.fuse}/bin/fusermount -u /mnt/backup-backblaze";
         Restart = "on-failure";
         RestartSec = "10s";
+        RemainAfterExit = "yes";
         User = "root";
       };
     };
@@ -251,7 +253,7 @@ in
   ] else []));
 
   systemd.timers = if config.homefree.backups.backblaze.enable == true then {
-    restic-backblaze-sync = {
+    restic-backblaze-rsync = {
       wantedBy = [ "timers.target" ];
       after = [ "rclone-backblaze.service" ];
       requires = [ "rclone-backblaze.service" ];

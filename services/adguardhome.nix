@@ -96,6 +96,18 @@
           name = "AdAway Default Blocklist";
           id = 2;
         }
+        {
+          enabled = true;
+          url = "https://adguardteam.github.io/HostlistsRegistry/assets/filter_7.txt";
+          name = "Perflyst and Dandelion Sprout's Smart-TV Blocklist";
+          id = 7;
+        }
+        {
+          enabled = true;
+          url = "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.txt";
+          name = "HaGeZi's Pro DNS Blocklist";
+          id = 99;
+        }
       ];
       whitelist_filters = [];
       user_rules = [

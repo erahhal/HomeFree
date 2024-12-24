@@ -163,6 +163,7 @@ in
         "--device=/dev/bus/usb:/dev/bus/usb"  # Passes the USB Coral, needs to be modified for other versions
         "--device=/dev/dri/renderD128:/dev/dri/renderD128" # For intel hwaccel, needs to be updated for your hardware
         "--cap-add=CAP_PERFMON" # For GPU statistics
+        "--privileged"
       ];
 
       ports = [
