@@ -392,6 +392,12 @@
           description = "enable Gitea git service";
         };
 
+        disable-registration = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Disable user registration";
+        };
+
         public = lib.mkOption {
           type = lib.types.bool;
           default = false;

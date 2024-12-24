@@ -15,6 +15,9 @@
         SSH_PORT = 3022;
         ROOT_URL = "https://git.${config.homefree.system.domain}";
       };
+      service = {
+        DISABLE_REGISTRATION = config.homefree.services.gitea.disable-registration;
+      };
       migrations = {
         ALLOWED_DOMAINS = "*";
         ALLOW_LOCALNETWORKS = true;
