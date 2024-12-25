@@ -123,103 +123,116 @@
         options = { noremap = true; };
       }
       ## Finds files by filename
-      {
-        mode = [ "n" ];
-        key = "<c-p>";
-        action = "<cmd>Telescope find_files<cr>";
-        options = { noremap = true; };
-      }
+      # {
+      #   mode = [ "n" ];
+      #   key = "<c-p>";
+      #   action = "<cmd>Telescope find_files<cr>";
+      #   action = "<cmd>FzfLua files<cr>";
+      #   options = { noremap = true; };
+      # }
       ## Search for a string in your current working directory and get results live as you type, respects .gitignore. (Requires ripgrep)
-      {
-        mode = [ "n" ];
-        key = "<leader>fg";
-        action = "<cmd>Telescope live_grep<cr>";
-        options = { noremap = true; };
-      }
+      # {
+      #   mode = [ "n" ];
+      #   key = "<leader>fg";
+      #   action = "<cmd>Telescope live_grep<cr>";
+      #   action = "<cmd>FzfLua live_grep<cr>";
+      #   options = { noremap = true; };
+      # }
       ## Search file contents
-      {
-        mode = [ "n" ];
-        key = "<c-s>";
-        action = "<cmd>Telescope live_grep<cr>";
-        options = { noremap = true; };
-      }
+      # {
+      #   mode = [ "n" ];
+      #   key = "<c-s>";
+      #   action = "<cmd>Telescope live_grep<cr>";
+      #   action = "<cmd>FzfLua live_grep<cr>";
+      #   options = { noremap = true; };
+      # }
       ## Lists open buffers in current neovim instance
-      {
-        mode = [ "n" ];
-        key = "<leader>db";
-        action = "<cmd>Telescope buffers<cr>";
-        options = { noremap = true; };
-      }
+      # {
+      #   mode = [ "n" ];
+      #   key = "<leader>db";
+      #   action = "<cmd>Telescope buffers<cr>";
+      #   action = "<cmd>FzfLua buffers<cr>";
+      #   options = { noremap = true; };
+      # }
       ## Lists available help tags and opens a new window with the relevant help info on <cr>
-      {
-        mode = [ "n" ];
-        key = "<leader>fh";
-        action = "<cmd>Telescope help_tags<cr>";
-        options = { noremap = true; };
-      }
+      # {
+      #   mode = [ "n" ];
+      #   key = "<leader>fh";
+      #   action = "<cmd>Telescope help_tags<cr>";
+      #   action = "<cmd>FzfLua helptags<cr>";
+      #   options = { noremap = true; };
+      # }
       ## Lists manpage entries, opens them in a help window on <cr>
-      {
-        mode = [ "n" ];
-        key = "<leader>fm";
-        action = "<cmd>Telescope man_pages<cr>";
-        options = { noremap = true; };
-      }
+      # {
+      #   mode = [ "n" ];
+      #   key = "<leader>fm";
+      #   action = "<cmd>Telescope man_pages<cr>";
+      #   action = "<cmd>FzfLua manpages<cr>";
+      #   options = { noremap = true; };
+      # }
       ## Lists previously open files
-      {
-        mode = [ "n" ];
-        key = "<leader>fp";
-        action = "<cmd>Telescope oldfiles<cr>";
-        options = { noremap = true; };
-      }
+      # {
+      #   mode = [ "n" ];
+      #   key = "<leader>fp";
+      #   action = "<cmd>Telescope oldfiles<cr>";
+      #   action = "<cmd>FzfLua oldfiles<cr>";
+      #   options = { noremap = true; };
+      # }
       ## Lists previously open files, Maps to ctrl-/
-      {
-        mode = [ "n" ];
-        key = "<c-_>";
-        action = "<cmd>Telescope oldfiles<cr>";
-        options = { noremap = true; };
-      }
+      # {
+      #   mode = [ "n" ];
+      #   key = "<c-_>";
+      #   action = "<cmd>Telescope oldfiles<cr>";
+      #   action = "<cmd>FzfLua oldfiles<cr>";
+      #   options = { noremap = true; };
+      # }
       ## Lists spelling suggestions for the current word under the cursor, replaces word with selected suggestion on <cr>
-      {
-        mode = [ "n" ];
-        key = "<leader>fs";
-        action = "<cmd>Telescope spell_suggest<cr>";
-        options = { noremap = true; };
-      }
+      # {
+      #   mode = [ "n" ];
+      #   key = "<leader>fs";
+      #   action = "<cmd>Telescope spell_suggest<cr>";
+      #   action = "<cmd>FzfLua spell_suggest<cr>";
+      #   options = { noremap = true; };
+      # }
       ## Lists LSP references for iword under the cursor
-      {
-        mode = [ "n" ];
-        key = "<leader>fr";
-        action = "<cmd>Telescope lsp_references<cr>";
-        options = { noremap = true; };
-      }
+      # {
+      #   mode = [ "n" ];
+      #   key = "<leader>fr";
+      #   action = "<cmd>Telescope lsp_references<cr>";
+      #   action = "<cmd>FzfLua lsp_references<cr>";
+      #   options = { noremap = true; };
+      # }
       ## Lists LSP incoming calls for word under the cursor
-      {
-        mode = [ "n" ];
-        key = "<leader>fi";
-        action = "<cmd>Telescope lsp_incoming_calls<cr>";
-        options = { noremap = true; };
-      }
+      # {
+      #   mode = [ "n" ];
+      #   key = "<leader>fi";
+      #   action = "<cmd>Telescope lsp_incoming_calls<cr>";
+      #   action = "<cmd>FzfLua lsp_incoming_calls<cr>";
+      #   options = { noremap = true; };
+      # }
       ## Lists LSP outgoing calls for word under the cursor
-      {
-        mode = [ "n" ];
-        key = "<leader>fo";
-        action = "<cmd>Telescope lsp_outgoing_calls<cr>";
-        options = { noremap = true; };
-      }
+      # {
+      #   mode = [ "n" ];
+      #   key = "<leader>fo";
+      #   action = "<cmd>Telescope lsp_outgoing_calls<cr>";
+      #   action = "<cmd>FzfLua lsp_outgoing_calls<cr>";
+      #   options = { noremap = true; };
+      # }
       ## Dynamically Lists LSP for all workspace symbols
-      {
-        mode = [ "n" ];
-        key = "<leader>fw";
-        action = "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>";
-        options = { noremap = true; };
-      }
+      # {
+      #   mode = [ "n" ];
+      #   key = "<leader>fw";
+      #   action = "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>";
+      #   action = "<cmd>FzfLua lsp_workspace_symbols<cr>";
+      #   options = { noremap = true; };
+      # }
       ## Goto the definition of the word under the cursor, if there's only one, otherwise show all options in Telescope
-      {
-        mode = [ "n" ];
-        key = "<leader>fd";
-        action = "<cmd>Telescope lsp_definitions<cr>";
-        options = { noremap = true; };
-      }
+      # {
+      #   mode = [ "n" ];
+      #   key = "<leader>fd";
+      #   action = "<cmd>Telescope lsp_definitions<cr>";
+      #   options = { noremap = true; };
+      # }
       ## Other Telescope options:
       ## git_files     search only files in git, respects .gitignore
       ## oldfiles      previously opened files
@@ -466,6 +479,79 @@
       };
     };
 
+    plugins.fzf-lua = {
+      enable = true;
+      # profile = "telescope";
+      settings = {
+        oldfiles = {
+          # In Telescope, when I used <leader>fr, it would load old buffers.
+          # fzf lua does the same, but by default buffers visited in the current
+          # session are not included. I use <leader>fr all the time to switch
+          # back to buffers I was just in. If you missed this from Telescope,
+          # give it a try.
+          include_current_session = true;
+        };
+        preview = {
+          vertical = "down:90%";
+          horizontal = "right:90%";
+        };
+        previewers = {
+          builtin = {
+            # fzf-lua is very fast, but it really struggled to preview a couple files
+            # in a repo. Those files were very big JavaScript files (1MB, minified, all on a single line).
+            # It turns out it was Treesitter having trouble parsing the files.
+            # With this change, the previewer will not add syntax highlighting to files larger than 100KB
+            # (Yes, I know you shouldn't have 100KB minified files in source control.)
+            syntax_limit_b = 1024 * 100; # 100KB
+          };
+        };
+        grep = {
+          # One thing I missed from Telescope was the ability to live_grep and the
+          # run a filter on the filenames.
+          # Ex: Find all occurrences of "enable" but only in the "plugins" directory.
+          # With this change, I can sort of get the same behaviour in live_grep.
+          # ex: > enable --*/plugins/*
+          # I still find this a bit cumbersome. There's probably a better way of doing this.
+          rg_glob = true; # enable glob parsing
+          glob_flag = "--iglob"; # case insensitive globs
+          glob_separator = "%s%-%-"; # query separator pattern (lua): ' --'
+        };
+      };
+      keymaps = {
+        "<C-p>" = {
+          action = "git_files";
+          options = {
+            desc = "Fzf-Lua Git Files";
+            silent = true;
+          };
+          settings = {
+            previewers = {
+              cat = {
+                cmd = "${pkgs.coreutils-full}/bin/cat";
+              };
+            };
+            # winopts = {
+            #   height = 0.5;
+            # };
+          };
+        };
+        "<C-s>" = "live_grep";
+        "<C-_>" = "oldfiles";
+        "<leader>fd" = "lsp_definitions";
+        "<leader>fg" = "live_grep";
+        "<leader>fh" = "helptags";
+        "<leader>fi" = "lsp_incoming_calls";
+        "<leader>fm" = "manpages";
+        "<leader>fo" = "lsp_outgoing_calls";
+        "<leader>fp" = "oldfiles";
+        "<leader>fr" = "lsp_references";
+        "<leader>fs" = "spell_suggest";
+        "<leader>fw" = "lsp_workspace_symbols";
+        "<leader>db" = "buffers";
+        "<leader>ch" = "command_history";
+      };
+    };
+
     plugins.treesitter.enable = true;
 
     plugins.tmux-navigator.enable = true;
@@ -539,6 +625,7 @@
       };
     };
 
+    ## @TODO: Enable once stable
     plugins.blink-cmp = {
       enable = false;
     };
