@@ -73,4 +73,4 @@ app.get("/api/system-status", async (c) => {
   return c.json(result);
 });
 
-Deno.serve(app.fetch);
+Deno.serve({ port: 4000 }, app.fetch);

@@ -4,9 +4,12 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@netflix/x-element": "github:netflix/x-element"
+    "@netflix/x-element": "github:netflix/x-element",
+    "serve": "^14.2.4",
+    "valtio": "^2.1.2"
   },
   "scripts": {
-    "build": ""
+    "build": "",
+    "serve": "serve"
   }
 }

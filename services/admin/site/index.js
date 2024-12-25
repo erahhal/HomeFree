@@ -1,9 +1,4 @@
-import XElement from '/node_modules/@netflix/x-element/x-element.js';
+// @TODO: Add auth here
 
-class HomeFreeAdmin extends XElement {
-  static template(html) {
-    return () => html`<span>HomeFree Admin</span>`;
-  }
-}
+await import('./app.js');
 
-customElements.define('homefree-admin', HomeFreeAdmin);

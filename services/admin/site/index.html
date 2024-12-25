@@ -3,9 +3,11 @@
   <head>
     <meta charset="UTF-8">
     <title>HomeFree Admin</title>
-    <script type="module" src="./index.js"></script>
+    <script src="/imports.js"></script>
+    <script type="module">import '@index';</script>
+    <style>[unresolved] { display: none; } body { margin: 0; overflow: auto; }</style>
   </head>
-  <body>
-    <homefree-admin></homefree-admin>
+  <body unresolved>
+    <hf-app></hf-app>
   </body>
 </html>
