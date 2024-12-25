@@ -539,7 +539,12 @@
       };
     };
 
+    plugins.blink-cmp = {
+      enable = false;
+    };
+
     plugins.cmp = {
+      enable = true;
       autoEnableSources = true;
       settings = {
         sources = [
