@@ -2,6 +2,7 @@
 {
   imports = [
     ./profiles/acme.nix
+    ./profiles/bash.nix
     ./profiles/common.nix
     ./profiles/config-editor.nix
     ./profiles/git.nix
