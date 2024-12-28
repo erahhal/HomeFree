@@ -5,6 +5,7 @@
       '@x-element': '/node_modules/@netflix/x-element/x-element.js',
       '@x-element-ready': '/node_modules/@netflix/x-element/etc/ready.js',
       '@valtio-vanilla': '/node_modules/valtio/esm/vanilla.mjs',
+      'gql-tag': '/node_modules/gql-tag/dist/index.es.js',
       'proxy-compare': '/node_modules/proxy-compare/dist/index.js'
     },
   };

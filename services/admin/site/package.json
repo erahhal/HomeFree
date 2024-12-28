@@ -5,11 +5,12 @@
   "type": "module",
   "dependencies": {
     "@netflix/x-element": "github:netflix/x-element",
+    "gql-tag": "^1.0.1",
     "serve": "^14.2.4",
     "valtio": "^2.1.2"
   },
   "scripts": {
     "build": "",
-    "serve": "serve"
+    "serve": "serve -p 8456"
   }
 }

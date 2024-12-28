@@ -69,8 +69,8 @@ app.use('/graphql', async (c) => {
 
 // Keep the REST endpoint as a fallback
 app.get("/api/system-status", async (c) => {
-  const result = await resolvers.Query.systemStatus();
-  return c.json(result);
+  const response = await yoga.handle(c.req.raw);
+  return c.json(response);
 });
 
 Deno.serve({ port: 4000 }, app.fetch);

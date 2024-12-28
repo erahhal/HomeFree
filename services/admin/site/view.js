@@ -22,7 +22,7 @@ export default class HFView extends XElement {
     }) => html`
       <span>HomeFree Admin</span>
       <p>
-        ${model?.endpoint}
+        ${model?.apiUrl}
       </p>
     `;
   }
