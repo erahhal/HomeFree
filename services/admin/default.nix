@@ -1,6 +1,10 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 let
   homefree-admin = pkgs.callPackage  ./site { };
+  runtime-paths = lib.makeBinPath [
+    pkgs.procps
+    pkgs.coreutils
+  ];
 in
 {
   ## add homefree admin page as a package
@@ -27,6 +31,7 @@ in
       WorkingDirectory = "${./api}";
       ExecStart = "${pkgs.deno}/bin/deno task start";
       Restart = "always";
+      Environment="PATH=$PATH:${runtime-paths}";
     };
   };
 

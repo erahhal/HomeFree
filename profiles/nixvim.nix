@@ -123,116 +123,116 @@
         options = { noremap = true; };
       }
       ## Finds files by filename
-      # {
-      #   mode = [ "n" ];
-      #   key = "<c-p>";
-      #   action = "<cmd>Telescope find_files<cr>";
-      #   action = "<cmd>FzfLua files<cr>";
-      #   options = { noremap = true; };
-      # }
-      ## Search for a string in your current working directory and get results live as you type, respects .gitignore. (Requires ripgrep)
-      # {
-      #   mode = [ "n" ];
-      #   key = "<leader>fg";
-      #   action = "<cmd>Telescope live_grep<cr>";
-      #   action = "<cmd>FzfLua live_grep<cr>";
-      #   options = { noremap = true; };
-      # }
-      ## Search file contents
-      # {
-      #   mode = [ "n" ];
-      #   key = "<c-s>";
-      #   action = "<cmd>Telescope live_grep<cr>";
-      #   action = "<cmd>FzfLua live_grep<cr>";
-      #   options = { noremap = true; };
-      # }
-      ## Lists open buffers in current neovim instance
-      # {
-      #   mode = [ "n" ];
-      #   key = "<leader>db";
-      #   action = "<cmd>Telescope buffers<cr>";
-      #   action = "<cmd>FzfLua buffers<cr>";
-      #   options = { noremap = true; };
-      # }
-      ## Lists available help tags and opens a new window with the relevant help info on <cr>
-      # {
-      #   mode = [ "n" ];
-      #   key = "<leader>fh";
-      #   action = "<cmd>Telescope help_tags<cr>";
-      #   action = "<cmd>FzfLua helptags<cr>";
-      #   options = { noremap = true; };
-      # }
-      ## Lists manpage entries, opens them in a help window on <cr>
-      # {
-      #   mode = [ "n" ];
-      #   key = "<leader>fm";
-      #   action = "<cmd>Telescope man_pages<cr>";
-      #   action = "<cmd>FzfLua manpages<cr>";
-      #   options = { noremap = true; };
-      # }
-      ## Lists previously open files
-      # {
-      #   mode = [ "n" ];
-      #   key = "<leader>fp";
-      #   action = "<cmd>Telescope oldfiles<cr>";
-      #   action = "<cmd>FzfLua oldfiles<cr>";
-      #   options = { noremap = true; };
-      # }
-      ## Lists previously open files, Maps to ctrl-/
-      # {
-      #   mode = [ "n" ];
-      #   key = "<c-_>";
-      #   action = "<cmd>Telescope oldfiles<cr>";
-      #   action = "<cmd>FzfLua oldfiles<cr>";
-      #   options = { noremap = true; };
-      # }
-      ## Lists spelling suggestions for the current word under the cursor, replaces word with selected suggestion on <cr>
-      # {
-      #   mode = [ "n" ];
-      #   key = "<leader>fs";
-      #   action = "<cmd>Telescope spell_suggest<cr>";
-      #   action = "<cmd>FzfLua spell_suggest<cr>";
-      #   options = { noremap = true; };
-      # }
-      ## Lists LSP references for iword under the cursor
-      # {
-      #   mode = [ "n" ];
-      #   key = "<leader>fr";
-      #   action = "<cmd>Telescope lsp_references<cr>";
-      #   action = "<cmd>FzfLua lsp_references<cr>";
-      #   options = { noremap = true; };
-      # }
-      ## Lists LSP incoming calls for word under the cursor
-      # {
-      #   mode = [ "n" ];
-      #   key = "<leader>fi";
-      #   action = "<cmd>Telescope lsp_incoming_calls<cr>";
-      #   action = "<cmd>FzfLua lsp_incoming_calls<cr>";
-      #   options = { noremap = true; };
-      # }
-      ## Lists LSP outgoing calls for word under the cursor
-      # {
-      #   mode = [ "n" ];
-      #   key = "<leader>fo";
-      #   action = "<cmd>Telescope lsp_outgoing_calls<cr>";
-      #   action = "<cmd>FzfLua lsp_outgoing_calls<cr>";
-      #   options = { noremap = true; };
-      # }
-      ## Dynamically Lists LSP for all workspace symbols
-      # {
-      #   mode = [ "n" ];
-      #   key = "<leader>fw";
-      #   action = "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>";
-      #   action = "<cmd>FzfLua lsp_workspace_symbols<cr>";
-      #   options = { noremap = true; };
-      # }
-      ## Goto the definition of the word under the cursor, if there's only one, otherwise show all options in Telescope
-      # {
-      #   mode = [ "n" ];
-      #   key = "<leader>fd";
-      #   action = "<cmd>Telescope lsp_definitions<cr>";
-      #   options = { noremap = true; };
-      # }
+      {
+        mode = [ "n" ];
+        key = "<c-p>";
+        action = "<cmd>Telescope find_files<cr>";
+        # action = "<cmd>FzfLua files<cr>";
+        options = { noremap = true; };
+      }
+      # Search for a string in your current working directory and get results live as you type, respects .gitignore. (Requires ripgrep)
+      {
+        mode = [ "n" ];
+        key = "<leader>fg";
+        action = "<cmd>Telescope live_grep<cr>";
+        # action = "<cmd>FzfLua live_grep<cr>";
+        options = { noremap = true; };
+      }
+      # Search file contents
+      {
+        mode = [ "n" ];
+        key = "<c-s>";
+        action = "<cmd>Telescope live_grep<cr>";
+        # action = "<cmd>FzfLua live_grep<cr>";
+        options = { noremap = true; };
+      }
+      # Lists open buffers in current neovim instance
+      {
+        mode = [ "n" ];
+        key = "<leader>db";
+        action = "<cmd>Telescope buffers<cr>";
+        # action = "<cmd>FzfLua buffers<cr>";
+        options = { noremap = true; };
+      }
+      # Lists available help tags and opens a new window with the relevant help info on <cr>
+      {
+        mode = [ "n" ];
+        key = "<leader>fh";
+        action = "<cmd>Telescope help_tags<cr>";
+        # action = "<cmd>FzfLua helptags<cr>";
+        options = { noremap = true; };
+      }
+      # Lists manpage entries, opens them in a help window on <cr>
+      {
+        mode = [ "n" ];
+        key = "<leader>fm";
+        action = "<cmd>Telescope man_pages<cr>";
+        # action = "<cmd>FzfLua manpages<cr>";
+        options = { noremap = true; };
+      }
+      # Lists previously open files
+      {
+        mode = [ "n" ];
+        key = "<leader>fp";
+        action = "<cmd>Telescope oldfiles<cr>";
+        # action = "<cmd>FzfLua oldfiles<cr>";
+        options = { noremap = true; };
+      }
+      # Lists previously open files, Maps to ctrl-/
+      {
+        mode = [ "n" ];
+        key = "<c-_>";
+        action = "<cmd>Telescope oldfiles<cr>";
+        # action = "<cmd>FzfLua oldfiles<cr>";
+        options = { noremap = true; };
+      }
+      # Lists spelling suggestions for the current word under the cursor, replaces word with selected suggestion on <cr>
+      {
+        mode = [ "n" ];
+        key = "<leader>fs";
+        action = "<cmd>Telescope spell_suggest<cr>";
+        # action = "<cmd>FzfLua spell_suggest<cr>";
+        options = { noremap = true; };
+      }
+      # Lists LSP references for iword under the cursor
+      {
+        mode = [ "n" ];
+        key = "<leader>fr";
+        action = "<cmd>Telescope lsp_references<cr>";
+        # action = "<cmd>FzfLua lsp_references<cr>";
+        options = { noremap = true; };
+      }
+      # Lists LSP incoming calls for word under the cursor
+      {
+        mode = [ "n" ];
+        key = "<leader>fi";
+        action = "<cmd>Telescope lsp_incoming_calls<cr>";
+        # action = "<cmd>FzfLua lsp_incoming_calls<cr>";
+        options = { noremap = true; };
+      }
+      # Lists LSP outgoing calls for word under the cursor
+      {
+        mode = [ "n" ];
+        key = "<leader>fo";
+        action = "<cmd>Telescope lsp_outgoing_calls<cr>";
+        # action = "<cmd>FzfLua lsp_outgoing_calls<cr>";
+        options = { noremap = true; };
+      }
+      # Dynamically Lists LSP for all workspace symbols
+      {
+        mode = [ "n" ];
+        key = "<leader>fw";
+        action = "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>";
+        # action = "<cmd>FzfLua lsp_workspace_symbols<cr>";
+        options = { noremap = true; };
+      }
+      # Goto the definition of the word under the cursor, if there's only one, otherwise show all options in Telescope
+      {
+        mode = [ "n" ];
+        key = "<leader>fd";
+        action = "<cmd>Telescope lsp_definitions<cr>";
+        options = { noremap = true; };
+      }
       ## Other Telescope options:
       ## git_files     search only files in git, respects .gitignore
       ## oldfiles      previously opened files
@@ -535,20 +535,20 @@
             # };
           };
         };
-        "<C-s>" = "live_grep";
-        "<C-_>" = "oldfiles";
-        "<leader>fd" = "lsp_definitions";
-        "<leader>fg" = "live_grep";
-        "<leader>fh" = "helptags";
-        "<leader>fi" = "lsp_incoming_calls";
-        "<leader>fm" = "manpages";
-        "<leader>fo" = "lsp_outgoing_calls";
-        "<leader>fp" = "oldfiles";
-        "<leader>fr" = "lsp_references";
-        "<leader>fs" = "spell_suggest";
-        "<leader>fw" = "lsp_workspace_symbols";
-        "<leader>db" = "buffers";
-        "<leader>ch" = "command_history";
+        # "<C-s>" = "live_grep";
+        # "<C-_>" = "oldfiles";
+        # "<leader>fd" = "lsp_definitions";
+        # "<leader>fg" = "live_grep";
+        # "<leader>fh" = "helptags";
+        # "<leader>fi" = "lsp_incoming_calls";
+        # "<leader>fm" = "manpages";
+        # "<leader>fo" = "lsp_outgoing_calls";
+        # "<leader>fp" = "oldfiles";
+        # "<leader>fr" = "lsp_references";
+        # "<leader>fs" = "spell_suggest";
+        # "<leader>fw" = "lsp_workspace_symbols";
+        # "<leader>db" = "buffers";
+        # "<leader>ch" = "command_history";
       };
     };
 
