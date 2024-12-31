@@ -2,8 +2,13 @@
 let
   homefree-admin = pkgs.callPackage  ./site { };
   runtime-paths = lib.makeBinPath [
-    pkgs.procps
+    pkgs.bash
     pkgs.coreutils
+    pkgs.gawk
+    pkgs.gnugrep
+    pkgs.gnused
+    pkgs.iproute2
+    pkgs.procps
   ];
 in
 {

@@ -5,12 +5,15 @@ export default class HFController {
     this.model.subscribe(data => {
       view.model = data;;
     })
-    this.model.apiUrl = 'https://api.homefree.host';
-    this.getSystemStatus();
+    if (location.host === '10.0.0.1') {
+      this.model.apiUrl = 'http://10.0.0.1:4000';
+    } else {
+      this.model.apiUrl = 'https://api.homefree.host';
+    }
+    this.loadMainPage();
   }
 
-  async getSystemStatus() {
-    const systemStatus = await this.model.getSystemStatus();
-    console.log(systemStatus);
+  async loadMainPage() {
+    this.model.systemStatus = await this.model.fetchSystemStatus();
   }
 }

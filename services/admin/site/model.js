@@ -20,6 +20,14 @@ export default class HFModel {
     this.state.apiUrl = apiUrl;
   };
 
+  get systemStatus() {
+    return this.state.systemStatus;
+  };
+
+  set systemStatus(systemStatus) {
+    this.state.systemStatus = systemStatus;
+  };
+
   subscribe(fn) {
     valtioSubscribe(this.state, () => {
       fn(snapshot(this.state));
@@ -40,11 +48,11 @@ export default class HFModel {
       })
     });
 
-    const data = await response.json();
-    return data;
+    return response.json();
   }
 
-  async getSystemStatus() {
-    return this.queryGraphQL(QUERY_SYSTEM_STATUS);
+  async fetchSystemStatus() {
+    const { data, errors } = await this.queryGraphQL(QUERY_SYSTEM_STATUS);
+    return data?.systemStatus;
   }
 }
