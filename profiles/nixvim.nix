@@ -21,6 +21,10 @@
     globals = {
        mapleader = " ";      # global
        maplocalleader = " "; # per buffer, e.g. can change behavior per filetype
+       ## To appropriately highlight codefences returned from denols
+       markdown_fenced_languages = {
+         ts = "typescript";
+       };
     };
 
     opts = {
@@ -33,7 +37,6 @@
 
       undodir.__raw = "vim.fs.normalize('~/.local/share/nvim/undo/')";
       undofile = true;
-
 
       # -----------------------------------------------------
       # Backspace settings
@@ -233,6 +236,33 @@
         action = "<cmd>Telescope lsp_definitions<cr>";
         options = { noremap = true; };
       }
+      # Got to previous error
+      {
+        mode = [ "n" ];
+        key = "[d";
+        action = "<cmd>lua vim.diagnostic.goto_prev()<CR>";
+        options = { noremap = true; silent = true; };
+      }
+      {
+        mode = [ "n" ];
+        key = ",k";
+        action = "<cmd>lua vim.diagnostic.goto_prev()<CR>";
+        options = { noremap = true; silent = true; };
+      }
+      # Got to next error
+      {
+        mode = [ "n" ];
+        key = "]d";
+        action = "<cmd>lua vim.diagnostic.goto_next()<CR>";
+        options = { noremap = true; silent = true; };
+      }
+      {
+        mode = [ "n" ];
+        key = ",j";
+        action = "<cmd>lua vim.diagnostic.goto_next()<CR>";
+        options = { noremap = true; silent = true; };
+      }
+
       ## Other Telescope options:
       ## git_files     search only files in git, respects .gitignore
       ## oldfiles      previously opened files
@@ -570,8 +600,17 @@
       enable = true;
       servers = {
         # Average webdev LSPs
-        # ts-ls.enable = true; # TS/JS
-        ts_ls.enable = true; # TS/JS
+        ts_ls = {
+          enable = true;
+          rootDir = ''require("lspconfig").util.root_pattern("package.json")'';
+          settings = {
+            single_file_support = false;
+          };
+        };
+        denols = {
+          enable = true;
+          rootDir = ''require("lspconfig").util.root_pattern("deno.json", "deno.jsonc")'';
+        };
         cssls.enable = true; # CSS
         tailwindcss.enable = true; # TailwindCSS
         html.enable = true; # HTML
@@ -581,7 +620,9 @@
         vuels.enable = false; # Vue
         pyright.enable = true; # Python
         marksman.enable = true; # Markdown
-        nil_ls.enable = true; # Nix
+        nil_ls.enable = true;
+        ## Using nil_ls
+        # nixd.enable = true;
         dockerls.enable = true; # Docker
         bashls.enable = true; # Bash
         clangd.enable = true; # C/C++
@@ -634,7 +675,23 @@
       enable = true;
       autoEnableSources = true;
       settings = {
+        enabled.__raw = ''
+          function()
+            -- local context = require("cmp.config.context")
+            -- local is_comment = context.in_treesitter_capture("comment") == true or context.in_syntax_group("Comment")
+
+            local col = vim.fn.col('.') - 1
+            local line = vim.fn.getline('.')
+            local char_under_cursor = string.sub(line, col, col)
+
+            if col == 0 or string.match(char_under_cursor, '%s') then
+              return false
+            end
+            return true
+          end
+        '';
         sources = [
+          { name = "nvim_lua"; }
           { name = "nvim_lsp"; }
           { name = "emoji"; }
           {
@@ -655,7 +712,7 @@
         ];
 
         completion = {
-          completeopt = "menu,menuone,noinsert";
+          completeopt = "menuone,noselect";
         };
 
         autoEnableSources = true;
@@ -676,7 +733,9 @@
           '';
         };
 
-        formatting = { fields = [ "kind" "abbr" "menu" ]; };
+        formatting = {
+          fields = [ "kind" "abbr" "menu" ];
+        };
 
         window = {
           completion = { border = "solid"; };
@@ -684,15 +743,34 @@
         };
 
         mapping = {
-          "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
           "<C-j>" = "cmp.mapping.select_next_item()";
+          "<C-n>" = "cmp.mapping.select_next_item()";
           "<C-k>" = "cmp.mapping.select_prev_item()";
+          "<C-p>" = "cmp.mapping.select_prev_item()";
           "<C-e>" = "cmp.mapping.abort()";
           "<C-b>" = "cmp.mapping.scroll_docs(-4)";
           "<C-f>" = "cmp.mapping.scroll_docs(4)";
           "<C-Space>" = "cmp.mapping.complete()";
-          "<CR>" = "cmp.mapping.confirm({ select = true })";
-          "<S-CR>" = "cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })";
+          "<Tab>" = "cmp.mapping.confirm({ select = true })";
+          # "<Tab>" = ''
+          #   cmp.mapping(function(fallback)
+          #     -- local context = require("cmp.config.context")
+          #     -- local is_comment = context.in_treesitter_capture("comment") == true or context.in_syntax_group("Comment")
+          #
+          #     local col = vim.fn.col('.') - 1
+          #     local line = vim.fn.getline('.')
+          #     local char_under_cursor = string.sub(line, col, col)
+          #
+          #     if col == 0 or string.match(char_under_cursor, '%s') then
+          #       fallback()
+          #     elseif cmp.visible() then
+          #       cmp.confirm({ select = true })
+          #     else
+          #       fallback()
+          #     end
+          #   end, { "i", "s" })
+          # '';
+          "<S-Tab>" = "cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })";
           "<C-l>" = ''
             cmp.mapping(function()
               if luasnip.expand_or_locally_jumpable() then

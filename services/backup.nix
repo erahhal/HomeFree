@@ -1,3 +1,7 @@
+## 3-2-1 Backup strategy
+## 3 copies of data - original plus 2 copies
+## 2 different devices or media types
+## 1 offsite backup
 { config, lib, pkgs, ... }:
 let
   trimTrailingSlash = s: lib.head (lib.match "(.*[^/])[/]*" s);
