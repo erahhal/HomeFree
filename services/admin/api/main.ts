@@ -19,12 +19,51 @@ const schema = createSchema({
       uptime: String
     }
 
+    type Mutation {
+      setConfig(
+        file: String,
+        attribute: String
+        value: String
+      ): Boolean
+    }
+
     type Query {
       systemStatus: SystemStatus
+
+      getConfig(
+        file: String,
+        attribute: String
+      ): String
     }
   `,
   resolvers: {
+    Mutation: {
+      // @TODO: don't take a file. Ready from config.json
+      setConfig: async (_, { file, attribute, value }) => {
+        try {
+          const setConfigCmd = new Deno.Command('nix-editor', { args: ['-i', file, attribute, '-v', value] });
+          const { stdout } = await setConfigCmd.output();
+          const setConfigOut = (new TextDecoder().decode(stdout)).trim();
+          return true;
+        } catch (error) {
+          console.error('Error executing setConfig mutation:', error);
+          return false;
+        }
+      },
+    },
     Query: {
+      // @TODO: don't take a file. Ready from config.json
+      getConfig: async (file, attribute) => {
+        try {
+          const setConfigCmd = new Deno.Command('nix-editor', { args: [file, attribute] });
+          const { stdout } = await setConfigCmd.output();
+          const setConfigOut = (new TextDecoder().decode(stdout)).trim();
+          return setConfigOut;
+        } catch (error) {
+          console.error('Error executing setConfig mutation:', error);
+          return false;
+        }
+      },
       systemStatus: async () => {
         try {
           const wanIpV4Cmd = new Deno.Command('bash', { args: ['-c', 'ip -f inet addr show eno1 | grep \'scope global\'  | sed -En -e \'s/.*inet ([0-9.]+).*/\\1/p\''] });
@@ -122,4 +161,14 @@ app.get("/api/system-status", async (c) => {
   return c.json(response);
 });
 
-Deno.serve({ port: 4000 }, app.fetch);
+const options: Object = Deno.args.reduce((acc: object, arg: string, index: number, arr: string[]) => {
+  if (index > 0 && arr[index - 1].startsWith('--')) {
+    const name = arr[index - 1].slice(2);
+    acc[name] = arg;
+  }
+  return acc;
+}, {});
+
+const port = options['port'] || 4000;
+
+Deno.serve({ port }, app.fetch);

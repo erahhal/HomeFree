@@ -19,7 +19,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-editor.url = "github:vlinkz/nix-editor";
+    nix-editor.url = "github:snowfallorg/nix-editor";
 
     sops-nix.url = "github:Mic92/sops-nix";
 

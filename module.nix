@@ -614,11 +614,28 @@
       description = "Detailed config for services";
       type = with lib.types; listOf (submodule {
         options = {
-          ## @TODO: ensure this is unique
           label = lib.mkOption {
             type = lib.types.str;
             default = "";
             description = "Unique label for service";
+          };
+
+          name = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+            description = "Formatted name of service";
+          };
+
+          icon = lib.mkOption {
+            type = lib.types.nullOr lib.types.path;
+            default = null;
+            description = "Path to service icon";
+          };
+
+          project-name = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+            description = "Official project name of application";
           };
 
           reverse-proxy = {

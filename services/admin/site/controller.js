@@ -6,7 +6,7 @@ export default class HFController {
       view.model = data;;
     })
     if (location.host === '10.0.0.1') {
-      this.model.apiUrl = 'http://10.0.0.1:4000';
+      this.model.apiUrl = 'http://10.0.0.1:4001';
     } else {
       this.model.apiUrl = 'https://api.homefree.host';
     }

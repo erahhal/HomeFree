@@ -1,18 +1,28 @@
-{ pkgs, lib, buildNpmPackage, ... }:
-
-buildNpmPackage {
-  name = "admin";
-  src = ./.;
-  # npmDepsHash = lib.fakeHash;
-  npmDepsHash = "sha256-shULp94RvPi6XBtf5+BL5J9zdnsjhxvcgXomAu9lTUY=";
-
-  # The prepack script runs the build script, which we'd rather do in the build phase.
-  npmPackFlags = [
-    "--legacy-peer-deps"
-    "--loglevel=verbose"
+{ config, pkgs, ... }:
+let
+  homefree-admin = pkgs.callPackage ./package.nix { };
+in
+{
+  ## add homefree admin page as a package
+  nixpkgs.overlays = [
+    (final: prev: {
+      homefree-admin = homefree-admin;
+    })
   ];
 
-  makeCacheWritable = true;
-
-  nodejs = pkgs.nodejs_22;
+  homefree.service-config = [
+    {
+      label = "admin";
+      reverse-proxy = {
+        enable = true;
+        subdomains = [ "admin" ];
+        http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
+        https-domains = [ config.homefree.system.domain ];
+        static-path = "${pkgs.homefree-admin}/lib/node_modules/homefree-admin";
+        ## @TODO: Don't allow this to be public until locked down
+        # public = config.homefree.admin-page.public;
+        public = false;
+      };
+    }
+  ];
 }

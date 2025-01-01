@@ -55,4 +55,15 @@ export default class HFModel {
     const { data, errors } = await this.queryGraphQL(QUERY_SYSTEM_STATUS);
     return data?.systemStatus;
   }
+
+  async setConfig(attribute, value) {
+    variables = {
+      // @TODO: load from config
+      file: '/home/erahhal/nixcfg/configuration.nix',
+      attribute,
+      value,
+    };
+    const { data, errors } = await this.queryGraphQL(MUTATION_SET_CONFIG, variables);
+    return data?.setConfig;
+  }
 }
