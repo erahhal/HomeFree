@@ -8,8 +8,12 @@ pids[1]=$!
 cd "${SCRIPTPATH}"
 cd "${SCRIPTPATH}/site"
 npm run serve &
+pids[2]=$!
 cd "${SCRIPTPATH}"
+
+echo "Visit site at http://10.0.0.1:8456"
+
 for pid in ${pids[*]}; do
-    wait $pid
+  wait $pid
 done
 

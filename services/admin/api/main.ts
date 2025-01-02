@@ -42,8 +42,7 @@ const schema = createSchema({
       setConfig: async (_, { file, attribute, value }) => {
         try {
           const setConfigCmd = new Deno.Command('nix-editor', { args: ['-i', file, attribute, '-v', value] });
-          const { stdout } = await setConfigCmd.output();
-          const setConfigOut = (new TextDecoder().decode(stdout)).trim();
+          await setConfigCmd.output();
           return true;
         } catch (error) {
           console.error('Error executing setConfig mutation:', error);
@@ -161,7 +160,7 @@ app.get("/api/system-status", async (c) => {
   return c.json(response);
 });
 
-const options: Object = Deno.args.reduce((acc: object, arg: string, index: number, arr: string[]) => {
+const options: {[key: string]: string} = Deno.args.reduce((acc: {[key: string]: string}, arg: string, index: number, arr: string[]) => {
   if (index > 0 && arr[index - 1].startsWith('--')) {
     const name = arr[index - 1].slice(2);
     acc[name] = arg;
@@ -169,6 +168,6 @@ const options: Object = Deno.args.reduce((acc: object, arg: string, index: numbe
   return acc;
 }, {});
 
-const port = options['port'] || 4000;
+const port: number = options['port'] ? parseInt(options['port']) : 4000;
 
 Deno.serve({ port }, app.fetch);

@@ -22,9 +22,11 @@
        mapleader = " ";      # global
        maplocalleader = " "; # per buffer, e.g. can change behavior per filetype
        ## To appropriately highlight codefences returned from denols
-       markdown_fenced_languages = {
-         ts = "typescript";
-       };
+       markdown_fenced_languages.__raw = ''
+          {
+            "ts=typescript"
+          }
+       '';
     };
 
     opts = {
@@ -598,28 +600,42 @@
 
     plugins.lsp = {
       enable = true;
+      onAttach = ''
+        local active_clients = vim.lsp.get_active_clients()
+        if client.name == "denols" then
+          for _, client_ in pairs(active_clients) do
+            -- stop tsserver if denols is already active
+            if client_.name == "ts_ls" then
+              client_.stop()
+            end
+          end
+        elseif client.name == "ts_ls" then
+          for _, client_ in pairs(active_clients) do
+            -- prevent tsserver from starting if denols is already active
+            if client_.name == "denols" then
+              client.stop()
+            end
+          end
+        end
+      '';
       servers = {
-        # Average webdev LSPs
         ts_ls = {
           enable = true;
-          rootDir = ''require("lspconfig").util.root_pattern("package.json")'';
+          rootDir = "require('lspconfig').util.root_pattern('package.json')";
           settings = {
             single_file_support = false;
           };
         };
         denols = {
           enable = true;
-          rootDir = ''require("lspconfig").util.root_pattern("deno.json", "deno.jsonc")'';
+          rootDir = "require('lspconfig').util.root_pattern('deno.json', 'deno.jsonc')";
         };
-        cssls.enable = true; # CSS
-        tailwindcss.enable = true; # TailwindCSS
-        html.enable = true; # HTML
-        astro.enable = true; # AstroJS
-        phpactor.enable = true; # PHP
-        svelte.enable = false; # Svelte
-        vuels.enable = false; # Vue
-        pyright.enable = true; # Python
-        marksman.enable = true; # Markdown
+        cssls.enable = true;
+        tailwindcss.enable = true;
+        html.enable = true;
+        phpactor.enable = true;
+        pyright.enable = true;
+        marksman.enable = true;
         nil_ls.enable = true;
         ## Using nil_ls
         # nixd.enable = true;
@@ -651,12 +667,10 @@
           enable = true;
           autostart = true;
         };
-
         lua_ls = { # Lua
           enable = true;
           settings.telemetry.enable = false;
         };
-
         # Rust
         rust_analyzer = {
           enable = true;
