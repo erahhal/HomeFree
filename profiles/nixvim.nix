@@ -584,7 +584,7 @@
       };
     };
 
-    plugins.treesitter.enable = true;
+    plugins.treesitter.enable = false;
 
     plugins.tmux-navigator.enable = true;
 
