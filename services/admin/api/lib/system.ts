@@ -85,7 +85,7 @@ export default class SystemStatus {
       uptime,
     ] = await Promise.all(promises);
 
-    return {
+    const result = {
       wanIpV4,
       wanIpV6,
       lanIpV4,
@@ -98,5 +98,7 @@ export default class SystemStatus {
       cpuLoad,
       uptime,
     };
+
+    return result;
   }
 }

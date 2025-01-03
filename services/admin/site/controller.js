@@ -5,7 +5,7 @@ export default class HFController {
     this.model.subscribe(data => {
       view.model = data;;
     })
-    if (location.host === '10.0.0.1') {
+    if (location.hostname === '10.0.0.1') {
       this.model.apiUrl = 'http://10.0.0.1:4001';
     } else {
       this.model.apiUrl = 'https://api.homefree.host';

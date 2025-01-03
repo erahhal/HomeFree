@@ -6,6 +6,10 @@ const queries = `
       file: String,
       attribute: String
     ): String
+
+    getWanInterface: String
+
+    getLanInterface: String
   }
 `;
 
