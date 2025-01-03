@@ -3,7 +3,8 @@ import {
   snapshot,
   subscribe as valtioSubscribe,
 } from '@valtio-vanilla';
-import QUERY_SYSTEM_STATUS from './graphql/queries/system-status.js';
+import QUERY_GET_SYSTEM_STATUS from './graphql/queries/get-system-status.js';
+import QUERY_GET_SERVICES from './graphql/queries/get-services.js';
 
 export default class HFModel {
   constructor() {
@@ -18,6 +19,14 @@ export default class HFModel {
 
   set apiUrl(apiUrl) {
     this.state.apiUrl = apiUrl;
+  };
+
+  get services() {
+    return this.state.services;
+  };
+
+  set services(services) {
+    this.state.services = services;
   };
 
   get systemStatus() {
@@ -51,9 +60,14 @@ export default class HFModel {
     return response.json();
   }
 
+  async fetchServices() {
+    const { data, errors } = await this.queryGraphQL(QUERY_GET_SERVICES);
+    return data?.getServices;
+  }
+
   async fetchSystemStatus() {
-    const { data, errors } = await this.queryGraphQL(QUERY_SYSTEM_STATUS);
-    return data?.systemStatus;
+    const { data, errors } = await this.queryGraphQL(QUERY_GET_SYSTEM_STATUS);
+    return data?.getSystemStatus;
   }
 
   async setConfig(attribute, value) {

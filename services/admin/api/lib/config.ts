@@ -1,5 +1,22 @@
+const toCamelCase = (obj: object) => {
+  if (typeof obj !== "object" || obj === null) {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(toCamelCase);
+  }
+
+  const newObj = {};
+  for (const key in obj) {
+    const camelKey = key.replace(/_([a-z])/g, (match, p1) => p1.toUpperCase());
+    newObj[camelKey] = toCamelCase(obj[key]);
+  }
+  return newObj;
+};
+
 export default class Config {
-  static async getConfig(file: string, attribute: string) {
+  static async getNixConfig(file: string, attribute: string) {
     try {
       const cmd = new Deno.Command('nix-editor', { args: [file, attribute] });
       const { stdout } = await cmd.output();
@@ -10,7 +27,7 @@ export default class Config {
     }
   }
 
-  static async setConfig(file: string, attribute: string, value: string) {
+  static async setNixConfig(file: string, attribute: string, value: string) {
     try {
       const cmd = new Deno.Command('nix-editor', { args: ['-i', file, attribute, '-v', value] });
       await cmd.output();
@@ -21,13 +38,27 @@ export default class Config {
     }
   }
 
-  static async getWanInterface(file:string) {
-    const wanInterface = await this.getConfig(file, 'homefree.network.wan-interface');
+  static async getJson(filePath: string) {
+    return JSON.parse(await Deno.readTextFile(filePath));
+  }
+
+  static kebabToCamel(str: string) {
+    return str.replace(/-([a-z])/g, match => match[1].toUpperCase());
+  }
+
+  static async getWanInterface(nixFile: string) {
+    const wanInterface = await this.getNixConfig(nixFile, 'homefree.network.wan-interface');
     return wanInterface;
   }
 
-  static async getLanInterface(file:string) {
-    const lanInterface = await this.getConfig(file, 'homefree.network.lan-interface');
+  static async getLanInterface(nixFile: string) {
+    const lanInterface = await this.getNixConfig(nixFile, 'homefree.network.lan-interface');
     return lanInterface;
+  }
+
+  static async getServices(jsonFile: string) {
+    const config = await this.getJson(jsonFile);
+    const services = toCamelCase(config.services);
+    return services;
   }
 }

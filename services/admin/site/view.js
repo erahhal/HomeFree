@@ -8,6 +8,13 @@ export default class HFView extends XElement {
         type: Object,
       },
 
+      services: {
+        type: Array,
+        internal: true,
+        input: ['model'],
+        compute: model => model?.services,
+        default: () => [],
+      },
       systemStatus: {
         type: Object,
         internal: true,
@@ -26,6 +33,7 @@ export default class HFView extends XElement {
 
   static template(html) {
     return ({
+      services,
       systemStatus,
     }) => html`
       <span>HomeFree Admin</span>
@@ -62,10 +70,9 @@ export default class HFView extends XElement {
       <p>
         Services
         <ul>
-          <li>name</li>
-          <li>icon</li>
-          <li>URL</li>
-          <li>Status</li>
+        ${services.map(service => html`
+          <li>${service.label}</li>
+        `)}
         </ul>
       </p>
     `;

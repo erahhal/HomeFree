@@ -1,8 +1,8 @@
 import gql from 'gql-tag';
 
 export default gql`
-  query HFSystemStatus {
-    systemStatus {
+  query HFGetSystemStatus {
+    getSystemStatus {
       wanIpV4
       wanIpV6
       lanIpV4

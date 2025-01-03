@@ -15,5 +15,6 @@ export default class HFController {
 
   async loadMainPage() {
     this.model.systemStatus = await this.model.fetchSystemStatus();
+    this.model.services = await this.model.fetchServices();
   }
 }

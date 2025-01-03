@@ -9,7 +9,7 @@
   "version": "0.1.0",
   "exports": "./main.ts",
   "tasks": {
-    "dev": "deno run --allow-env --allow-net --allow-run --watch main.ts --port 4001",
+    "dev": "deno run --allow-env --allow-net --allow-run --allow-read --watch main.ts --port 4001",
     "start": "deno run --allow-env --allow-net --allow-run --allow-read main.ts"
   }
 }

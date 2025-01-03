@@ -1,6 +1,6 @@
 const queries = `
   type Query {
-    systemStatus: SystemStatus
+    getSystemStatus: SystemStatus
 
     getConfig(
       file: String,
@@ -10,6 +10,8 @@ const queries = `
     getWanInterface: String
 
     getLanInterface: String
+
+    getServices: [Service]
   }
 `;
 
