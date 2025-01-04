@@ -13,6 +13,9 @@ in
   homefree.service-config = [
     {
       label = "admin";
+      name = "HomeFree Admin";
+      project-name = "HomeFree Admin";
+      systemd-service-name = "caddy";
       reverse-proxy = {
         enable = true;
         subdomains = [ "admin" ];

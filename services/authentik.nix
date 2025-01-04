@@ -37,9 +37,12 @@
   homefree.service-config = if config.homefree.services.authentik.enable == true then [
     {
       label = "authentik";
+      name = "Single Sign On";
+      project-name = "Authentik";
+      systemd-service-name = "authentik";
       reverse-proxy = {
         enable = true;
-        subdomains = [ "authentik" "auth" ];
+        subdomains = [ "auth" "authentik" ];
         http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
         https-domains = [ config.homefree.system.domain ];
         host = "10.0.0.1";

@@ -24,6 +24,9 @@ in
   homefree.service-config = if config.homefree.services.linkwarden.enable == true then [
     {
       label = "linkwarden";
+      name = "Bookmark Manager";
+      project-name = "linkwarden";
+      systemd-service-name = "linkwarden";
       reverse-proxy = {
         enable = true;
         subdomains = [ "links" "linkwarden" ];

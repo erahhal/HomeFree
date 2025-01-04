@@ -17,6 +17,9 @@ in
   homefree.service-config = if config.homefree.services.vaultwarden.enable == true then [
     {
       label = "vaultwarden";
+      name = "Password Manager";
+      project-name = "Vaultwarden";
+      systemd-service-name = "vaultwarden";
       reverse-proxy = {
         enable = true;
         subdomains = [ "vaultwarden" ];

@@ -623,7 +623,7 @@
           name = lib.mkOption {
             type = lib.types.str;
             default = "";
-            description = "Formatted name of service";
+            description = "Full name of service";
           };
 
           icon = lib.mkOption {
@@ -636,6 +636,12 @@
             type = lib.types.str;
             default = "";
             description = "Official project name of application";
+          };
+
+          systemd-service-name = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+            description = "Systemd service name";
           };
 
           reverse-proxy = {

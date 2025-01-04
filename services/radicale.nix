@@ -21,6 +21,9 @@
   homefree.service-config = if config.homefree.services.radicale.enable == true then [
     {
       label = "radicale";
+      name = "Contacts/Calendar (CalDAV/CardDAV)";
+      project-name = "Radicale";
+      systemd-service-name = "radicale";
       reverse-proxy = {
         enable = true;
         subdomains = [ "radicale" "dav" "webdav" "caldav" "carddav" ];

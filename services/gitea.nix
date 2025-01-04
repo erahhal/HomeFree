@@ -30,6 +30,9 @@
   homefree.service-config = if config.homefree.services.gitea.enable == true then [
     {
       label = "gitea";
+      name = "Git";
+      project-name = "Gitea";
+      systemd-service-name = "gitea";
       reverse-proxy = {
         enable = true;
         subdomains = [ "git" ];

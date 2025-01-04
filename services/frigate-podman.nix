@@ -202,9 +202,12 @@ in
   homefree.service-config = if config.homefree.services.frigate.enable == true then [
     {
       label = "frigate";
+      name = "NVR (Network Video Recorer)";
+      project-name = "Frigate";
+      systemd-service-name = "podman-frigate";
       reverse-proxy = {
         enable = true;
-        subdomains = [ "frigate" ];
+        subdomains = [ "nvr" "frigate" ];
         http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
         https-domains = [ config.homefree.system.domain ];
         host = "10.0.0.1";

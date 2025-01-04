@@ -34,21 +34,6 @@
     )
   ];
 
-  homefree.service-config = if config.homefree.services.jellyfin.enable == true then [
-    {
-      label = "jellyfin";
-      reverse-proxy = {
-        enable = true;
-        subdomains = [ "jellyfin" "video" ];
-        http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
-        https-domains = [ config.homefree.system.domain ];
-        host = "10.0.0.1";
-        port = 8096;
-        public = config.homefree.services.jellyfin.public;
-      };
-    }
-  ] else [];
-
   ##--------------------------------------------------------------------------------
   ## Enable hardware transcoding
   ## Only works on Intel
@@ -72,4 +57,22 @@
       intel-media-sdk # QSV up to 11th gen
     ];
   };
+
+  homefree.service-config = if config.homefree.services.jellyfin.enable == true then [
+    {
+      label = "jellyfin";
+      name = "Streaming Video";
+      project-name = "Jellyfin";
+      systemd-service-name = "jellyfin";
+      reverse-proxy = {
+        enable = true;
+        subdomains = [ "video" "jellyfin" ];
+        http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
+        https-domains = [ config.homefree.system.domain ];
+        host = "10.0.0.1";
+        port = 8096;
+        public = config.homefree.services.jellyfin.public;
+      };
+    }
+  ] else [];
 }

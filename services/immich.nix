@@ -25,6 +25,9 @@
   homefree.service-config = if config.homefree.services.immich.enable == true then [
     {
       label = "immich";
+      name = "Photos";
+      project-name = "Immich";
+      systemd-service-name = "immic-server";
       reverse-proxy = {
         enable = true;
         subdomains = [ "photos" "immich" ];

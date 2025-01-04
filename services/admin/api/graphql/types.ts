@@ -36,12 +36,44 @@ const types = `
     postgresDatabases: [String]!
   }
 
-  type Service {
+  type ServiceConfig {
     name: String
     icon: String
     label: String
     projectName: String
     reverseProxyConfig: ReverseProxyConfig
+    backupConfig: BackupConfig
+    systemdServiceName: String
+  }
+
+  enum ServiceActiveState {
+    ACTIVE
+    RELOADING
+    INACTIVE
+    FAILED
+    ACTIVATING
+    DEACTIVATING
+    MAINTENANCE
+  }
+
+  enum ServiceSubState {
+    RUNNING
+    DEAD
+    FAILED
+    EXITED
+    RELOADING
+    AUTO_RESTART
+    START
+    STOP
+    FINAL_SIGTERM
+    FINAL_SIGKILL
+  }
+
+  type Service {
+    serviceConfig: ServiceConfig
+    serviceActiveState: ServiceActiveState
+    serviceSubState: ServiceSubState
+    url: String
   }
 `;
 

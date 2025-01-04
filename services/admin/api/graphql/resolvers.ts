@@ -1,5 +1,6 @@
 import SystemStatus from '../lib/system.ts';
 import Config from '../lib/config.ts';
+import Services from '../lib/services.ts';
 
 const NIX_CONFIG_FILE = '/home/erahhal/nixcfg/configuration.nix';
 const JSON_CONFIG_FILE = '/run/homefree/admin/config.json';
@@ -39,7 +40,8 @@ const resolvers = {
       return systemStatus;
     },
     getServices: async () => {
-      const services = await Config.getServices(JSON_CONFIG_FILE);
+      // @TODO: replace with Services.getServices
+      const services = await Services.getServices(JSON_CONFIG_FILE);
       return services;
     },
   }

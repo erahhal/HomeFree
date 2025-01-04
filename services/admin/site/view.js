@@ -71,7 +71,7 @@ export default class HFView extends XElement {
         Services
         <ul>
         ${services.map(service => html`
-          <li>${service.label}</li>
+          <li><a href="${service.url}" target="_blank">${service.serviceConfig.name || service.url}</a></li>
         `)}
         </ul>
       </p>

@@ -199,6 +199,9 @@
   homefree.service-config = if config.homefree.services.matrix.enable == true then [
     {
       label = "matrix";
+      name = "Matrix Chat";
+      project-name = "Matrix-Synapse";
+      systemd-service-name = "matrix-synapse";
       reverse-proxy = {
         enable = true;
         subdomains = [ "matrix" ];

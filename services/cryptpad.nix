@@ -18,6 +18,9 @@
   homefree.service-config = if config.homefree.services.cryptpad.enable == true then [
     {
       label = "cryptpad";
+      name = "Docs/Office Suite";
+      project-name = "Cryptpad";
+      systemd-service-name = "cryptpad";
       reverse-proxy = {
         enable = true;
         # subdomains = [ "cryptpad" "cryptpad-sandbox" "cryptpad-ui" ];

@@ -694,6 +694,12 @@
             -- local context = require("cmp.config.context")
             -- local is_comment = context.in_treesitter_capture("comment") == true or context.in_syntax_group("Comment")
 
+            buftype = vim.api.nvim_buf_get_option(0, "buftype")
+            if buftype == "prompt" then
+              -- don't show in Telescope
+              return false
+            end
+
             local col = vim.fn.col('.') - 1
             local line = vim.fn.getline('.')
             local char_under_cursor = string.sub(line, col, col)
@@ -704,6 +710,7 @@
             return true
           end
         '';
+
         sources = [
           { name = "nvim_lua"; }
           { name = "nvim_lsp"; }
@@ -725,6 +732,50 @@
           { name = "cmdline"; }
         ];
 
+        formatting = {
+          fields = [ "kind" "abbr" "menu" ];
+          format = ''
+            function(entry, vim_item)
+              local kind_icons = {
+                Text = "󰊄",
+                Method = "",
+                Function = "󰡱",
+                Constructor = "",
+                Field = "",
+                Variable = "󱀍",
+                Class = "",
+                Interface = "",
+                Module = "󰕳",
+                Property = "",
+                Unit = "",
+                Value = "",
+                Enum = "",
+                Keyword = "",
+                Snippet = "",
+                Color = "",
+                File = "",
+                Reference = "",
+                Folder = "",
+                EnumMember = "",
+                Constant = "",
+                Struct = "",
+                Event = "",
+                Operator = "",
+                TypeParameter = "",
+              }
+              vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
+              vim_item.menu = ({
+                path = "[Path]",
+                nvim_lua = "[NVIM_LUA]",
+                nvim_lsp = "[LSP]",
+                luasnip = "[Snippet]",
+                buffer = "[Buffer]",
+              })[entry.source.name]
+              return vim_item
+            end
+          '';
+        };
+
         completion = {
           completeopt = "menuone,noselect";
         };
@@ -745,10 +796,6 @@
               require('luasnip').lsp_expand(args.body)
             end
           '';
-        };
-
-        formatting = {
-          fields = [ "kind" "abbr" "menu" ];
         };
 
         window = {

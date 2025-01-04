@@ -414,6 +414,9 @@ in
   homefree.service-config = if config.homefree.services.homeassistant.enable == true then [
     {
       label = "homeassistant";
+      name = "Home Assistant";
+      project-name = "Home Assistant";
+      systemd-service-name = "home-assistant";
       reverse-proxy = {
         enable = true;
         subdomains = [ "homeassistant" "ha" ];

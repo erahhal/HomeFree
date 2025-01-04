@@ -13,6 +13,9 @@ in
   homefree.service-config = [
     {
       label = "landing-page";
+      name = "HomeFree Landing Page";
+      project-name = "HomeFree Landing Page";
+      systemd-service-name = "caddy";
       reverse-proxy = {
         enable = true;
         rootDomain = true;

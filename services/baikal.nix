@@ -42,6 +42,9 @@ in
   homefree.service-config = if config.homefree.services.baikal.enable == true then [
     {
       label = "baikal";
+      name = "Baikal CalDAV/CardDAV";
+      project-name = "Baikal";
+      systemd-service-name = "podman-baikal";
       reverse-proxy = {
         enable = true;
         subdomains = [ "baikal" ];

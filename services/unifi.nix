@@ -12,6 +12,9 @@
   homefree.service-config = if config.homefree.services.unifi.enable == true then [
     {
       label = "unifi";
+      name = "Unifi Controller";
+      project-name = "Unifi Controller";
+      systemd-service-name = "unifi";
       reverse-proxy = {
         enable = true;
         subdomains = [ "unifi" ];

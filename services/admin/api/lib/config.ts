@@ -1,4 +1,4 @@
-const toCamelCase = (obj: object) => {
+export const toCamelCase = (obj: object) => {
   if (typeof obj !== "object" || obj === null) {
     return obj;
   }
@@ -9,7 +9,7 @@ const toCamelCase = (obj: object) => {
 
   const newObj = {};
   for (const key in obj) {
-    const camelKey = key.replace(/_([a-z])/g, (match, p1) => p1.toUpperCase());
+    const camelKey = key.replace(/[_-]([a-z])/g, (match, p1) => p1.toUpperCase());
     newObj[camelKey] = toCamelCase(obj[key]);
   }
   return newObj;
@@ -56,9 +56,9 @@ export default class Config {
     return lanInterface;
   }
 
-  static async getServices(jsonFile: string) {
+  static async getStaticServiceData(jsonFile: string) {
     const config = await this.getJson(jsonFile);
-    const services = toCamelCase(config.services);
-    return services;
+    const serviceData = toCamelCase(config.services);
+    return serviceData;
   }
 }

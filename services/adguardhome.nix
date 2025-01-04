@@ -182,6 +182,9 @@
   homefree.service-config = if config.homefree.services.adguard.enable == true then [
     {
       label = "adguard";
+      name = "AdGuard Home";
+      project-name = "AdGuard Home";
+      systemd-service-name = "adguardhome";
       reverse-proxy = {
         enable = true;
         subdomains = [ "adguard" ];

@@ -120,9 +120,13 @@ in
   homefree.service-config = if config.homefree.services.headscale.enable == true then [
     {
       label = "headscale";
+      name = "VPN";
+      project-name = "Headscale";
+      systemd-service-name = "headscale";
       reverse-proxy = {
         enable = true;
-        subdomains = [ "headscale" ];
+        ## @TODO: Use "vpn" as default
+        subdomains = [ "headscale" "vpn" ];
         http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
         https-domains = [ config.homefree.system.domain ];
         host = "10.0.0.1";

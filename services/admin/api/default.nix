@@ -17,9 +17,16 @@ let
   admin-config = {
     wanInterface = config.homefree.network.wan-interface;
     lanInterface = config.homefree.network.lan-interface;
-    services = config.homefree.service-config;
+    services = lib.map (service-config:
+      {
+        service-config = service-config;
+        ## Use first defined subomdain
+        ## @TODO: supply a list of URLs instead
+        url = "https://${builtins.head service-config.reverse-proxy.subdomains}.${config.homefree.system.domain}";
+      }
+    ) config.homefree.service-config;
   };
-  config-json = (pkgs.formats.json {}).generate "admin-config.yaml" admin-config;
+  config-json = (pkgs.formats.json {}).generate "admin-config.json" admin-config;
 
   preStart = ''
     mkdir -p /run/homefree/admin
@@ -52,7 +59,10 @@ in
 
   homefree.service-config = [
     {
-      label = "api";
+      name = "HomeFree API";
+      project-name = "HomeFree API";
+      label = "admin-api";
+      systemd-service-name = "admin-api";
       reverse-proxy = {
         enable = true;
         subdomains = [ "api" ];
