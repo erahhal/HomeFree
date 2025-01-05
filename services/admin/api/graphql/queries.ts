@@ -12,6 +12,8 @@ const queries = `
     getLanInterface: String
 
     getServices: [Service]
+
+    getVulnerabilities: [Vulnerability]
   }
 `;
 

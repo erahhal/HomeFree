@@ -12,19 +12,35 @@ let
     pkgs.iproute2
     pkgs.nix-editor
     pkgs.procps
+    pkgs.vulnix
   ];
   ## @TODO: read directly from nix-config
   admin-config = {
     wanInterface = config.homefree.network.wan-interface;
     lanInterface = config.homefree.network.lan-interface;
-    services = lib.map (service-config:
+    services =
+    let
+      filtered = lib.filter (service-config: service-config.admin.show == true) config.homefree.service-config;
+      compareByName = a: b: a.name < b.name;
+      sorted = builtins.sort compareByName filtered;
+    in
+    lib.map (service-config:
+      let
+        ## @TODO: Strip leading slash and add it explicitly
+        path = if service-config.admin.urlPathOverride != null then service-config.admin.urlPathOverride else "";
+        subdomain = builtins.head service-config.reverse-proxy.subdomains;
+        domain = if (builtins.length service-config.reverse-proxy.https-domains > 0) then (builtins.head service-config.reverse-proxy.https-domains)
+                 else if (builtins.length service-config.reverse-proxy.http-domains > 0) then (builtins.head service-config.reverse-proxy.http-domains)
+                 ## @TODO: Add assertion in module.nix that ensures there is at least one domain
+                 else "";
+      in
       {
         service-config = service-config;
         ## Use first defined subomdain
         ## @TODO: supply a list of URLs instead
-        url = "https://${builtins.head service-config.reverse-proxy.subdomains}.${config.homefree.system.domain}";
+        url = ''https://${subdomain}.${domain}${path}'';
       }
-    ) config.homefree.service-config;
+    ) sorted;
   };
   config-json = (pkgs.formats.json {}).generate "admin-config.json" admin-config;
 
@@ -63,6 +79,9 @@ in
       project-name = "HomeFree API";
       label = "admin-api";
       systemd-service-name = "admin-api";
+      admin = {
+        show = false;
+      };
       reverse-proxy = {
         enable = true;
         subdomains = [ "api" ];

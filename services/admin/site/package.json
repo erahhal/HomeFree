@@ -11,6 +11,6 @@
   },
   "scripts": {
     "build": "",
-    "serve": "serve -p 8456"
+    "serve": "serve -s -p 8456"
   }
 }

@@ -644,6 +644,20 @@
             description = "Systemd service name";
           };
 
+          admin = {
+            show = lib.mkOption {
+              type = lib.types.bool;
+              default = true;
+              description = "Show in Admin UI";
+            };
+
+            urlPathOverride = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+              description = "Override path of URL to service";
+            };
+          };
+
           reverse-proxy = {
             enable = lib.mkOption {
               type = lib.types.bool;

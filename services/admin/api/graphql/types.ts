@@ -13,6 +13,11 @@ const types = `
     uptime: String
   }
 
+  type AdminConfig {
+    show: Boolean
+    urlPathOverride: String
+  }
+
   type ReverseProxyConfig {
     basicAuth: Boolean
     description: String
@@ -41,6 +46,7 @@ const types = `
     icon: String
     label: String
     projectName: String
+    adminConfig: AdminConfig
     reverseProxyConfig: ReverseProxyConfig
     backupConfig: BackupConfig
     systemdServiceName: String
@@ -74,6 +80,32 @@ const types = `
     serviceActiveState: ServiceActiveState
     serviceSubState: ServiceSubState
     url: String
+  }
+
+  enum CveSeverity {
+    CRITICAL          # 9.0-10.0
+    HIGH              # 7.0-8.9
+    MEDIUM            # 4.0-6.9
+    LOW               # 0.1-3.9
+  }
+
+  scalar CveId
+
+  type Cve {
+    cveId: CveId
+    cvssv3BaseScore: Float
+    severity: CveSeverity
+    description: String
+  }
+
+  type Vulnerability {
+    name: String
+    pname: String
+    version: String
+    derivation: String
+    affectedBy: [CveId]
+    whitelisted: [String]
+    cves: [Cve]
   }
 `;
 

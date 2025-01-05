@@ -234,6 +234,7 @@
     inetutils
     iotop
     iperf3
+    lemonade
     luarocks
     lshw
     lsof
@@ -243,6 +244,7 @@
     jhead
     memtest86plus
     minicom
+    ncdu
     neofetch
     nil
     nix-index

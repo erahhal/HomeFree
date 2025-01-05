@@ -1,41 +1,32 @@
 import XElement from '@x-element';
-import ready from '@x-element-ready';
 
-export default class HFView extends XElement {
+export default class HFSystemStatus extends XElement {
   static get properties() {
     return {
       model: {
         type: Object,
       },
 
-      services: {
-        type: Array,
-        internal: true,
-        input: ['model'],
-        compute: model => model?.services,
-        default: () => [],
-      },
+      // Internal props
       systemStatus: {
         type: Object,
         internal: true,
         input: ['model'],
-        compute: model => model?.systemStatus,
+        compute: model => model?.systemStatus.data,
         default: () => ({}),
       },
     };
   }
 
-  async connectedCallback() {
-    super.connectedCallback();
-    await ready(document);
-    this.ownerDocument.body.removeAttribute('unresolved');
-  }
-
   static template(html) {
     return ({
-      services,
       systemStatus,
     }) => html`
+      <style>
+        td {
+          border: 1px solid black;
+        }
+      </style>
       <span>HomeFree Admin</span>
       <p>
         WAN IP (v4): ${systemStatus.wanIpV4}
@@ -67,16 +58,9 @@ export default class HFView extends XElement {
       <p>
         Uptime: ${systemStatus.uptime}
       </p>
-      <p>
-        Services
-        <ul>
-        ${services.map(service => html`
-          <li><a href="${service.url}" target="_blank">${service.serviceConfig.name || service.url}</a></li>
-        `)}
-        </ul>
-      </p>
     `;
   }
 }
 
-customElements.define('hf-view', HFView);
+customElements.define('hf-system-status', HFSystemStatus);
+

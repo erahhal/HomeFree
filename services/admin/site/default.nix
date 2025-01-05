@@ -16,6 +16,9 @@ in
       name = "HomeFree Admin";
       project-name = "HomeFree Admin";
       systemd-service-name = "caddy";
+      admin = {
+        show = false;
+      };
       reverse-proxy = {
         enable = true;
         subdomains = [ "admin" ];
@@ -25,6 +28,13 @@ in
         ## @TODO: Don't allow this to be public until locked down
         # public = config.homefree.admin-page.public;
         public = false;
+        extraCaddyConfig = ''
+          header /* {
+            Cache-Control "no-cache, no-store, must-revalidate"
+          }
+
+          try_files {path} /index.html
+        '';
       };
     }
   ];

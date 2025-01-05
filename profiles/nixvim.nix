@@ -2,6 +2,13 @@
 {
   environment.systemPackages = with pkgs; [
     ripgrep
+
+    ## To get rid of checkhealth warnings
+    chafa
+    fd
+    mercurial
+    ueberzugpp
+    viu
   ];
 
   environment.interactiveShellInit = ''
@@ -446,6 +453,8 @@
     plugins.nix.enable = true;
 
     plugins.noice.enable = true;
+
+    plugins.notify.enable = true;
 
     plugins.nvim-autopairs.enable = true;
 

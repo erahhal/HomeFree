@@ -1,13 +1,12 @@
 import HFController from './controller.js';
 import HFModel from './model.js';
-import HFView from './view.js';
+import HFRootView from './root-view.js';
 
 class HFApp extends HTMLElement {
-  constructor() {
-    super();
+  async connectedCallback() {
     this.model = new HFModel();
-    this.view = new HFView();
-    this.attachShadow({ mode: 'open' });
+    this.view = new HFRootView();
+    this.attachShadow({ mode: "open" });
     this.shadowRoot.appendChild(this.view);
     this.controller = new HFController(this.model, this.view);
   }

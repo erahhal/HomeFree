@@ -182,7 +182,7 @@
   homefree.service-config = if config.homefree.services.adguard.enable == true then [
     {
       label = "adguard";
-      name = "AdGuard Home";
+      name = "Ad Blocker";
       project-name = "AdGuard Home";
       systemd-service-name = "adguardhome";
       reverse-proxy = {

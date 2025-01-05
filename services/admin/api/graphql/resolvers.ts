@@ -1,6 +1,7 @@
 import SystemStatus from '../lib/system.ts';
 import Config from '../lib/config.ts';
 import Services from '../lib/services.ts';
+import Vulnerabilities from "../lib/vulnerabilities.ts";
 
 const NIX_CONFIG_FILE = '/home/erahhal/nixcfg/configuration.nix';
 const JSON_CONFIG_FILE = '/run/homefree/admin/config.json';
@@ -40,9 +41,12 @@ const resolvers = {
       return systemStatus;
     },
     getServices: async () => {
-      // @TODO: replace with Services.getServices
       const services = await Services.getServices(JSON_CONFIG_FILE);
       return services;
+    },
+    getVulnerabilities: async () => {
+      const vulnerabilities = await Vulnerabilities.getVulnerabilities();
+      return vulnerabilities;
     },
   }
 };

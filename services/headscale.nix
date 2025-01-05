@@ -123,6 +123,9 @@ in
       name = "VPN";
       project-name = "Headscale";
       systemd-service-name = "headscale";
+      admin = {
+        urlPathOverride = "/web";
+      };
       reverse-proxy = {
         enable = true;
         ## @TODO: Use "vpn" as default
