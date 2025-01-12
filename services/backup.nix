@@ -12,7 +12,9 @@ let
       label = entry.label;
       paths = entry.backup.paths
         ## Add postgres database backup paths
-        ++ (if (lib.length entry.backup.postgres-databases) > 0 then [ "/var/backup/postgresql-homefree/${entry.label}" ] else []);
+        ++ (if (lib.length entry.backup.postgres-databases) > 0 then [ "/var/backup/postgresql-homefree/${entry.label}" ] else [])
+        ## Add mysql database backup paths
+        ++ (if (lib.length entry.backup.mysql-databases) > 0 then [ "/var/backup/mysql-homefree/${entry.label}" ] else []);
     }) config.homefree.service-config)
     ++ [{ label = "extra-paths"; paths = config.homefree.backups.extra-from-paths; }];
   ## filter out any entries without backup paths
@@ -23,6 +25,11 @@ let
   service-to-postgres-databases-map  = lib.listToAttrs (lib.map (entry: {
     name = entry.label;
     value = entry.backup.postgres-databases;
+  }) config.homefree.service-config);
+  mysql-databases = lib.flatten (lib.map (entry: entry.backup.mysql-databases) config.homefree.service-config);
+  service-to-mysql-databases-map  = lib.listToAttrs (lib.map (entry: {
+    name = entry.label;
+    value = entry.backup.mysql-databases;
   }) config.homefree.service-config);
   quoted-backup-path-list = lib.concatStringsSep " " (lib.map (entry: ''"${backup-to-path}/${entry.label}"'') backup-from-paths);
   backup-cli = pkgs.writeShellScriptBin "backup-cli" ''
@@ -37,6 +44,21 @@ let
       sudo --preserve-env=RESTIC_REPOSITORY --preserve-env=RESTIC_PASSWORD restic ls latest
     done
   '';
+  backup-mysql-script =
+  let
+    cfg = config.services.mysqlBackup;
+  in
+    db: ''
+      dest="${cfg.location}/${db}.gz"
+      if ${pkgs.mariadb}/bin/mysqldump ${lib.optionalString cfg.singleTransaction "--single-transaction"} ${db} | ${pkgs.gzip}/bin/gzip -c ${cfg.gzipOptions} > $dest.tmp; then
+        mv $dest.tmp $dest
+        echo "Backed up to $dest"
+      else
+        echo "Failed to back up to $dest"
+        rm -f $dest.tmp
+        failed="$failed ${db}"
+      fi
+    '';
 in
 {
   ## Typical rsync command
@@ -63,6 +85,22 @@ in
     ## This isn't really used, as backups are kicked off by restic below,
     ## so select the least frequent period.
     startAt = "yearly";
+  };
+
+  # --------------------------------------------------------------------------------------
+  # Mysql Dumps
+  # --------------------------------------------------------------------------------------
+
+  ## This service is only used for its config, but not actually run backups
+  ## @TODO: Discard this
+  services.mysqlBackup = {
+    enable = config.homefree.backups.enable;
+    ## Default location. Just repeated here for reference and stability.
+    location = "/var/backup/mysql";
+    databases = mysql-databases;
+    ## This isn't really used, as backups are kicked off by restic below,
+    ## so select the least frequent period.
+    calendar = "01-01-01";
   };
 
   # --------------------------------------------------------------------------------------
@@ -171,7 +209,8 @@ in
     "d /mnt/backup-backblaze 0750 root root -"
   ];
 
-  systemd.services = lib.listToAttrs ((lib.map (entry: {
+  systemd.services = lib.listToAttrs (
+    (lib.map (entry: {
     name = "restic-backups-local-${entry.label}";
     value = {
       serviceConfig =
@@ -180,18 +219,44 @@ in
           ## Make sure backup path exists
           mkdir -p "${backup-to-path + "/${entry.label}"}"
 
-        '' + (if (lib.hasAttr entry.label service-to-postgres-databases-map) then
-        (lib.concatStrings (lib.map (database:
         ''
-          ## Dump postgres DB
-          ## This could also be controlled by setting
-          ## PartOf=restic-backups-local-${entry.label} in the postgresBackup-${database} settings
-          systemctl restart postgresqlBackup-${database}
+        +
+        (if (lib.hasAttr entry.label service-to-postgres-databases-map) then
+          (lib.concatStrings
+            (lib.map
+              (database: ''
+                ## Dump postgres DB
+                ## This could also be controlled by setting
+                ## PartOf=restic-backups-local-${entry.label} in the postgresBackup-${database} settings
+                systemctl restart postgresqlBackup-${database}
 
-          mkdir -p "/var/backup/postgresql-homefree/${entry.label}"
-          cp -rf "/var/backup/postgresql/${database}.sql.gz" "/var/backup/postgresql-homefree/${entry.label}/"
-        '') service-to-postgres-databases-map.${entry.label}))
-        else "");
+                mkdir -p "/var/backup/postgresql-homefree/${entry.label}"
+                cp -rf "/var/backup/postgresql/${database}.sql.gz" "/var/backup/postgresql-homefree/${entry.label}/"
+
+              '')
+              service-to-postgres-databases-map.${entry.label}
+            )
+          )
+        else
+          ""
+        )
+        +
+        (if (lib.hasAttr entry.label service-to-mysql-databases-map) then
+          (lib.concatStrings
+            (lib.map
+              (database: ''
+                ${backup-mysql-script database}
+
+                mkdir -p "/var/backup/mysql-homefree/${entry.label}"
+                cp -rf "/var/backup/mysql/${database}.gz" "/var/backup/mysql-homefree/${entry.label}/"
+
+              '')
+              service-to-mysql-databases-map.${entry.label}
+            )
+          )
+        else
+          ""
+        );
       in
       {
         ## Must use lib.mkBefore to make sure path is created before other ExecStartPre scripts are run

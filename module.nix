@@ -405,6 +405,20 @@
         };
       };
 
+      grocy = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "enable Homebox inventory management service";
+        };
+
+        public = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Open to public on WAN port";
+        };
+      };
+
       headscale = {
         enable = lib.mkOption {
           type = lib.types.bool;
@@ -452,6 +466,26 @@
           type = lib.types.bool;
           default = false;
           description = "enable Home Assistant Home Automation";
+        };
+
+        public = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Open to public on WAN port";
+        };
+      };
+
+      homebox = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "enable Homebox inventory management service";
+        };
+
+        disable-registration = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Disable user registration";
         };
 
         public = lib.mkOption {
@@ -578,6 +612,31 @@
           type = lib.types.bool;
           default = false;
           description = "Open to public on WAN port";
+        };
+      };
+
+      snipe-it = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "enable Snipe-IT inventory management service";
+        };
+
+        public = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Open to public on WAN port";
+        };
+
+        secrets = {
+          mysql-password = lib.mkOption {
+            type = lib.types.path;
+            description = "Location of Snipe-IT mysql password file. Should not be a file included in your source repo.";
+          };
+          env = lib.mkOption {
+            type = lib.types.path;
+            description = "Location of Snipe-IT env file. Contains DB_PASSWORD, which is the same as mysql-password above, and APP_KEY. Should not be a file included in your source repo.";
+          };
         };
       };
 
@@ -757,10 +816,16 @@
               description = "list of paths to backup";
             };
 
+            mysql-databases = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [];
+              description = "list of mysql databases to backup";
+            };
+
             postgres-databases = lib.mkOption {
               type = lib.types.listOf lib.types.str;
               default = [];
-              description = "list of databases to backup";
+              description = "list of postgres databases to backup";
             };
           };
         };

@@ -23,7 +23,9 @@
     ./services/dnsmasq.nix
     ./services/frigate-podman.nix
     ./services/gitea.nix
+    ./services/grocy.nix
     ./services/home-assistant
+    ./services/homebox.nix
     ./services/headscale.nix
     ./services/headscale-ui.nix
     ./services/immich.nix
@@ -32,9 +34,11 @@
     ./services/linkwarden.nix
     ./services/matrix.nix
     ./services/mqtt.nix
+    ./services/mysql.nix
     ./services/nextcloud.nix
     ./services/postgres.nix
     ./services/radicale.nix
+    ./services/snipe-it.nix
     ./services/unbound.nix
     ./services/unifi.nix
     ./services/vaultwarden.nix

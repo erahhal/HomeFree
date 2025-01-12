@@ -50,6 +50,9 @@
         public = config.homefree.services.authentik.public;
       };
       backup = {
+        paths = [
+          "/var/lib/authentik"
+        ];
         postgres-databases = [
           "authentik"
         ];

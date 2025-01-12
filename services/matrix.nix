@@ -137,6 +137,7 @@
     };
   };
 
+  ## @TODO: lock down user password
   systemd.services.matrix-synapse =
   let
     preStart = ''

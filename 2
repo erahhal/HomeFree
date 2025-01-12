@@ -1,25 +1,24 @@
 { config, pkgs, ... }:
 let
-  containerDataPath = "/var/lib/baikal";
+  containerDataPath = "/var/lib/snipe-it";
 
   preStart = ''
-    mkdir -p /var/lib/baikal/config
-    mkdir -p /var/lib/baikal/Specific
+    mkdir -p /var/lib/snipe-it
   '';
 in
 {
-  virtualisation.oci-containers.containers = if config.homefree.services.baikal.enable == true then {
-    baikal = {
-      image = "ckulka/baikal:nginx";
+  virtualisation.oci-containers.containers = if config.homefree.services.snipe-it.enable == true then {
+    snipe-it = {
+      image = "snipe/snipe-it";
 
-      autoStart = true;
+      autoStart  = true;
 
       extraOptions = [
         "--pull=always"
       ];
 
       ports = [
-        "0.0.0.0:3007:80"
+        "0.0.0.0:3017:80"
       ];
 
       volumes = [
@@ -33,18 +32,18 @@ in
     };
   } else {};
 
-  systemd.services.podman-baikal = {
+  systemd.services.podman-snipe-it = {
     serviceConfig = {
-      ExecStartPre = [ "!${pkgs.writeShellScript "baikal-prestart" preStart}" ];
+      ExecStartPre = [ "!${pkgs.writeShellScript "snipeit-prestart" preStart}" ];
     };
   };
 
-  homefree.service-config = if config.homefree.services.baikal.enable == true then [
+  homefree.service-config = if config.homefree.services.snipe-it.enable == true then [
     {
-      label = "baikal";
-      name = "Baikal CalDAV/CardDAV";
-      project-name = "Baikal";
-      systemd-service-name = "podman-baikal";
+      label = "snipe-it";
+      name = "Snipe-IT";
+      project-name = "Snipe-IT";
+      systemd-service-name = "podman-snipe-it";
       reverse-proxy = {
         enable = true;
         subdomains = [ "baikal" ];
