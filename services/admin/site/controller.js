@@ -58,59 +58,26 @@ export default class HFController {
 
     const path = window.location.pathname;
     this.handleNavigation(path);
-
-    // this.loadMainPage();
   }
 
   addEventListeners() {
     // Set up link interception
-    this.view.addEventListener('click', (e) => {
-      const link = e.target.closest('a');
-      if (link && link.href.startsWith(window.location.origin)) {
-        e.preventDefault();
-        this.handleNavigation(link.pathname);
+    this.view.addEventListener('click', evt => {
+      const elem = evt.composedPath()?.[0];
+      if (elem && elem.localName === 'a' && elem.href.startsWith(window.location.origin)) {
+        evt.preventDefault();
+        this.handleNavigation(elem.pathname);
       }
     });
   }
 
-  handleNavigation(path) {
+  async handleNavigation(path) {
     const route = this.router.navigateTo(path);
-    this.loadView(route);
     this.loadModel(route);
   }
 
-  async loadView(route) {
-    // Clean up previous component if it exists
-    if (this.currentComponent && this.currentComponent.disconnectedCallback) {
-      this.currentComponent.disconnectedCallback();
-      this.currentComponent.remove();
-      this.currentComponent = undefined;
-    }
-
-    try {
-      // Create and append new component
-      await import(route.componentPath);
-      this.currentComponent = document.createElement(route.componentName);
-
-      if (route.routeParams) {
-        // do something with params
-      }
-
-      this.view.shadowRoot.appendChild(this.currentComponent);
-
-      // Update document title if provided
-      if (route.title) {
-        document.title = route.title;
-      }
-    } catch (error) {
-      console.error('Error loading component:', error);
-      const errorComponent = document.createElement('div');
-      errorComponent.innerHTML = '<h1>Error loading page</h1>';
-      this.view.shadowRoot.appendChild(errorComponent);
-    }
-  }
-
   async loadModel(route) {
+    this.model.route = route;
     const { default: subModelClass } = await import(route.modelPath);
     const subModel = new subModelClass();
     // @TODO: Figure out how to have submodels access root model
