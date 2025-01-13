@@ -454,7 +454,10 @@
 
     plugins.noice.enable = true;
 
-    plugins.notify.enable = true;
+    plugins.notify = {
+      enable = true;
+      topDown = false;
+    };
 
     plugins.nvim-autopairs.enable = true;
 
