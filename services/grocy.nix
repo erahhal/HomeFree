@@ -1,11 +1,44 @@
-{ config, ... }:
+{ config, pkgs, ... }:
+let
+  containerDataPath = "/var/lib/grocy";
+
+  preStart = ''
+    mkdir -p /var/lib/grocy
+  '';
+
+  version = "4.3.0";
+
+  port = 3018;
+in
 {
-  services.grocy = {
-    # enable = config.homefree.services.grocy.enable;
-    ## Currently, nginx port 80 conflicts with caddy
-    enable = false;
-    hostName = "grocy.${config.homefree.system.domain}";
-    nginx.enableSSL = false;
+  virtualisation.oci-containers.containers = if config.homefree.services.grocy.enable == true then {
+    grocy = {
+      image = "lscr.io/linuxserver/grocy:${version}";
+
+      autoStart = true;
+
+      extraOptions = [
+        "--pull=always"
+      ];
+
+      ports = [
+        "0.0.0.0:${toString port}:80"
+      ];
+
+      volumes = [
+        "${containerDataPath}:/config"
+      ];
+
+      environment = {
+        TZ = config.homefree.system.timeZone;
+      };
+    };
+  } else {};
+
+  systemd.services.podman-grocy = {
+    serviceConfig = {
+      ExecStartPre = [ "!${pkgs.writeShellScript "grocy-prestart" preStart}" ];
+    };
   };
 
   homefree.service-config = if config.homefree.services.grocy.enable == true then [
@@ -20,7 +53,7 @@
         http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
         https-domains = [ config.homefree.system.domain ];
         host = "10.0.0.1";
-        port = 7746;
+        port = port;
         public = config.homefree.services.grocy.public;
       };
       backup = {
