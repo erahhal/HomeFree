@@ -3,7 +3,7 @@ let
   containerDataPath = "/var/lib/grocy";
 
   preStart = ''
-    mkdir -p /var/lib/grocy
+    mkdir -p ${containerDataPath}
   '';
 
   version = "4.3.0";
@@ -11,6 +11,9 @@ let
   port = 3018;
 in
 {
+  ## @NOTE: Default username and password: admin, admin
+  ## @TODO: Setup LDAP login (see /var/lib/grocy/data/config.php)
+  ##        Can this be set up with env vars?
   virtualisation.oci-containers.containers = if config.homefree.services.grocy.enable == true then {
     grocy = {
       image = "lscr.io/linuxserver/grocy:${version}";
@@ -58,7 +61,7 @@ in
       };
       backup = {
         paths = [
-          "/var/lib/grocy"
+          containerDataPath
         ];
       };
     }

@@ -3,7 +3,7 @@ let
   containerDataPath = "/var/lib/snipeit";
 
   preStart = ''
-    mkdir -p /var/lib/snipeit
+    mkdir -p ${containerDataPath}
 
     MYSQL_PASSWORD=$(cat ${config.homefree.services.snipe-it.secrets.mysql-password})
 
