@@ -336,6 +336,26 @@
         };
       };
 
+      forgejo = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "enable Forgejo git service";
+        };
+
+        disable-registration = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Disable user registration";
+        };
+
+        public = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Open to public on WAN port";
+        };
+      };
+
       frigate = {
         enable = lib.mkOption {
           type = lib.types.bool;
@@ -601,6 +621,20 @@
         };
       };
 
+      ollama = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "enable Ollama GenAI service";
+        };
+
+        public = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Open to public on WAN port";
+        };
+      };
+
       radicale = {
         enable = lib.mkOption {
           type = lib.types.bool;
@@ -697,10 +731,10 @@
             description = "Official project name of application";
           };
 
-          systemd-service-name = lib.mkOption {
-            type = lib.types.str;
-            default = "";
-            description = "Systemd service name";
+          systemd-service-names = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [];
+            description = "Associated systemd services";
           };
 
           admin = {

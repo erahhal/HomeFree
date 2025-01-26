@@ -32,7 +32,9 @@
       label = "gitea";
       name = "Git";
       project-name = "Gitea";
-      systemd-service-name = "gitea";
+      systemd-service-names = [
+        "gitea"
+      ];
       reverse-proxy = {
         enable = true;
         subdomains = [ "git" ];

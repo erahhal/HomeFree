@@ -15,7 +15,9 @@ in
       label = "admin";
       name = "HomeFree Admin";
       project-name = "HomeFree Admin";
-      systemd-service-name = "caddy";
+      systemd-service-names = [
+        "caddy"
+      ];
       admin = {
         show = false;
       };

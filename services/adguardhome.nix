@@ -184,7 +184,9 @@
       label = "adguard";
       name = "Ad Blocker";
       project-name = "AdGuard Home";
-      systemd-service-name = "adguardhome";
+      systemd-service-names = [
+        "adguardhome"
+      ];
       reverse-proxy = {
         enable = true;
         subdomains = [ "adguard" ];

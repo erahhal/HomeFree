@@ -14,7 +14,9 @@
       label = "unifi";
       name = "Unifi Controller";
       project-name = "Unifi Controller";
-      systemd-service-name = "unifi";
+      systemd-service-names = [
+        "unifi"
+      ];
       reverse-proxy = {
         enable = true;
         subdomains = [ "unifi" ];

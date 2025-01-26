@@ -63,7 +63,9 @@
       label = "jellyfin";
       name = "Streaming Video";
       project-name = "Jellyfin";
-      systemd-service-name = "jellyfin";
+      systemd-service-names = [
+        "jellyfin"
+      ];
       reverse-proxy = {
         enable = true;
         subdomains = [ "video" "jellyfin" ];

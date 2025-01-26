@@ -26,7 +26,10 @@ in
       label = "linkwarden";
       name = "Bookmark Manager";
       project-name = "linkwarden";
-      systemd-service-name = "linkwarden";
+      systemd-service-names = [
+        "linkwarden"
+        "postgresql"
+      ];
       reverse-proxy = {
         enable = true;
         subdomains = [ "links" "linkwarden" ];

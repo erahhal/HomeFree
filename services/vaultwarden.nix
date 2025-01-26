@@ -19,7 +19,9 @@ in
       label = "vaultwarden";
       name = "Password Manager";
       project-name = "Vaultwarden";
-      systemd-service-name = "vaultwarden";
+      systemd-service-names = [
+        "vaultwarden"
+      ];
       reverse-proxy = {
         enable = true;
         subdomains = [ "vaultwarden" ];

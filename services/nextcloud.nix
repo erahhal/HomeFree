@@ -145,7 +145,12 @@ in
       label = "nextcloud";
       name = "Nextcloud";
       project-name = "Nextcloud";
-      systemd-service-name = "phpfpm-nextcloud";
+      systemd-service-names = [
+        "phpfpm-nextcloud"
+        "postgresql"
+        "redis-nextcloud"
+        "nginx"
+      ];
       reverse-proxy = {
         enable = true;
         subdomains = [ "nextcloud" ];

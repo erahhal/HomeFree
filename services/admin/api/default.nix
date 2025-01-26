@@ -78,7 +78,10 @@ in
       name = "HomeFree API";
       project-name = "HomeFree API";
       label = "admin-api";
-      systemd-service-name = "admin-api";
+      systemd-service-names = [
+        "admin-api"
+        "caddy"
+      ];
       admin = {
         show = false;
       };

@@ -143,8 +143,8 @@ let
     cp ${config-yaml} ${containerDataPath}/config/config.yaml
   '';
 in
-{
-  environment.systemPackages= [
+  {
+    environment.systemPackages= [
     ## Google Coral (Edge TPU) USB Support
     pkgs.libedgetpu
   ];
@@ -204,7 +204,9 @@ in
       label = "frigate";
       name = "NVR (Network Video Recorer)";
       project-name = "Frigate";
-      systemd-service-name = "podman-frigate";
+      systemd-service-names = [
+        "podman-frigate"
+      ];
       reverse-proxy = {
         enable = true;
         subdomains = [ "nvr" "frigate" ];

@@ -23,7 +23,9 @@
       label = "radicale";
       name = "Contacts/Calendar (CalDAV/CardDAV)";
       project-name = "Radicale";
-      systemd-service-name = "radicale";
+      systemd-service-names = [
+        "radicale"
+      ];
       reverse-proxy = {
         enable = true;
         subdomains = [ "radicale" "dav" "webdav" "caldav" "carddav" ];

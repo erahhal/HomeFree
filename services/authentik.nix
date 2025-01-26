@@ -39,7 +39,13 @@
       label = "authentik";
       name = "Single Sign On";
       project-name = "Authentik";
-      systemd-service-name = "authentik";
+      systemd-service-names = [
+        "authentik"
+        "authentik-ldap"
+        "authentik-worker"
+        "redis-authentik"
+        "postgresql"
+      ];
       reverse-proxy = {
         enable = true;
         subdomains = [ "auth" "authentik" ];

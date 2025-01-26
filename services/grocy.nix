@@ -49,7 +49,9 @@ in
       label = "grocy";
       name = "Grocy";
       project-name = "Grocy";
-      systemd-service-name = "grocy";
+      systemd-service-names = [
+        "podman-grocy"
+      ];
       reverse-proxy = {
         enable = true;
         subdomains = [ "grocy" ];

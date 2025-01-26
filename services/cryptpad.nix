@@ -20,7 +20,9 @@
       label = "cryptpad";
       name = "Docs/Office Suite";
       project-name = "Cryptpad";
-      systemd-service-name = "cryptpad";
+      systemd-service-names = [
+        "cryptpad"
+      ];
       reverse-proxy = {
         enable = true;
         # subdomains = [ "cryptpad" "cryptpad-sandbox" "cryptpad-ui" ];

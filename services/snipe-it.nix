@@ -250,7 +250,10 @@ in
       label = "snipe-it";
       name = "Snipe-IT";
       project-name = "Snipe-IT";
-      systemd-service-name = "podman-snipe-it";
+      systemd-service-names = [
+        "podman-snipe-it"
+        "mysql"
+      ];
       reverse-proxy = {
         enable = true;
         subdomains = [ "snipeit" ];

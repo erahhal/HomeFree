@@ -21,6 +21,8 @@
     ./services/cryptpad.nix
     ./services/ddclient.nix
     ./services/dnsmasq.nix
+    # ./services/forgejo.nix
+    ./services/forgejo-podman.nix
     ./services/frigate-podman.nix
     ./services/gitea.nix
     ./services/grocy.nix
@@ -36,6 +38,7 @@
     ./services/mqtt.nix
     ./services/mysql.nix
     ./services/nextcloud.nix
+    ./services/ollama.nix
     ./services/postgres.nix
     ./services/radicale.nix
     ./services/snipe-it.nix

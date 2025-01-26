@@ -202,7 +202,10 @@
       label = "matrix";
       name = "Matrix Chat";
       project-name = "Matrix-Synapse";
-      systemd-service-name = "matrix-synapse";
+      systemd-service-names = [
+        "matrix-synapse"
+        "matrix-synapse-discord"
+      ];
       reverse-proxy = {
         enable = true;
         subdomains = [ "matrix" ];

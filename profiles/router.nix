@@ -223,7 +223,11 @@ in
 
             ## podman-LAN
             iifname { "podman0" } oifname { "${lan-interface}" } accept comment "Allow trusted LAN to WAN"
-            iifname { "${lan-interface}" } oifname { "podman0" } ct state established, related accept comment "Allow established back to LANs"
+            iifname { "${lan-interface}" } oifname { "podman0" } ct state established, related accept comment "Allow established back to podman"
+
+            ## podman-WAN
+            iifname { "podman0" } oifname { "${wan-interface}" } accept comment "Allow trusted podman to WAN"
+            iifname { "${wan-interface}" } oifname { "podman0" } ct state established, related accept comment "Allow established back to podman"
 
             ## @TODO: Confirm which, if any, of these are needed.
 

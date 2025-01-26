@@ -41,13 +41,18 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "linkwarden";
-  version = "2.8.4";
+  version = "2.9.3";
 
   src = fetchFromGitHub {
     owner = "linkwarden";
     repo = "linkwarden";
-    rev = "v${version}";
-    hash = "sha256-EbvyykvMMRfgKQETXm97RjKfb90M0f+e9yIZUoZRytw=";
+    tag = "v${version}";
+    hash = "sha256-7vSF2g7HZbo5jJ15JF4wTjFT7k+da9Hu7e4USw7+NuU=";
+  };
+
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = src + "/yarn.lock";
+    hash = "sha256-AugaWscW19VSWJWIj4IykuJp7aGBjuLSUt3Y48Kr3b4=";
   };
 
   nativeBuildInputs = [
@@ -67,6 +72,7 @@ stdenvNoCC.mkDerivation rec {
   postPatch = ''
     substituteInPlace package.json \
       --replace-fail "yarn worker:prod" "ts-node --transpile-only --skip-project scripts/worker.ts"
+
     for f in lib/api/storage/*Folder.ts lib/api/storage/*File.ts; do
       substituteInPlace $f \
         --replace-fail 'path.join(process.cwd(), storagePath + "/" + file' 'path.join(storagePath, file'
@@ -87,10 +93,12 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+
     rm -r node_modules/bcrypt node_modules/.prisma/client/libquery_engine.node node_modules/@next/swc-*
     ln -s ${bcrypt}/lib/node_modules/bcrypt node_modules/
     mkdir -p $out/share/linkwarden/.next $out/bin
     cp -r * .next $out/share/linkwarden/
+
     echo "#!${lib.getExe bash} -e
     export DATABASE_URL=\''${DATABASE_URL-"postgresql://\$DATABASE_USER:\$POSTGRES_PASSWORD@\$DATABASE_HOST:\$DATABASE_PORT/\$DATABASE_NAME"}
     export npm_config_cache="\$LINKWARDEN_CACHE_DIR/npm"
@@ -98,6 +106,7 @@ stdenvNoCC.mkDerivation rec {
       && ${lib.getExe' nodejs "npm"} start --prefix $out/share/linkwarden -- -H \$LINKWARDEN_HOST -p \$LINKWARDEN_PORT
     " > $out/bin/start.sh
     chmod +x $out/bin/start.sh
+
     makeWrapper $out/bin/start.sh $out/bin/linkwarden \
       --prefix PATH : "${
         lib.makeBinPath [
@@ -114,13 +123,9 @@ stdenvNoCC.mkDerivation rec {
       --set-default LINKWARDEN_HOST localhost \
       --set-default LINKWARDEN_PORT 3000 \
       --set-default STORAGE_FOLDER /var/lib/linkwarden
+
     runHook postInstall
   '';
-
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
-    hash = "sha256-IA5rPRIvk9MTToAH6B+hf9C3hAZLkuTm8YHFwh8WMHo=";
-  };
 
   passthru.tests = {
     inherit (nixosTests) linkwarden;
@@ -136,3 +141,4 @@ stdenvNoCC.mkDerivation rec {
   };
 
 }
+

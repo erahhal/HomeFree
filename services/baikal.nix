@@ -44,7 +44,9 @@ in
       label = "baikal";
       name = "Baikal CalDAV/CardDAV";
       project-name = "Baikal";
-      systemd-service-name = "podman-baikal";
+      systemd-service-names = [
+        "podman-baikal"
+      ];
       reverse-proxy = {
         enable = true;
         subdomains = [ "baikal" ];

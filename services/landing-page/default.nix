@@ -15,7 +15,9 @@ in
       label = "landing-page";
       name = "Landing Page";
       project-name = "HomeFree Landing Page";
-      systemd-service-name = "caddy";
+      systemd-service-names = [
+        "caddy"
+      ];
       reverse-proxy = {
         enable = true;
         rootDomain = true;

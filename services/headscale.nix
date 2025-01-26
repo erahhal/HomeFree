@@ -122,7 +122,10 @@ in
       label = "headscale";
       name = "VPN";
       project-name = "Headscale";
-      systemd-service-name = "headscale";
+      systemd-service-names = [
+        "headscale"
+        "podman-headscale-ui"
+      ];
       admin = {
         urlPathOverride = "/web";
       };

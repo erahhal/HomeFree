@@ -27,7 +27,12 @@
       label = "immich";
       name = "Photos";
       project-name = "Immich";
-      systemd-service-name = "immic-server";
+      systemd-service-names = [
+        "immich-server"
+        "immich-machine-learning"
+        "redis-immich"
+        "postgresql"
+      ];
       reverse-proxy = {
         enable = true;
         subdomains = [ "photos" "immich" ];

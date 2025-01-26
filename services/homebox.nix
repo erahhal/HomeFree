@@ -13,7 +13,9 @@
       label = "homebox";
       name = "Homebox";
       project-name = "Homebox";
-      systemd-service-name = "homebox";
+      systemd-service-names = [
+        "homebox"
+      ];
       reverse-proxy = {
         enable = true;
         subdomains = [ "homebox" ];

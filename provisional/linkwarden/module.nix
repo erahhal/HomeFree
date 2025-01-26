@@ -169,7 +169,7 @@ in
       ] ++ lib.optionals cfg.database.enable [ "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
       environment = cfg.environment // {
-        # Required, otherwise chome dumps core
+        # Required, otherwise chrome dumps core
         CHROME_CONFIG_HOME = cfg.cacheLocation;
       };
 
