@@ -1,13 +1,31 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 let
   proxiedHostConfig = lib.filter (service-config: service-config.reverse-proxy.enable == true) config.homefree.service-config;
   trimTrailingSlash = s: lib.head (lib.match "(.*[^/])[/]*" s);
 in
 {
   systemd.services.caddy = {
-    after = [ "network.target" "network-online.target" "unbound.service" ];
+    wants = [ "unbound.service" ]
+    ++ (if config.homefree.services.adguard.enable == true then [ "adguardhome.service" ] else []);
+    after = [ "network.target" "network-online.target" "unbound.service" ]
+    ++ (if config.homefree.services.adguard.enable == true then [ "adguardhome.service" ] else []);
     requires = [ "network-online.target" "unbound.service" ];
+    serviceConfig = {
+      ## make sure unbound and adguard are fully up before starting
+      ExecStartPre = "${pkgs.coreutils}/bin/sleep 3";
+    };
   };
+
+  ## Restart Unbound DNS with caddy changes
+  systemd.services.unbound = {
+    partOf = [ "caddy.service" ];
+    before = [ "caddy.service" ] ++ (if config.homefree.services.adguard.enable == true then [ "adguardhome.service" ] else []);
+  };
+
+  ## Restart Adguard DNS with caddy changes
+  systemd.services.adguardhome = if config.homefree.services.adguard.enable == true then {
+    partOf = [ "unbound.service" ];
+  } else {};
 
   services.caddy = {
     enable = true;

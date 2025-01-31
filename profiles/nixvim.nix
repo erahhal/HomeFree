@@ -455,7 +455,9 @@
     plugins.noice.enable = true;
 
     plugins.notify = {
-      enable = true;
+      ## disable, very annoying as notifications block content and
+      ## are part of the buffer rotation
+      enable = false;
       topDown = false;
     };
 

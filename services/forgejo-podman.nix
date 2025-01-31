@@ -8,7 +8,12 @@ let
     mkdir -p ${containerDataPath}
   '';
 in
-  {
+{
+  environment.systemPackages = [
+    ## Installs "gitea" executable
+    pkgs.forgejo
+  ];
+
   virtualisation.oci-containers.containers = if config.homefree.services.forgejo.enable == true then {
     forgejo = {
       image = "codeberg.org/forgejo/forgejo:10.0.0";
@@ -75,16 +80,6 @@ in
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "forgejo-prestart" preStart}" ];
     };
-  };
-
-  services.forgejo = {
-    enable = config.homefree.services.gitea.enable;
-    database = {
-      ## @TODO: move to postgresql
-      type = "sqlite3";
-    };
-    lfs.enable = true;
-    # mailerPasswordFile = config.age.secrets.forgejo-mailer-password.path;
   };
 
   homefree.service-config = if config.homefree.services.forgejo.enable == true then [

@@ -26,12 +26,13 @@
     ./services/frigate-podman.nix
     ./services/gitea.nix
     ./services/grocy.nix
-    ./services/home-assistant
+    # ./services/home-assistant
+    ./services/home-assistant-podman.nix
     ./services/homebox.nix
     ./services/headscale.nix
-    ./services/headscale-ui.nix
     ./services/immich.nix
     ./services/jellyfin.nix
+    ./services/kanidm.nix
     ./services/landing-page
     ./services/linkwarden.nix
     ./services/matrix.nix
@@ -40,11 +41,14 @@
     ./services/nextcloud.nix
     ./services/ollama.nix
     ./services/postgres.nix
-    ./services/radicale.nix
+    # ./services/radicale.nix
+    ./services/radicale-container.nix
     ./services/snipe-it.nix
     ./services/unbound.nix
-    ./services/unifi.nix
+    # ./services/unifi.nix
+    ./services/unifi-container.nix
     ./services/vaultwarden.nix
+    ./services/zitadel-podman.nix
   ];
 
   # --------------------------------------------------------------------------------------

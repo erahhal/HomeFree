@@ -5,18 +5,26 @@ let
   ## See: https://headscale.net/stable/ref/acls/
   ## @TODO: Doesn't seem to work, may even block all traffic not explicitly approved.
   policy = pkgs.writeText "headscale-policy.json" ''
-  {
-    "hosts": {
-      "homefree.lan": "10.0.0.1/32"
-    },
-    "autoApprovers": {
-      "routes": {
-        "10.0.0.0/24": [
-          "homefree.lan"
-        ]
+    {
+      "hosts": {
+        "homefree.lan": "10.0.0.1/32"
+      },
+      "autoApprovers": {
+        "routes": {
+          "10.0.0.0/24": [
+            "homefree.lan"
+          ]
+        }
       }
     }
-  }
+  '';
+
+  headplane-version = "0.3.9";
+  headplane-containerDataPath = "/var/lib/headplane";
+  headplane-port = 3009;
+  headplane-preStart = ''
+    mkdir -p ${headplane-containerDataPath}/data
+    mkdir -p ${headplane-containerDataPath}/configs
   '';
 in
 {
@@ -117,6 +125,63 @@ in
     '';
   };
 
+  virtualisation.oci-containers.containers = if config.homefree.services.headscale.enable == true then {
+    headplane = {
+      image = "ghcr.io/tale/headplane:${headplane-version}";
+
+      autoStart = true;
+
+      extraOptions = [
+        "--pull=always"
+      ];
+
+      ports = [
+        "0.0.0.0:${toString headplane-port}:3000"
+      ];
+
+      volumes = [
+        "/var/lib/headscale:/var/lib/headscale"
+        "/etc/headscale:/etc/headscale"
+        "/run/headscale:/run/headscale"
+      ];
+
+      environment = {
+        TZ = config.homefree.system.timeZone;
+
+        DEBUG = "true";
+
+        HEADSCALE_URL = "https://headscale.${config.homefree.system.domain}";
+        # HEADSCALE_URL = "http://localhost:8080";
+
+        ## If headscale iteself is running in docker, set these
+        # HEADSCALE_INTEGRATION = "docker";
+        # HEADSCALE_CONTAINER = "headscale";
+
+        DISABLE_API_KEY_LOGIN = "true";
+        HOST = "0.0.0.0";    # default: 0.0.0.0
+        PORT = "3000";       # default: 3000
+
+        ## Only set this to false if you aren't behind a reverse proxy
+        COOKIE_SECURE = "true";
+
+        ## Overrides the configuration file values if they are set in config.yaml
+        ## If you want to share the same OIDC configuration you do not need this
+        # OIDC_CLIENT_ID = "headscale";
+        # OIDC_ISSUER = "https://sso.example.com";
+      };
+
+      environmentFiles = [
+        config.homefree.services.headscale.secrets.headplane-env
+      ];
+    };
+  } else {};
+
+  systemd.services.podman-headplane = {
+    serviceConfig = {
+      ExecStartPre = [ "!${pkgs.writeShellScript "headplane-prestart" headplane-preStart}" ];
+    };
+  };
+
   homefree.service-config = if config.homefree.services.headscale.enable == true then [
     {
       label = "headscale";
@@ -124,7 +189,7 @@ in
       project-name = "Headscale";
       systemd-service-names = [
         "headscale"
-        "podman-headscale-ui"
+        "podman-headplane"
       ];
       admin = {
         urlPathOverride = "/web";
@@ -136,10 +201,10 @@ in
         http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
         https-domains = [ config.homefree.system.domain ];
         host = "10.0.0.1";
-        port = 8087;
+        port = config.services.headscale.port;
         public = config.homefree.services.headscale.public;
         extraCaddyConfig = ''
-          reverse_proxy /web* http://10.0.0.1:3009
+          reverse_proxy /admin* http://10.0.0.1:3009
         '';
       };
       backup = {

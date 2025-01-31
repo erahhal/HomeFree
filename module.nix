@@ -464,20 +464,10 @@
             type = lib.types.path;
             description = "Location of Tailscale client key for server. Should not be a file included in your source repo.";
           };
-        };
-      };
-
-      headscale-ui = {
-        enable = lib.mkOption {
-          type = lib.types.bool;
-          default = false;
-          description = "enable Headscale UI service";
-        };
-
-        public = lib.mkOption {
-          type = lib.types.bool;
-          default = false;
-          description = "Open to public on WAN port";
+          headplane-env = lib.mkOption {
+            type = lib.types.path;
+            description = "Location of Headplane environment var file. Contains COOKIE_SECRET, ROOT_API_KEY, OIDC_CLIENT_SECRET. Should not be a file included in your source repo.";
+          };
         };
       };
 
@@ -534,6 +524,20 @@
           type = lib.types.bool;
           default = false;
           description = "enable Jellyfin media server";
+        };
+
+        public = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Open to public on WAN port";
+        };
+      };
+
+      kanidm = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "enable Kanidm";
         };
 
         public = lib.mkOption {
@@ -699,6 +703,27 @@
           type = lib.types.bool;
           default = false;
           description = "Open to public on WAN port";
+        };
+      };
+
+      zitadel = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "enable Zitadel auth service";
+        };
+
+        public = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Open to public on WAN port";
+        };
+
+        secrets = {
+          env = lib.mkOption {
+            type = lib.types.path;
+            description = "Location of Zitadel environment var file. Contains ZITADEL_MASTERKEY. Should not be a file included in your source repo.";
+          };
         };
       };
     };

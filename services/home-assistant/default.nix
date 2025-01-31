@@ -425,6 +425,7 @@ in
         subdomains = [ "homeassistant" "ha" ];
         http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
         https-domains = [ config.homefree.system.domain ];
+        host = "10.0.0.1";
         port = 8123;
         public = config.homefree.services.homeassistant.public;
       };

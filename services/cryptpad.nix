@@ -6,6 +6,7 @@
     settings = {
       httpPort = 3004;
       httpAddress = "10.0.0.1";
+      websocketPort = 3023; # defaults to 3003, which is used by
       blockDailyCheck = true;
       httpUnsafeOrigin = "https://docs.${config.homefree.system.domain}";
       httpSafeOrigin = "https://docs-ui.${config.homefree.system.domain}";

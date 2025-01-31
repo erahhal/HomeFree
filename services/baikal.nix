@@ -2,9 +2,11 @@
 let
   containerDataPath = "/var/lib/baikal";
 
+  port = 3007;
+
   preStart = ''
-    mkdir -p /var/lib/baikal/config
-    mkdir -p /var/lib/baikal/Specific
+    mkdir -p ${containerDataPath}/config
+    mkdir -p ${containerDataPath}/Specific
   '';
 in
 {
@@ -19,7 +21,7 @@ in
       ];
 
       ports = [
-        "0.0.0.0:3007:80"
+        "0.0.0.0:${toString port}:80"
       ];
 
       volumes = [
@@ -53,7 +55,7 @@ in
         http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
         https-domains = [ config.homefree.system.domain ];
         host = "10.0.0.1";
-        port = 3007;
+        port = port;
         public = config.homefree.services.baikal.public;
       };
       backup = {

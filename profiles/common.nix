@@ -48,12 +48,12 @@
       allowed-users = [ "@wheel" ];
       substituters = [
         "https://cache.nixos.org"
-        # "https://hydra.nixos.org"
+        "https://hydra.nixos.org"
         "https://nix-community.cachix.org"
       ];
       trusted-public-keys = [
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-        # "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
+        "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
     };
@@ -121,6 +121,16 @@
 
   nixpkgs = {
     hostPlatform = system;
+    config = {
+      # Allow proprietary packages.
+      allowUnfree = true;
+      packageOverrides = pkgs: {
+        unstable = import homefree-inputs.nixpkgs-unstable {
+          config = config.nixpkgs.config;
+          inherit system;
+        };
+      };
+    };
   };
 
   # --------------------------------------------------------------------------------------
@@ -139,6 +149,16 @@
 
   hardware.enableRedistributableFirmware = true;
   hardware.enableAllFirmware = true;
+
+  # --------------------------------------------------------------------------------------
+  # System
+  # --------------------------------------------------------------------------------------
+
+  ## Needed to avoid "too many file open" errors when building containers
+  systemd.extraConfig = "DefaultLimitNOFILE=4096";
+  security.pam.loginLimits = [
+    { domain = "*"; item = "nofile"; type = "-"; value = "65536"; }
+  ];
 
   # --------------------------------------------------------------------------------------
   # Services

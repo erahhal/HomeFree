@@ -12,6 +12,8 @@
       #type database DBuser origin-address auth-method
       # ipv4
       host  all      all     127.0.0.1/32   trust
+      # podman
+      host  all      all     10.88.0.0/16   trust
       # ipv6
       host all       all     ::1/128        trust
     '';
