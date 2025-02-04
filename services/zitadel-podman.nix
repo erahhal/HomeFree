@@ -52,7 +52,7 @@ in
         ZITADEL_FIRSTINSTANCE_ORG_HUMAN_USERNAME = "zitadel-admin@zitadel.${config.homefree.system.domain}";
         ZITADEL_FIRSTINSTANCE_ORG_HUMAN_PASSWORD = "Password1!";
 
-        ZITADEL_EXTERNALDOMAIN = "zitadel.${config.homefree.system.domain}";
+        ZITADEL_EXTERNALDOMAIN = "sso.${config.homefree.system.domain}";
         ZITADEL_EXTERNALPORT = "443";
         ZITADEL_EXTERNALSECURE = "true";
         ZITADEL_TLS_ENABLED = "false";
@@ -80,7 +80,7 @@ in
       ];
       reverse-proxy = {
         enable = true;
-        subdomains = [ "auth" "zitadel" ];
+        subdomains = [ "sso" "auth" "zitadel" ];
         http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
         https-domains = [ config.homefree.system.domain ];
         host = "10.0.0.1";
