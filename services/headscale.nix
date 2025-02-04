@@ -197,7 +197,7 @@ in
       reverse-proxy = {
         enable = true;
         ## @TODO: Use "vpn" as default
-        subdomains = [ "headscale" "vpn" ];
+        subdomains = [ "vpn" "headscale" ];
         http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
         https-domains = [ config.homefree.system.domain ];
         host = "10.0.0.1";
