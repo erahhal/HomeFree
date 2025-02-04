@@ -894,7 +894,7 @@
     ## ------------------------------------------------
 
     extraPlugins = with pkgs.vimPlugins; [
-      # vim-nix
+      vim-dirdiff
       {
         plugin = vim-signify;
         config = ''
