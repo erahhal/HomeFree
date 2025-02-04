@@ -73,7 +73,7 @@ in
   homefree.service-config = if config.homefree.services.zitadel.enable == true then [
     {
       label = "zitadel";
-      name = "Auth";
+      name = "Auth/SSO";
       project-name = "Zitadel";
       systemd-service-names = [
         "podman-zitadel"
