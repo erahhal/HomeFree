@@ -192,7 +192,7 @@ in
         "podman-headplane"
       ];
       admin = {
-        urlPathOverride = "/web";
+        urlPathOverride = "/admin";
       };
       reverse-proxy = {
         enable = true;
