@@ -30,7 +30,8 @@
     ./services/home-assistant-podman.nix
     ./services/homebox.nix
     ./services/headscale.nix
-    ./services/immich.nix
+    # ./services/immich.nix
+    ./services/immich-podman.nix
     ./services/jellyfin.nix
     ./services/kanidm.nix
     ./services/landing-page
@@ -47,7 +48,8 @@
     ./services/unbound.nix
     # ./services/unifi.nix
     ./services/unifi-container.nix
-    ./services/vaultwarden.nix
+    # ./services/vaultwarden.nix
+    ./services/vaultwarden-container.nix
     ./services/zitadel-podman.nix
   ];
 

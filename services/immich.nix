@@ -44,7 +44,7 @@
       };
       backup = {
         paths = [
-          config.services.immich.mediaLocation
+          containerDataPath
         ];
         postgres-databases = [
           "immich"

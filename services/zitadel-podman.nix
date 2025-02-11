@@ -91,6 +91,9 @@ in
         paths = [
           containerDataPath
         ];
+        postgres-databases = [
+          "zitadel"
+        ];
       };
     }
   ] else [];
