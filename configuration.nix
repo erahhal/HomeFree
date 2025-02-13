@@ -7,7 +7,6 @@
     ./profiles/config-editor.nix
     ./profiles/git.nix
     ./profiles/hardware-configuration.nix
-    ./profiles/nixvim.nix
     ./profiles/podman.nix
     ./profiles/router.nix
     ./profiles/traffic-control.nix

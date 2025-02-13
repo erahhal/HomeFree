@@ -187,7 +187,8 @@ in
 
             ## Allow for web traffic
             ## http is needed for headscale relaying
-            tcp dport { http, https } ct state new accept;
+            ## 3022 is for git/forgejo ssh
+            tcp dport { http, https, 3022 } ct state new accept;
 
             ## Headscale connections
             udp dport { 41641 } ct state new accept;
@@ -222,18 +223,30 @@ in
             iifname { "${wan-interface}" } oifname { "${lan-interface}" } ct state established, related accept comment "Allow established back to LANs"
 
             ## podman-LAN
-            iifname { "podman0" } oifname { "${lan-interface}" } accept comment "Allow trusted LAN to WAN"
+            iifname { "podman0" } oifname { "${lan-interface}" } accept comment "Allow trusted podman to LAN"
             iifname { "${lan-interface}" } oifname { "podman0" } ct state established, related accept comment "Allow established back to podman"
+
+            ## LAN-podman - Needed for SSH to git/forgejo
+            iifname { "${lan-interface}" } oifname { "podman0" } accept comment "Allow trusted LAN to podman"
+            iifname { "podman0" } oifname {  "${lan-interface}" } ct state established, related accept comment "Allow established back to LAN"
 
             ## podman-WAN
             iifname { "podman0" } oifname { "${wan-interface}" } accept comment "Allow trusted podman to WAN"
             iifname { "${wan-interface}" } oifname { "podman0" } ct state established, related accept comment "Allow established back to podman"
+
+            ## WAN-podman - Needed for SSH to git/forgejo
+            iifname { "${wan-interface}" } oifname { "podman0" } accept comment "Allow trusted WAN to podman"
+            iifname { "podman0" } oifname {  "${wan-interface}" } ct state established, related accept comment "Allow established back to LAN"
 
             ## @TODO: Confirm which, if any, of these are needed.
 
             ## Headscale-WAN
             iifname { "tailscale0" } oifname { "${wan-interface}" } accept comment "Allow trusted tailscale to WAN"
             iifname { "${wan-interface}" } oifname { "tailscale0" } ct state established, related accept comment "Allow established back to tailscale"
+
+            ## WAN-Headscale (neded for relaying?)
+            iifname { "${wan-interface}" } oifname { "tailscale0" } accept comment "Allow trusted tailscale to WAN"
+            iifname { "tailscale0" } oifname { "${wan-interface}" } ct state established, related accept comment "Allow established back to tailscale"
 
             ## Headscale-LAN
             iifname { "tailscale0" } oifname { "${lan-interface}" } accept comment "Allow trusted tailscale to LAN"

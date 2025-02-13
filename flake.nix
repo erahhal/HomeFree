@@ -11,10 +11,7 @@
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
-    nixvim = {
-      url = "github:nix-community/nixvim/nixos-24.11";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nixvim-config.url = "git+https://git.homefree.host/homefree/nixvim-config";
 
     nixos-generators = {
       url = "github:nix-community/nixos-generators";

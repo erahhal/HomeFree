@@ -48,6 +48,7 @@ in
     pkgs.immich-go
   ] else [];
 
+  ## Copied from nixpkgs
   services.postgresql = if config.homefree.services.immich.enable then {
     enable = true;
     ensureDatabases = [ database-name ];
@@ -65,6 +66,7 @@ in
     };
   } else {};
 
+  ## Copied from nixpkgs
   systemd.services.postgresql.serviceConfig.ExecStartPost = if config.homefree.services.immich.enable then
   let
     sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" ''

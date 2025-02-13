@@ -1,5 +1,6 @@
 { config, pkgs, ... }:
 let
+  version = "10.0.0";
   containerDataPath = "/var/lib/forgejo";
   port = 3201;
   ssh-port = 3022;
@@ -16,7 +17,7 @@ in
 
   virtualisation.oci-containers.containers = if config.homefree.services.forgejo.enable == true then {
     forgejo = {
-      image = "codeberg.org/forgejo/forgejo:10.0.0";
+      image = "codeberg.org/forgejo/forgejo:${version}";
 
       autoStart  = true;
 

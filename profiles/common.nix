@@ -221,6 +221,8 @@
   # Base Packages
   # --------------------------------------------------------------------------------------
 
+  nixvim-config.enable = true;
+
   programs.nix-ld.enable = true;
 
   programs.mosh.enable = true;
