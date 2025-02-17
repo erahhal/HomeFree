@@ -1,5 +1,6 @@
 { config, lib, pkgs, ... }:
 let
+  version = "stable";
   containerDataPath = "/var/lib/frigate";
   # mediaPath = "${containerDataPath}/media";
   mediaPath = "/mnt/ellis/nvr";
@@ -151,7 +152,7 @@ in
 
   virtualisation.oci-containers.containers = if config.homefree.services.frigate.enable == true then {
     frigate = {
-      image = "ghcr.io/blakeblackshear/frigate:stable";
+      image = "ghcr.io/blakeblackshear/frigate:${version}";
 
       autoStart  = true;
 
