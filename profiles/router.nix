@@ -255,6 +255,14 @@ in
             ## LAN-Headscale
             iifname { "${lan-interface}" } oifname { "tailscale0" } accept comment "Allow trusted LAN to tailscale"
             iifname { "tailscale0" } oifname { "${lan-interface}" } ct state established, related accept comment "Allow established back to lan"
+
+            ## Podman-Headscale
+            iifname { "podman0" } oifname { "tailscale0" } accept comment "Allow trusted podman to tailscale"
+            iifname { "tailscale0" } oifname { "podman0" } ct state established, related accept comment "Allow established back to podman"
+
+            ## Headscale-Podman
+            iifname { "tailscale0" } oifname { "podman0" } accept comment "Allow trusted tailscale to podman"
+            iifname { "podman0" } oifname { "tailscale0" } ct state established, related accept comment "Allow established back to tailscale"
           }
         }
 
