@@ -255,6 +255,10 @@ in
             ## Headscale-podman
             iifname { "tailscale0" } oifname { "podman0" } accept comment "Allow trusted tailscale to podman"
             iifname { "podman" } oifname { "tailscale0" } ct state established, related accept comment "Allow established podman back to tailscale"
+
+            ## podman-Headscale
+            iifname { "podman0" } oifname { "tailscale0" } accept comment "Allow trusted podman to tailscale"
+            iifname { "tailscale0" } oifname { "podman0" } ct state established, related accept comment "Allow established tailscale back to podman"
           }
         }
 
