@@ -8,7 +8,7 @@ let
   cameras-filtered = lib.filter (camera: camera.enable == true) config.homefree.services.frigate.cameras;
 
   frigate-config = {
-    version = 0.14;
+    version = 0.15;
 
     detectors = {
       coral = {
