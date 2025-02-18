@@ -635,11 +635,11 @@
         "nixvim": "nixvim"
       },
       "locked": {
-        "lastModified": 1739815906,
-        "narHash": "sha256-mPzF6py9kZKzHSO8Rm5ZHz8wxCfzaxXWxTbz+IHuH9E=",
+        "lastModified": 1739852155,
+        "narHash": "sha256-Osjbq4Afg3vKJpgPZf45VfkOHE7jgzpmkYlBtosV3sk=",
         "ref": "refs/heads/main",
-        "rev": "9cf6e96c73dc343fd15571cea2a1e18937c6dd2a",
-        "revCount": 9,
+        "rev": "4ad80df1eb9e5157e728cc6d9c467ee7543fd8c3",
+        "revCount": 10,
         "type": "git",
         "url": "https://git.homefree.host/homefree/nixvim-config"
       },
