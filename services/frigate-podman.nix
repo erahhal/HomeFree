@@ -9,14 +9,13 @@ let
   frigate-config = {
     version = configVersion;
 
-    detectors = {
-      coral = {
-        type = "edgetpu";
-        device = "usb";
-        # num_threads = 3;
-      };
-    };
-
+    # detectors = {
+    #   coral = {
+    #     type = "edgetpu";
+    #     device = "usb";
+    #     # num_threads = 3;
+    #   };
+    # };
 
     ffmpeg = {
       ## Intel
