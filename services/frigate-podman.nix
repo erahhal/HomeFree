@@ -143,6 +143,7 @@ in
         "--pull=always"
         ## 1GB of memory, reduces SSD/SD Card wear
         "--mount=type=tmpfs,target=/tmp/cache,tmpfs-size=1000000000"
+        "--shm-size=512M"
         # "--network=bridge"
         "--device=/dev/bus/usb:/dev/bus/usb"  # Passes the USB Coral, needs to be modified for other versions
         "--device=/dev/dri/card1:/dev/dri/card1" # For intel hwaccel, needs to be updated for your hardware
