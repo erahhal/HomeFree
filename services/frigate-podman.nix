@@ -19,7 +19,7 @@ let
 
     ffmpeg = {
       ## Intel
-      hwaccel_args = "preset-intel-qsv-h265";
+      hwaccel_args = "preset-intel-qsv-h264";
 
       ## Raspberry Pi
       # hwaccel_args = "-c:v h264_v4l2m2m";
