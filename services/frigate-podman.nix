@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
   version = "0.15.0";
-  configVersion = 0.15;
+  configVersion = "0.15-1";
   containerDataPath = "/var/lib/frigate";
   # mediaPath = "${containerDataPath}/media";
   mediaPath = "/mnt/ellis/nvr";
