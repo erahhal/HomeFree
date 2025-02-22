@@ -1,14 +1,13 @@
 { config, lib, pkgs, ... }:
 let
-  version = "0.14.1";
+  version = "0.15.0";
+  configVersion = "0.15-1";
   containerDataPath = "/var/lib/frigate";
   # mediaPath = "${containerDataPath}/media";
   mediaPath = "/mnt/ellis/nvr";
 
-  cameras-filtered = lib.filter (camera: camera.enable == true) config.homefree.services.frigate.cameras;
-
   frigate-config = {
-    version = 0.14;
+    version = configVersion;
 
     detectors = {
       coral = {
@@ -20,7 +19,7 @@ let
 
     ffmpeg = {
       ## Intel
-      hwaccel_args = "preset-vaapi";
+      hwaccel_args = "preset-intel-qsv-h265";
 
       ## Raspberry Pi
       # hwaccel_args = "-c:v h264_v4l2m2m";
@@ -46,42 +45,45 @@ let
 
     record = {
       enabled = true;
-      ## Minutes
-      expire_interval = 60;
+      # ## Minutes
+      # expire_interval = 60;
       retain = {
-        days = 2;
+        days = 3;
         mode = "all";
       };
-      events = {
-        # Optional: Number of seconds before the event to include (default: shown below)
-        pre_capture = 5;
-        # Optional: Number of seconds after the event to include (default: shown below)
-        post_capture = 5;
-        # Optional: Objects to save recordings for. (default: all tracked objects)
-        objects = [
-          "person"
-          "bicycle"
-          "dog"
-          "cat"
-        ];
-        # Optional: Retention settings for recordings of events
+      alerts = {
         retain = {
-          # Required: Default retention days (default: shown below)
-          default = 10;
-          # Optional: Mode for retention. (default: shown below)
-          #   all - save all recording segments for events regardless of activity
-          #   motion - save all recordings segments for events with any detected motion
-          #   active_objects - save all recording segments for event with active/moving objects
-          #
-          # NOTE: If the retain mode for the camera is more restrictive than the mode configured
-          #       here, the segments will already be gone by the time this mode is applied.
-          #       For example, if the camera retain mode is "motion", the segments without motion are
-          #       never stored, so setting the mode to "all" here won't bring them back.
+          days = 30;
           mode = "motion";
-          # Optional: Per object retention days
-          objects = {
-            person = 30;
-          };
+        };
+      };
+      detections = {
+        retain = {
+          days = 30;
+          mode = "motion";
+        };
+      };
+    };
+
+    snapshots = {
+      # Optional: Enable writing jpg snapshot to /media/frigate/clips (default: shown below)
+      # This value can be set via MQTT and will be updated in startup based on retained value
+      enabled = true;
+      # Optional: print a timestamp on the snapshots (default: shown below)
+      timestamp = false;
+      # Optional: draw bounding box on the snapshots (default: shown below)
+      bounding_box = false;
+      # Optional: crop the snapshot (default: shown below)
+      crop = false;
+      # # Optional: height to resize the snapshot to (default: original size)
+      # height = 175;
+      # Optional: Camera override for retention settings (default: global values)
+      retain = {
+        # Required: Default retention days (default: shown below)
+        default = 10;
+        # Optional: Per object retention days
+        objects = {
+          person = 15;
         };
       };
     };
@@ -94,12 +96,15 @@ let
     cameras = lib.listToAttrs (lib.map (camera: {
       name = camera.name;
       value = {
+        enabled = camera.enable;
         ffmpeg = {
           inputs = [
             {
               path = camera.path;
               roles = [
+                "audio"
                 "detect"
+                "record"
               ];
             }
           ];
@@ -109,30 +114,8 @@ let
           height = camera.height;
           fps = 5;
         };
-        snapshots = {
-          # Optional: Enable writing jpg snapshot to /media/frigate/clips (default: shown below)
-          # This value can be set via MQTT and will be updated in startup based on retained value
-          enabled = true;
-          # Optional: print a timestamp on the snapshots (default: shown below)
-          timestamp = false;
-          # Optional: draw bounding box on the snapshots (default: shown below)
-          bounding_box = false;
-          # Optional: crop the snapshot (default: shown below)
-          crop = false;
-          # # Optional: height to resize the snapshot to (default: original size)
-          # height = 175;
-          # Optional: Camera override for retention settings (default: global values)
-          retain = {
-            # Required: Default retention days (default: shown below)
-            default = 10;
-            # Optional: Per object retention days
-            objects = {
-              person = 15;
-            };
-          };
-        };
       };
-    }) cameras-filtered);
+    }) config.homefree.services.frigate.cameras);
   };
 
   config-yaml = (pkgs.formats.yaml {}).generate "frigate-config.yaml" frigate-config;
