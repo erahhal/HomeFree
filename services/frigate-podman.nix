@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 let
-  version = "stable";
+  version = "0.15.0";
+  configVersion = 0.15;
   containerDataPath = "/var/lib/frigate";
   # mediaPath = "${containerDataPath}/media";
   mediaPath = "/mnt/ellis/nvr";
@@ -8,7 +9,7 @@ let
   # cameras-filtered = lib.filter (camera: camera.enable == true) config.homefree.services.frigate.cameras;
 
   frigate-config = {
-    version = 0.15;
+    version = configVersion;
 
     detectors = {
       coral = {
