@@ -6,8 +6,6 @@ let
   # mediaPath = "${containerDataPath}/media";
   mediaPath = "/mnt/ellis/nvr";
 
-  # cameras-filtered = lib.filter (camera: camera.enable == true) config.homefree.services.frigate.cameras;
-
   frigate-config = {
     version = configVersion;
 
@@ -19,8 +17,10 @@ let
       };
     };
 
+
     ffmpeg = {
       ## Intel
+      ## Should be detected automatically
       # hwaccel_args = "preset-vaapi";
 
       ## Raspberry Pi
@@ -104,7 +104,9 @@ let
             {
               path = camera.path;
               roles = [
+                "audio"
                 "detect"
+                "record"
               ];
             }
           ];
