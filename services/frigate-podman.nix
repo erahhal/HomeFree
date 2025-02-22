@@ -20,7 +20,7 @@ let
 
     ffmpeg = {
       ## Intel
-      hwaccel_args = "preset-vaapi";
+      # hwaccel_args = "preset-vaapi";
 
       ## Raspberry Pi
       # hwaccel_args = "-c:v h264_v4l2m2m";
