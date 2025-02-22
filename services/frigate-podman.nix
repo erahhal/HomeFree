@@ -19,7 +19,7 @@ let
 
     ffmpeg = {
       ## Intel
-      hwaccel_args = "preset-intel-qsv-h264";
+      hwaccel_args = "preset-intel-qsv-h265";
 
       ## Raspberry Pi
       # hwaccel_args = "-c:v h264_v4l2m2m";
@@ -145,6 +145,7 @@ in
         "--mount=type=tmpfs,target=/tmp/cache,tmpfs-size=1000000000"
         # "--network=bridge"
         "--device=/dev/bus/usb:/dev/bus/usb"  # Passes the USB Coral, needs to be modified for other versions
+        "--device=/dev/dri/card1:/dev/dri/card1" # For intel hwaccel, needs to be updated for your hardware
         "--device=/dev/dri/renderD128:/dev/dri/renderD128" # For intel hwaccel, needs to be updated for your hardware
         "--cap-add=CAP_PERFMON" # For GPU statistics
         "--privileged"
