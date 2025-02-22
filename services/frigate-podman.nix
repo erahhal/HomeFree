@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
-  version = "0.15.0";
-  configVersion = "0.15-1";
+  version = "0.14.1";
+  configVersion = "0.14";
   containerDataPath = "/var/lib/frigate";
   # mediaPath = "${containerDataPath}/media";
   mediaPath = "/mnt/ellis/nvr";
@@ -9,13 +9,13 @@ let
   frigate-config = {
     version = configVersion;
 
-    # detectors = {
-    #   coral = {
-    #     type = "edgetpu";
-    #     device = "usb";
-    #     # num_threads = 3;
-    #   };
-    # };
+    detectors = {
+      coral = {
+        type = "edgetpu";
+        device = "usb";
+        # num_threads = 3;
+      };
+    };
 
     ffmpeg = {
       ## Intel
