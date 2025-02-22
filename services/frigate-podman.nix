@@ -5,6 +5,7 @@ let
   containerDataPath = "/var/lib/frigate";
   # mediaPath = "${containerDataPath}/media";
   mediaPath = "/mnt/ellis/nvr";
+  cameras-filtered = lib.filter (camera: camera.enable == true) config.homefree.services.frigate.cameras;
 
   frigate-config = {
     version = configVersion;
@@ -115,7 +116,7 @@ let
           fps = 5;
         };
       };
-    }) config.homefree.services.frigate.cameras);
+    }) cameras-filtered);
   };
 
   config-yaml = (pkgs.formats.yaml {}).generate "frigate-config.yaml" frigate-config;
