@@ -61,7 +61,7 @@
   homefree.service-config = if config.homefree.services.jellyfin.enable == true then [
     {
       label = "jellyfin";
-      name = "Streaming Video";
+      name = "Streaming Media";
       project-name = "Jellyfin";
       systemd-service-names = [
         "jellyfin"

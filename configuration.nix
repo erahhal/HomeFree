@@ -32,6 +32,7 @@
     # ./services/immich.nix
     ./services/immich-podman.nix
     ./services/jellyfin.nix
+    ./services/joplin-podman.nix
     ./services/kanidm.nix
     ./services/landing-page
     ./services/linkwarden.nix

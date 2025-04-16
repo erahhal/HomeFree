@@ -41,18 +41,18 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "linkwarden";
-  version = "2.9.3";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "linkwarden";
     repo = "linkwarden";
     tag = "v${version}";
-    hash = "sha256-7vSF2g7HZbo5jJ15JF4wTjFT7k+da9Hu7e4USw7+NuU=";
+    hash = "sha256-mtygHx09VqrVq5eiCm8UbVM+bjA6n4MbRRT1HcWnUAo=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-AugaWscW19VSWJWIj4IykuJp7aGBjuLSUt3Y48Kr3b4=";
+    hash = "sha256-D6iZp7O90ZwxyiwRZ1H67eUphh3kRplu3ucOEJIRR/w=";
   };
 
   nativeBuildInputs = [
@@ -80,6 +80,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   preBuild = ''
+    export PRISMA_CLIENT_ENGINE_TYPE='binary'
     export PRISMA_QUERY_ENGINE_LIBRARY="${prisma-engines}/lib/libquery_engine.node"
     export PRISMA_QUERY_ENGINE_BINARY="${prisma-engines}/bin/query-engine"
     export PRISMA_SCHEMA_ENGINE_BINARY="${prisma-engines}/bin/schema-engine"
@@ -94,7 +95,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    rm -r node_modules/bcrypt node_modules/.prisma/client/libquery_engine.node node_modules/@next/swc-*
+    rm -r node_modules/bcrypt node_modules/@next/swc-*
     ln -s ${bcrypt}/lib/node_modules/bcrypt node_modules/
     mkdir -p $out/share/linkwarden/.next $out/bin
     cp -r * .next $out/share/linkwarden/
@@ -115,6 +116,7 @@ stdenvNoCC.mkDerivation rec {
           openssl
         ]
       }" \
+      --set-default PRISMA_CLIENT_ENGINE_TYPE 'binary' \
       --set-default PRISMA_QUERY_ENGINE_LIBRARY "${prisma-engines}/lib/libquery_engine.node" \
       --set-default PRISMA_QUERY_ENGINE_BINARY "${prisma-engines}/bin/query-engine" \
       --set-default PRISMA_SCHEMA_ENGINE_BINARY "${prisma-engines}/bin/schema-engine" \
@@ -141,4 +143,3 @@ stdenvNoCC.mkDerivation rec {
   };
 
 }
-

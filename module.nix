@@ -533,6 +533,20 @@
         };
       };
 
+      joplin = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "enable Joplin notes service";
+        };
+
+        public = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Open to public on WAN port";
+        };
+      };
+
       kanidm = {
         enable = lib.mkOption {
           type = lib.types.bool;
@@ -754,6 +768,20 @@
             type = lib.types.str;
             default = "";
             description = "Official project name of application";
+          };
+
+          release-tracking = {
+            type = lib.mkOption {
+              type = lib.types.str;
+              default = "github";
+              description = "Project release service type";
+            };
+
+            project = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = "Project path, e.g. <owner>/<repo> for github";
+            };
           };
 
           systemd-service-names = lib.mkOption {

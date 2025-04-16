@@ -19,7 +19,7 @@
 ## update person set "thumbnailPath" = replace("thumbnailPath", '/var/lib/immich', '/usr/src/app/upload');
 { config, lib, pkgs, ... }:
 let
-  version = "v1.126.1";
+  version = "v1.131.3";
   version-redis = "6.2-alpine";
   containerDataPath = "/var/lib/immich";
   # Seems to be hard coded in docker container, so can't override
@@ -195,6 +195,10 @@ in
       label = "immich";
       name = "Photos";
       project-name = "Immich";
+      release-tracking = {
+        type = "github";
+        project = "immich-app/immich";
+      };
       systemd-service-names = [
         "podman-immich-server"
         "podman-immich-machine-learning"
