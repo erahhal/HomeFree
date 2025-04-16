@@ -66,6 +66,11 @@ in
         port = port;
         public = config.homefree.services.joplin.public;
       };
+      backup = {
+        postgres-databases = [
+          database-name
+        ];
+      };
     }
   ] else [];
 }

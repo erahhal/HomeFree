@@ -219,7 +219,7 @@ in
           containerDataPath
         ];
         postgres-databases = [
-          "immich"
+          database-name
         ];
       };
     }
