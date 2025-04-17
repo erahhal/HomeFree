@@ -17,7 +17,7 @@ in
     zitadel = {
       image = "ghcr.io/zitadel/zitadel:${version}";
 
-      autoStart  = true;
+      autoStart = true;
 
       extraOptions = [
         "--pull=always"

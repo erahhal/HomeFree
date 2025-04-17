@@ -592,6 +592,12 @@
           description = "Location of music media";
         };
 
+        downloads-path = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          description = "Location of downloads";
+        };
+
         enable-backup-media = lib.mkOption {
           type = lib.types.bool;
           default = true;
@@ -674,6 +680,32 @@
             type = lib.types.path;
             description = "Location of Nextcloud secrets file. Should not be a file included in your source repo.";
           };
+        };
+      };
+
+      nzbget = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "enable NZBGet downloader";
+        };
+
+        public = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Open to public on WAN port";
+        };
+
+        downloads-path = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          description = "Location of downloads";
+        };
+
+        enable-backup-media = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Whether to backup media";
         };
       };
 

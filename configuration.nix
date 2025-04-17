@@ -41,6 +41,7 @@
     ./services/mqtt.nix
     ./services/mysql.nix
     ./services/nextcloud.nix
+    ./services/nzbget-podman.nix
     ./services/ollama.nix
     ./services/postgres.nix
     # ./services/radicale.nix

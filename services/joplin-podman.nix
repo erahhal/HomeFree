@@ -22,7 +22,7 @@ in
     joplin = {
       image = "joplin/server:${version}";
 
-      autoStart  = true;
+      autoStart = true;
 
       extraOptions = [
         "--pull=always"

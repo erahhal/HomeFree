@@ -3,10 +3,11 @@ let
   version = "2.10.3";
   port = 8976;
   containerDataPath = "/var/lib/lidarr";
+  configPath = "${containerDataPath}/config";
   mediaPath = config.homefree.services.lidarr.media-path or "${containerDataPath}/media";
   downloadsPath = config.homefree.services.lidarr.downloads-path or "${containerDataPath}/downloads";
   preStart = ''
-    mkdir -p ${containerDataPath}/config
+    mkdir -p ${configPath}
     mkdir -p ${mediaPath}
     mkdir -p ${downloadsPath}
   '';
@@ -22,7 +23,7 @@ in
     lidarr = {
       image = "lscr.io/linuxserver/lidarr:${version}";
 
-      autoStart  = true;
+      autoStart = true;
 
       extraOptions = [
         "--pull=always"
@@ -34,7 +35,7 @@ in
 
       volumes = [
         "/etc/localtime:/etc/localtime:ro"
-        "${containerDataPath}:/config"
+        "${configPath}:/config"
         "${mediaPath}:/music"
         "${downloadsPath}:/downloads"
       ];
@@ -67,6 +68,7 @@ in
       backup = if config.homefree.services.lidarr.enable-backup-media then {
         paths = [
           mediaPath
+          downloadsPath
         ];
       } else {};
     }

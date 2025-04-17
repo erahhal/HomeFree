@@ -94,7 +94,7 @@ in
     immich-server = {
       image = "ghcr.io/immich-app/immich-server:${version}";
 
-      autoStart  = true;
+      autoStart = true;
 
       extraOptions = [
         "--pull=always"
@@ -135,7 +135,7 @@ in
     immich-machine-learning = {
       image = "ghcr.io/immich-app/immich-machine-learning:${version}";
 
-      autoStart  = true;
+      autoStart = true;
 
       extraOptions = [
         "--pull=always"
@@ -167,7 +167,7 @@ in
     immich-redis = {
       image = "redis:${version-redis}";
 
-      autoStart  = true;
+      autoStart = true;
 
       extraOptions = [
         "--pull=always"

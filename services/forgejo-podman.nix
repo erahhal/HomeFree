@@ -19,7 +19,7 @@ in
     forgejo = {
       image = "codeberg.org/forgejo/forgejo:${version}";
 
-      autoStart  = true;
+      autoStart = true;
 
       extraOptions = [
         "--pull=always"

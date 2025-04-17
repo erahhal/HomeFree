@@ -137,7 +137,7 @@ in
     frigate = {
       image = "ghcr.io/blakeblackshear/frigate:${version}";
 
-      autoStart  = true;
+      autoStart = true;
 
       extraOptions = [
         "--pull=always"
