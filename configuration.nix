@@ -35,6 +35,7 @@
     ./services/joplin-podman.nix
     ./services/kanidm.nix
     ./services/landing-page
+    ./services/lidarr-podman.nix
     ./services/linkwarden.nix
     ./services/matrix.nix
     ./services/mqtt.nix

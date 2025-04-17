@@ -369,6 +369,18 @@
           description = "Open to public on WAN port";
         };
 
+        media-path = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          description = "Location to save recording";
+        };
+
+        enable-backup-media = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Whether to backup records";
+        };
+
         cameras = lib.mkOption {
           description = "list of cameras";
           type = with lib.types; listOf (submodule {
@@ -558,6 +570,32 @@
           type = lib.types.bool;
           default = false;
           description = "Open to public on WAN port";
+        };
+      };
+
+      lidarr = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "enable Lidarr music management service";
+        };
+
+        public = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Open to public on WAN port";
+        };
+
+        media-path = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          description = "Location of music media";
+        };
+
+        enable-backup-media = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Whether to backup media";
         };
       };
 

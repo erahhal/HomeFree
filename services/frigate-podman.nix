@@ -3,8 +3,7 @@ let
   version = "0.15.0";
   configVersion = "0.15-1";
   containerDataPath = "/var/lib/frigate";
-  # mediaPath = "${containerDataPath}/media";
-  mediaPath = "/mnt/ellis/nvr";
+  mediaPath = config.homefree.services.frigate.media-path or "${containerDataPath}/media";
   cameras-filtered = lib.filter (camera: camera.enable == true) config.homefree.services.frigate.cameras;
 
   frigate-config = {
@@ -205,6 +204,11 @@ in
         ssl-no-verify = true;
         public = config.homefree.services.frigate.public;
       };
+      backup = if config.homefree.services.frigate.enable-backup-media then {
+        paths = [
+          mediaPath
+        ];
+      } else {};
     }
   ] else [];
 }

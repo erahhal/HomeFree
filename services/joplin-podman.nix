@@ -44,14 +44,14 @@ in
         POSTGRES_USER = database-user;
         POSTGRES_PORT = "5432";
         POSTGRES_HOST = "/run/postgresql";
-        APP_BASE_URL = "https://notes.${config.homefree.system.domain}";
+        APP_BASE_URL = "https://joplin.${config.homefree.system.domain}";
       };
     };
   } else {};
 
   homefree.service-config = if config.homefree.services.joplin.enable == true then [
     {
-      label = "notes";
+      label = "joplin";
       name = "Joplin Notes";
       project-name = "Joplin";
       systemd-service-names = [
@@ -59,7 +59,7 @@ in
       ];
       reverse-proxy = {
         enable = true;
-        subdomains = [ "notes" "joplin" ];
+        subdomains = [ "joplin" ];
         http-domains = [ "homefree.lan" config.homefree.system.localDomain ];
         https-domains = [ config.homefree.system.domain ];
         host = "10.0.0.1";
