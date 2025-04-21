@@ -227,7 +227,17 @@
   # Base Packages
   # --------------------------------------------------------------------------------------
 
-  nixvim-config.enable = true;
+  nixvim-config = {
+    enable = true;
+    startify-header = let header-space = "    "; in [
+     ''${header-space}  ___ ___                      ___________''
+     ''${header-space} /   |   \  ____   _____   ____\_   _____/______   ____   ____''
+     ''${header-space}/    ~    \/  _ \ /     \_/ __ \|    __) \_  __ \_/ __ \_/ __ \''
+     ''${header-space}\    Y    (  <_> )  Y Y  \  ___/|     \   |  | \/\  ___/\  ___/''
+     ''${header-space} \___|_  / \____/|__|_|  /\___  >___  /   |__|    \___  >\___  >''
+     ''${header-space}       \/              \/     \/    \/                \/     \/''
+    ];
+  };
 
   programs.nix-ld.enable = true;
 
