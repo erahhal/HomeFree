@@ -467,8 +467,10 @@
         stun-port = lib.mkOption {
           type = lib.types.int;
           description = "DERP STUN relay port";
+          ## Now using Unifi in a docker container to block STUN port conflict
+          default = 3478;
           ## Non-standard port to avoid conflict with Unifi Controller STUN listener
-          default = 3578;
+          # default = 3578;
         };
 
         secrets = {
@@ -623,6 +625,20 @@
             type = lib.types.path;
             description = "Location of Linkwarden environment variables file. Should not be a file included in your source repo.";
           };
+        };
+      };
+
+      logseq = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "enable Logseq knowledge management service";
+        };
+
+        public = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Open to public on WAN port";
         };
       };
 
@@ -987,6 +1003,26 @@
           };
         };
       });
+    };
+
+    docker-io-auth = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Enable docker.io auth";
+      };
+
+      username = lib.mkOption {
+        type = lib.types.str;
+        description = "docker.io username";
+      };
+
+      secrets = {
+        password = lib.mkOption {
+          type = lib.types.path;
+          description = "Location of docker.io password file Should not be a file included in your source repo.";
+        };
+      };
     };
 
     admin-page = {

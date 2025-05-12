@@ -7,52 +7,64 @@
     ./profiles/config-editor.nix
     ./profiles/git.nix
     ./profiles/hardware-configuration.nix
-    ./profiles/podman.nix
     ./profiles/router.nix
     ./profiles/traffic-control.nix
+    ./profiles/virtualisation.nix
 
-    ./services/adguardhome.nix
+    ## System services
+    ## @TODO: Evaluate if any can be moved to podman
     ./services/admin
-    ./services/authentik.nix
     ./services/backup.nix
-    ./services/baikal.nix
     ./services/caddy.nix
-    ./services/cryptpad.nix
     ./services/ddclient.nix
     ./services/dnsmasq.nix
-    # ./services/forgejo.nix
-    ./services/forgejo-podman.nix
-    ./services/frigate-podman.nix
-    ./services/gitea.nix
-    ./services/grocy.nix
-    # ./services/home-assistant
-    ./services/home-assistant-podman.nix
-    ./services/homebox.nix
     ./services/headscale.nix
-    # ./services/immich.nix
-    ./services/immich-podman.nix
-    ./services/jellyfin.nix
-    ./services/joplin-podman.nix
-    ./services/kanidm.nix
     ./services/landing-page
-    ./services/lidarr-podman.nix
-    ./services/linkwarden.nix
-    ./services/matrix.nix
+    ./services/unbound.nix
+
+    ## Shared services
+    ## @TODO: Evaluate if any can be moved to podman
     ./services/mqtt.nix
     ./services/mysql.nix
-    ./services/nextcloud.nix
-    ./services/nzbget-podman.nix
-    ./services/ollama.nix
     ./services/postgres.nix
-    # ./services/radicale.nix
-    ./services/radicale-container.nix
-    ./services/snipe-it.nix
-    ./services/unbound.nix
-    # ./services/unifi.nix
-    ./services/unifi-container.nix
-    # ./services/vaultwarden.nix
-    ./services/vaultwarden-container.nix
+
+    ## Podman-based services
+    ./services/forgejo-podman.nix
+    ./services/frigate-podman.nix
+    ./services/home-assistant-podman.nix
+    ./services/joplin-podman.nix
+    ./services/immich-podman.nix
+    ./services/logseq-podman.nix
+    ./services/lidarr-podman.nix
+    # ./services/mongo-podman.nix
+    ./services/nzbget-podman.nix
+    ./services/radicale-podman.nix
+    ./services/unifi-podman.nix
     ./services/zitadel-podman.nix
+
+    ## @TODO: Move to podman
+    ## Otherwise entire system needs to be upgraded to upgrade individual app
+    ./services/adguardhome.nix
+    ./services/authentik.nix
+    ./services/baikal.nix
+    ./services/cryptpad.nix
+    ./services/gitea.nix
+    ./services/grocy.nix
+    ./services/homebox.nix
+    ./services/jellyfin.nix
+    ./services/kanidm.nix
+    ./services/linkwarden.nix
+    ./services/matrix.nix
+    ./services/nextcloud.nix
+    ./services/ollama.nix
+    ./services/snipe-it.nix
+
+    ## @TODO: replace with podman
+    ## containers introduce very long build times
+    ./services/vaultwarden-container.nix
+
+    ## Temporary fixes
+    ./provisional/hypothesis.nix
   ];
 
   # --------------------------------------------------------------------------------------

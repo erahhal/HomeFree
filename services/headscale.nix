@@ -75,6 +75,8 @@ in
         v6 = "fd7a:115c:a1e0::/48";
       };
       derp = {
+        ## Frequency to update DERP maps
+        update_frequency = "5m";
         server = {
           enabled = true;
           region_id = 999;
