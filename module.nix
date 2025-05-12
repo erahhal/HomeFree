@@ -957,6 +957,12 @@
               description = "Whether to expose on WAN interface";
             };
 
+            no-internal-ip = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = "Don't map hostname to internal ip when on LAN";
+            };
+
             ssl = lib.mkOption {
               type = lib.types.bool;
               default = false;

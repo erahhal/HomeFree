@@ -42,6 +42,7 @@ in
       # policy.path = policy;
       dns = {
         magic_dns = true;
+        # override_local_dns = true;
         ## Must be different from server domain
         base_domain = "homefree.vpn";
         # search_domains = search-domains;
@@ -59,6 +60,7 @@ in
           ## Secondary backup
           "1.1.1.1"
         ];
+        ## Needed to resolve internal domains
         nameservers.split = lib.listToAttrs (lib.map (domain:
           {
             name = domain;
@@ -76,6 +78,7 @@ in
       };
       derp = {
         ## Frequency to update DERP maps
+        auto_update_enable = true;
         update_frequency = "5m";
         server = {
           enabled = true;
@@ -86,7 +89,8 @@ in
           automatically_add_embedded_derp_region = true;
         };
         ## Disable default DERP pointing at tailscale corporate servers
-        urls = [ ];
+        urls = [];
+        paths = [];
       };
     };
   };
@@ -205,6 +209,9 @@ in
         host = "10.0.0.1";
         port = config.services.headscale.port;
         public = config.homefree.services.headscale.public;
+        ## Always use public IP, so that headscale.<base domain> IP always resolves to the same thing,
+        ## avoiding client errors about the relay server not being available.
+        no-internal-ip = true;
         extraCaddyConfig = ''
           reverse_proxy /admin* http://10.0.0.1:3009
         '';
