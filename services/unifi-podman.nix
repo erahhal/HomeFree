@@ -141,12 +141,16 @@ in
   } else {};
 
   systemd.services.podman-unifi-db = {
+    after = [ "dns-ready.target" ];
+    wants = [ "dns-ready.target" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "unifi-db-prestart" mongo-preStart}" ];
     };
   };
 
   systemd.services.podman-unifi = {
+    after = [ "dns-ready.target" ];
+    wants = [ "dns-ready.target" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "unifi-prestart" preStart}" ];
     };

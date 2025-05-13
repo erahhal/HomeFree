@@ -36,6 +36,8 @@ in
   } else {};
 
   systemd.services.podman-baikal = {
+    after = [ "dns-ready.target" ];
+    wants = [ "dns-ready.target" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "baikal-prestart" preStart}" ];
     };

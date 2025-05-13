@@ -87,6 +87,8 @@ in
   } else {};
 
   systemd.services.podman-homeassistant = {
+    after = [ "dns-ready.target" ];
+    wants = [ "dns-ready.target" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "homeassistant-prestart" preStart}" ];
     };

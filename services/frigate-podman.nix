@@ -172,6 +172,8 @@ in
   } else {};
 
   systemd.services.podman-frigate = {
+    after = [ "dns-ready.target" ];
+    wants = [ "dns-ready.target" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "frigate-prestart" preStart}" ];
     };

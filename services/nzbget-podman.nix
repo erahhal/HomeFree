@@ -11,12 +11,6 @@ let
   '';
 in
 {
-  systemd.services.podman-nzbget = {
-    serviceConfig = {
-      ExecStartPre = [ "!${pkgs.writeShellScript "nzbget-prestart" preStart}" ];
-    };
-  };
-
   virtualisation.oci-containers.containers = if config.homefree.services.nzbget.enable == true then {
     nzbget = {
       image = "lscr.io/linuxserver/nzbget:${version}";
@@ -46,6 +40,14 @@ in
       };
     };
   } else {};
+
+  systemd.services.podman-nzbget = {
+    after = [ "dns-ready.target" ];
+    wants = [ "dns-ready.target" ];
+    serviceConfig = {
+      ExecStartPre = [ "!${pkgs.writeShellScript "nzbget-prestart" preStart}" ];
+    };
+  };
 
   homefree.service-config = if config.homefree.services.nzbget.enable == true then [
     {

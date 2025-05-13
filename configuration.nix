@@ -29,16 +29,21 @@
     ./services/postgres.nix
 
     ## Podman-based services
+    ./services/baikal-podman.nix
     ./services/forgejo-podman.nix
     ./services/frigate-podman.nix
+    ./services/grocy-podman.nix
     ./services/home-assistant-podman.nix
     ./services/joplin-podman.nix
+    ./services/kanidm-podman.nix
     ./services/immich-podman.nix
     ./services/logseq-podman.nix
     ./services/lidarr-podman.nix
     # ./services/mongo-podman.nix
     ./services/nzbget-podman.nix
+    ./services/ollama-podman.nix
     ./services/radicale-podman.nix
+    ./services/snipe-it-podman.nix
     ./services/unifi-podman.nix
     ./services/zitadel-podman.nix
 
@@ -46,18 +51,13 @@
     ## Otherwise entire system needs to be upgraded to upgrade individual app
     ./services/adguardhome.nix
     ./services/authentik.nix
-    ./services/baikal.nix
     ./services/cryptpad.nix
     ./services/gitea.nix
-    ./services/grocy.nix
     ./services/homebox.nix
     ./services/jellyfin.nix
-    ./services/kanidm.nix
     ./services/linkwarden.nix
     ./services/matrix.nix
     ./services/nextcloud.nix
-    ./services/ollama.nix
-    ./services/snipe-it.nix
 
     ## @TODO: replace with podman
     ## containers introduce very long build times

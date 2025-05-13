@@ -5,15 +5,8 @@ let
 in
 {
   systemd.services.caddy = {
-    wants = [ "unbound.service" ]
-    ++ (if config.homefree.services.adguard.enable == true then [ "adguardhome.service" ] else []);
-    after = [ "network.target" "network-online.target" "unbound.service" ]
-    ++ (if config.homefree.services.adguard.enable == true then [ "adguardhome.service" ] else []);
-    requires = [ "network-online.target" "unbound.service" ];
-    serviceConfig = {
-      ## make sure unbound and adguard are fully up before starting
-      ExecStartPre = "${pkgs.coreutils}/bin/sleep 3";
-    };
+    wants = [ "dns-ready.target" ];
+    after = [ "dns-ready.target" ];
   };
 
   ## Restart Unbound DNS with caddy changes

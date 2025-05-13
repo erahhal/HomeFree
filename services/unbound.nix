@@ -28,9 +28,35 @@ in
   ## For a proper authoritative DNS, look at NSD.
 
   systemd.services.unbound = {
+    after = [ "nftables.service" ];
+    wants = [ "nftables.service" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "unbound-prestart" preStart}" ];
     };
+  };
+
+  systemd.services.dns-ready-delay = {
+    description = "Wait 10 seconds after DNS services are ready";
+    bindsTo = [ "unbound.service" ]
+    ++ (if config.homefree.services.adguard.enable == true then [ "adguardhome.service" ] else []);
+    after = [ "network.target" "network-online.target" "unbound.service" ]
+    ++ (if config.homefree.services.adguard.enable == true then [ "adguardhome.service" ] else []);
+    requires = [ "network-online.target" "unbound.service" ]
+    ++ (if config.homefree.services.adguard.enable == true then [ "adguardhome.service" ] else []);
+
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      # Sleep for 10 seconds
+      ExecStart = "${pkgs.coreutils}/bin/sleep 6";
+    };
+  };
+
+  systemd.targets.dns-ready = {
+    description = "DNS services are ready with delay";
+    bindsTo = [ "dns-ready-delay.service" ];
+    after = [ "dns-ready-delay.service" ];
+    wantedBy = [ "multi-user.target" ];
   };
 
   services.unbound = {

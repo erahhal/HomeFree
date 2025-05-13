@@ -240,6 +240,8 @@ in
   } else {};
 
   systemd.services.podman-snipe-it = {
+    after = [ "dns-ready.target" ];
+    wants = [ "dns-ready.target" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "snipe-it-prestart" preStart}" ];
     };

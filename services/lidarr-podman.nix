@@ -13,12 +13,6 @@ let
   '';
 in
 {
-  systemd.services.podman-lidarr = {
-    serviceConfig = {
-      ExecStartPre = [ "!${pkgs.writeShellScript "lidarr-prestart" preStart}" ];
-    };
-  };
-
   virtualisation.oci-containers.containers = if config.homefree.services.lidarr.enable == true then {
     lidarr = {
       image = "lscr.io/linuxserver/lidarr:${version}";
@@ -47,6 +41,14 @@ in
       };
     };
   } else {};
+
+  systemd.services.podman-lidarr = {
+    after = [ "dns-ready.target" ];
+    wants = [ "dns-ready.target" ];
+    serviceConfig = {
+      ExecStartPre = [ "!${pkgs.writeShellScript "lidarr-prestart" preStart}" ];
+    };
+  };
 
   homefree.service-config = if config.homefree.services.lidarr.enable == true then [
     {

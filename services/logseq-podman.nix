@@ -28,6 +28,11 @@ in
     };
   } else {};
 
+  systemd.services.podman-logseq = {
+    after = [ "dns-ready.target" ];
+    wants = [ "dns-ready.target" ];
+  };
+
   homefree.service-config = if config.homefree.services.logseq.enable == true then [
     {
       label = "logseq";

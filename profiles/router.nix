@@ -234,10 +234,6 @@ in
             iifname { "podman0" } oifname { "${wan-interface}" } accept comment "Allow trusted podman to WAN"
             iifname { "${wan-interface}" } oifname { "podman0" } ct state established, related accept comment "Allow established back to podman"
 
-            ## WAN-podman - Needed for SSH to git/forgejo
-            iifname { "${wan-interface}" } oifname { "podman0" } accept comment "Allow trusted WAN to podman"
-            iifname { "podman0" } oifname {  "${wan-interface}" } ct state established, related accept comment "Allow established back to LAN"
-
             ## @TODO: Confirm which, if any, of these are needed.
 
             ## Headscale-WAN

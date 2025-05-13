@@ -216,6 +216,8 @@ in
   } else {};
 
   systemd.services.podman-kanidm = {
+    after = [ "dns-ready.target" ];
+    wants = [ "dns-ready.target" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "kanidm-prestart" preStart}" ];
     };

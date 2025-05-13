@@ -65,6 +65,8 @@ in
   } else {};
 
   systemd.services.podman-zitadel = {
+    after = [ "dns-ready.target" ];
+    wants = [ "dns-ready.target" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "zitadel-prestart" preStart}" ];
     };

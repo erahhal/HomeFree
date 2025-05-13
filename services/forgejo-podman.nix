@@ -78,6 +78,8 @@ in
   } else {};
 
   systemd.services.podman-forgejo = {
+    after = [ "dns-ready.target" ];
+    wants = [ "dns-ready.target" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "forgejo-prestart" preStart}" ];
     };

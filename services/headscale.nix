@@ -183,6 +183,8 @@ in
   } else {};
 
   systemd.services.podman-headplane = {
+    after = [ "dns-ready.target" ];
+    wants = [ "dns-ready.target" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "headplane-prestart" headplane-preStart}" ];
     };

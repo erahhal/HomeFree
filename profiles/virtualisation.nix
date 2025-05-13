@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 let
   username = config.homefree.docker-io-auth.username;
   passwordFile = config.homefree.docker-io-auth.secrets.password;

@@ -39,6 +39,8 @@ in
   } else {};
 
   systemd.services.podman-grocy = {
+    after = [ "dns-ready.target" ];
+    wants = [ "dns-ready.target" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "grocy-prestart" preStart}" ];
     };

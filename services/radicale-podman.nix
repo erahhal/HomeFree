@@ -9,12 +9,6 @@ let
   '';
 in
 {
-  systemd.services.podman-radicale = {
-    serviceConfig = {
-      ExecStartPre = [ "!${pkgs.writeShellScript "radicale-prestart" preStart}" ];
-    };
-  };
-
   virtualisation.oci-containers.containers = if config.homefree.services.radicale.enable == true then {
     radicale = {
       image = "tomsquest/docker-radicale:${version}";
@@ -39,6 +33,14 @@ in
       };
     };
   } else {};
+
+  systemd.services.podman-radicale = {
+    after = [ "dns-ready.target" ];
+    wants = [ "dns-ready.target" ];
+    serviceConfig = {
+      ExecStartPre = [ "!${pkgs.writeShellScript "radicale-prestart" preStart}" ];
+    };
+  };
 
   homefree.service-config = if config.homefree.services.radicale.enable == true then [
     {

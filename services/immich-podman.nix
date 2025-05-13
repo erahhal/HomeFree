@@ -19,7 +19,7 @@
 ## update person set "thumbnailPath" = replace("thumbnailPath", '/var/lib/immich', '/usr/src/app/upload');
 { config, lib, pkgs, ... }:
 let
-  version = "v1.131.3";
+  version = "v1.132.3";
   version-redis = "6.2-alpine";
   containerDataPath = "/var/lib/immich";
   # Seems to be hard coded in docker container, so can't override
@@ -185,9 +185,21 @@ in
   } else {};
 
   systemd.services.podman-immich-server = {
+    after = [ "dns-ready.target" ];
+    wants = [ "dns-ready.target" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "imimich-server-prestart" preStart}" ];
     };
+  };
+
+  systemd.services.podman-immich-machine-learning = {
+    after = [ "dns-ready.target" ];
+    wants = [ "dns-ready.target" ];
+  };
+
+  systemd.services.podman-immich-redis = {
+    after = [ "dns-ready.target" ];
+    wants = [ "dns-ready.target" ];
   };
 
   homefree.service-config = if config.homefree.services.immich.enable == true then [

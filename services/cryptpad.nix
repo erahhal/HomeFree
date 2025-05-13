@@ -1,5 +1,10 @@
 { config, ... }:
 {
+  systemd.services.cryptpad = {
+    after = [ "dns-ready.target" ];
+    wants = [ "dns-ready.target" ];
+  };
+
   services.cryptpad = {
     enable = config.homefree.services.cryptpad.enable;
     configureNginx = false;

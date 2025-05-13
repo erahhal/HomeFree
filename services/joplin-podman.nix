@@ -49,6 +49,11 @@ in
     };
   } else {};
 
+  systemd.services.podman-joplin = {
+    after = [ "dns-ready.target" ];
+    wants = [ "dns-ready.target" ];
+  };
+
   homefree.service-config = if config.homefree.services.joplin.enable == true then [
     {
       label = "joplin";
