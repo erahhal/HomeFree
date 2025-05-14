@@ -50,8 +50,8 @@ in
   } else {};
 
   systemd.services.podman-joplin = {
-    after = [ "dns-ready.target" ];
-    wants = [ "dns-ready.target" ];
+    after = [ "dns-ready.service" ];
+    requires = [ "dns-ready.service" ];
   };
 
   homefree.service-config = if config.homefree.services.joplin.enable == true then [

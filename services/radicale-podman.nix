@@ -35,8 +35,8 @@ in
   } else {};
 
   systemd.services.podman-radicale = {
-    after = [ "dns-ready.target" ];
-    wants = [ "dns-ready.target" ];
+    after = [ "dns-ready.service" ];
+    requires = [ "dns-ready.service" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "radicale-prestart" preStart}" ];
     };

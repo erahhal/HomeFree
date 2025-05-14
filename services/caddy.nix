@@ -5,8 +5,8 @@ let
 in
 {
   systemd.services.caddy = {
-    wants = [ "dns-ready.target" ];
-    after = [ "dns-ready.target" ];
+    wants = [ "dns-ready.service" ];
+    requires = [ "dns-ready.service" ];
   };
 
   ## Restart Unbound DNS with caddy changes

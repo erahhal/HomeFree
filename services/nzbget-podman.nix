@@ -42,8 +42,8 @@ in
   } else {};
 
   systemd.services.podman-nzbget = {
-    after = [ "dns-ready.target" ];
-    wants = [ "dns-ready.target" ];
+    after = [ "dns-ready.service" ];
+    requires = [ "dns-ready.service" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "nzbget-prestart" preStart}" ];
     };

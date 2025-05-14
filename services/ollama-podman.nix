@@ -61,8 +61,8 @@ in
   } else {};
 
   systemd.services.podman-ollama-webui = {
-    after = [ "dns-ready.target" ];
-    wants = [ "dns-ready.target" ];
+    after = [ "dns-ready.service" ];
+    requires = [ "dns-ready.service" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "ollama-webui-prestart" preStart}" ];
     };

@@ -35,28 +35,26 @@ in
     };
   };
 
-  systemd.services.dns-ready-delay = {
-    description = "Wait 10 seconds after DNS services are ready";
-    bindsTo = [ "unbound.service" ]
-    ++ (if config.homefree.services.adguard.enable == true then [ "adguardhome.service" ] else []);
+  systemd.services.dns-ready = {
+    description = "Wait for DNS services to be ready";
+    # bindsTo = [ "unbound.service" ]
+    # ++ (if config.homefree.services.adguard.enable == true then [ "adguardhome.service" ] else []);
+    # after = [ "network.target" "network-online.target" "unbound.service" ]
+    # ++ (if config.homefree.services.adguard.enable == true then [ "adguardhome.service" ] else []);
+    # requires = [ "network-online.target" "unbound.service" ]
+    # ++ (if config.homefree.services.adguard.enable == true then [ "adguardhome.service" ] else []);
     after = [ "network.target" "network-online.target" "unbound.service" ]
     ++ (if config.homefree.services.adguard.enable == true then [ "adguardhome.service" ] else []);
-    requires = [ "network-online.target" "unbound.service" ]
+    wants = [ "network-online.target" "unbound.service" ]
     ++ (if config.homefree.services.adguard.enable == true then [ "adguardhome.service" ] else []);
+    wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
       Type = "oneshot";
+      ExecStart = "${pkgs.bash}/bin/bash -c 'until ${pkgs.dnsutils}/bin/dig +short ${config.homefree.system.domain} >/dev/null 2>&1; do ${pkgs.coreutils}/bin/sleep 1; done'";
       RemainAfterExit = true;
-      # Sleep for 10 seconds
-      ExecStart = "${pkgs.coreutils}/bin/sleep 6";
+      TimeoutStartSec = 60;
     };
-  };
-
-  systemd.targets.dns-ready = {
-    description = "DNS services are ready with delay";
-    bindsTo = [ "dns-ready-delay.service" ];
-    after = [ "dns-ready-delay.service" ];
-    wantedBy = [ "multi-user.target" ];
   };
 
   services.unbound = {

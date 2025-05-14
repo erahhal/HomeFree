@@ -185,21 +185,21 @@ in
   } else {};
 
   systemd.services.podman-immich-server = {
-    after = [ "dns-ready.target" ];
-    wants = [ "dns-ready.target" ];
+    after = [ "dns-ready.service" ];
+    requires = [ "dns-ready.service" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "imimich-server-prestart" preStart}" ];
     };
   };
 
   systemd.services.podman-immich-machine-learning = {
-    after = [ "dns-ready.target" ];
-    wants = [ "dns-ready.target" ];
+    after = [ "dns-ready.service" ];
+    requires = [ "dns-ready.service" ];
   };
 
   systemd.services.podman-immich-redis = {
-    after = [ "dns-ready.target" ];
-    wants = [ "dns-ready.target" ];
+    after = [ "dns-ready.service" ];
+    requires = [ "dns-ready.service" ];
   };
 
   homefree.service-config = if config.homefree.services.immich.enable == true then [

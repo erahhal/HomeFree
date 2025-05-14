@@ -1,8 +1,8 @@
 { config, ... }:
 {
   systemd.services.cryptpad = {
-    after = [ "dns-ready.target" ];
-    wants = [ "dns-ready.target" ];
+    after = [ "dns-ready.service" ];
+    requires =[ "dns-ready.service" ];
   };
 
   services.cryptpad = {

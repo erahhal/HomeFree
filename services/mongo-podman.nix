@@ -37,8 +37,8 @@ in
   };
 
   systemd.services.podman-mongo = {
-    after = [ "dns-ready.target" ];
-    wants = [ "dns-ready.target" ];
+    after = [ "dns-ready.service" ];
+    requires = [ "dns-ready.service" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "mongo-prestart" preStart}" ];
     };
