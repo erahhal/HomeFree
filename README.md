@@ -22,6 +22,16 @@ Configure system by setting up values as defined in the [HomeFree module](./modu
   * Make sure to disable all packet filters on "Package Filter" tab
   * Absolutely make sure to disable all settings on "Firewall Advanced" tab
 
+### Intel NUC
+
+* Prevent hangs on boot due to alerts (e.g. if no monitor attached)
+  * F2 to enter BIOS
+  * Select "Boot" tab
+  * Select "Boot Display Configuration"
+  * Enable "Suppress Alert Messages at Boot"
+* Enable headless GPU
+  * Plug in a dummy HDMI dongle
+
 ## Initializing Authentik
 
 Browse to:
