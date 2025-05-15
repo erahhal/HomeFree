@@ -4,6 +4,11 @@
   # Ad blocking
   #-----------------------------------------------------------------------------------------------------
 
+  systemd.services.adguardhome = {
+    after = [ "unbound.service" ];
+    wants = [ "unbound.service" ];
+  };
+
   services.adguardhome = {
     enable = config.homefree.services.adguard.enable;
     openFirewall = true;

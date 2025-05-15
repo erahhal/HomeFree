@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 let
   proxiedHostConfig = lib.filter (service-config: service-config.reverse-proxy.enable == true) config.homefree.service-config;
   trimTrailingSlash = s: lib.head (lib.match "(.*[^/])[/]*" s);
@@ -7,6 +7,8 @@ in
   systemd.services.caddy = {
     wants = [ "dns-ready.service" ];
     requires = [ "dns-ready.service" ];
+    ## Restart Caddy with Unbound DNS changes
+    partOf = [ "unbound.service" ];
   };
 
   ## Restart Unbound DNS with caddy changes
@@ -62,9 +64,7 @@ in
           '' else "")
           + (if reverse-proxy-config.public == false then ''
             bind 10.0.0.1
-          '' else ''
-            bind 10.0.0.1 ${config.homefree.system.domain} ::
-          '')
+          '' else "")
           + (if reverse-proxy-config.subdir != null then ''
             rewrite / ${trimTrailingSlash reverse-proxy-config.subdir}{uri}
           '' else "")
@@ -131,16 +131,16 @@ in
               X-XSS-Protection "1; mode=block"
             }
           '' else (''
-            reverse_proxy ${if reverse-proxy-config.ssl == true then  "https" else "http"}://${reverse-proxy-config.host}:${toString reverse-proxy-config.port} {
+            reverse_proxy ${if reverse-proxy-config.ssl == true then "https" else "http"}://${reverse-proxy-config.host}:${toString reverse-proxy-config.port} {
           ''
           + (if reverse-proxy-config.ssl == true && reverse-proxy-config.ssl-no-verify then ''
-              transport http {
-                tls
-                tls_insecure_skip_verify
+            transport http {
+              tls
+              tls_insecure_skip_verify
               }
           '' else "")
           + (if reverse-proxy-config.basic-auth == true then ''
-              header_up X-remote-user {http.auth.user.id}
+            header_up X-remote-user {http.auth.user.id}
           '' else "")
           +
           ''
