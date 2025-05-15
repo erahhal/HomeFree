@@ -28,8 +28,8 @@ in
       ];
 
       volumes = [
-        "${containerDataPath}:/data"
         "/etc/localtime:/etc/localtime:ro"
+        "${containerDataPath}:/data"
       ];
 
       cmd = [

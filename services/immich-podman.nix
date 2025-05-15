@@ -105,8 +105,8 @@ in
       ];
 
       volumes = [
-        "${containerDataPath}:${uploadLocation}"
         "/etc/localtime:/etc/localtime:ro"
+        "${containerDataPath}:${uploadLocation}"
         "/run/postgresql:/run/postgresql"
       ];
 
@@ -148,9 +148,9 @@ in
       ];
 
       volumes = [
+        "/etc/localtime:/etc/localtime:ro"
         "${containerDataPath}:${uploadLocation}"
         "/var/cache/immich:/var/cache/immich"
-        "/etc/localtime:/etc/localtime:ro"
       ];
 
       environment = {

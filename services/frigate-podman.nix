@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 let
-  version = "0.15.0";
+  version = "0.15.1";
   configVersion = "0.15-1";
   containerDataPath = "/var/lib/frigate";
   mediaPath = config.homefree.services.frigate.media-path or "${containerDataPath}/media";
@@ -160,6 +160,7 @@ in
       ];
 
       volumes = [
+        "/etc/localtime:/etc/localtime:ro"
         "${containerDataPath}/config:/config"
         ## @TODO: make this configurable
         "${mediaPath}:/media/frigate"

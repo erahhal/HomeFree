@@ -25,6 +25,7 @@ in
       ];
 
       volumes = [
+        "/etc/localtime:/etc/localtime:ro"
         "${containerDataPath}/config:/var/www/baikal/config"
         "${containerDataPath}/Specific:/var/www/baikal/Specific"
       ];

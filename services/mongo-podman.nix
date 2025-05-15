@@ -25,8 +25,8 @@ in
     ];
 
     volumes = [
-      "${containerDataPath}:/data/db"
       "/etc/localtime:/etc/localtime:ro"
+      "${containerDataPath}:/data/db"
     ];
 
     environment = {

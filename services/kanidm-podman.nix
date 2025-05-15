@@ -206,6 +206,7 @@ in
       ];
 
       volumes = [
+        "/etc/localtime:/etc/localtime:ro"
         "${containerDataPath}:/data"
       ];
 

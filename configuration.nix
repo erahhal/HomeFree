@@ -30,6 +30,7 @@
 
     ## Podman-based services
     ./services/baikal-podman.nix
+    ./services/cryptpad-podman.nix
     ./services/forgejo-podman.nix
     ./services/frigate-podman.nix
     ./services/grocy-podman.nix
@@ -53,7 +54,6 @@
     ## Otherwise entire system needs to be upgraded to upgrade individual app
     ./services/adguardhome.nix
     ./services/authentik.nix
-    ./services/cryptpad.nix
     ./services/gitea.nix
     ./services/jellyfin.nix
     ./services/linkwarden.nix

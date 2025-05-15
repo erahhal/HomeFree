@@ -75,8 +75,8 @@ in
       ];
 
       volumes = [
-        "${containerDataPath}/config:/config"
         "/etc/localtime:/etc/localtime:ro"
+        "${containerDataPath}/config:/config"
         "/run/dbus:/run/dbus:ro"
       ];
 
