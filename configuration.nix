@@ -34,6 +34,7 @@
     ./services/frigate-podman.nix
     ./services/grocy-podman.nix
     ./services/home-assistant-podman.nix
+    ./services/homebox-podman.nix
     ./services/joplin-podman.nix
     ./services/kanidm-podman.nix
     ./services/immich-podman.nix
@@ -54,7 +55,6 @@
     ./services/authentik.nix
     ./services/cryptpad.nix
     ./services/gitea.nix
-    ./services/homebox.nix
     ./services/jellyfin.nix
     ./services/linkwarden.nix
     ./services/matrix.nix

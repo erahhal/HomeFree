@@ -294,6 +294,7 @@
     podman-tui
     powertop
     sops
+    sqlite
     sshpass
     steampipe
     tmux
