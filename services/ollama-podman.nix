@@ -24,7 +24,7 @@ in
     ];
   };
 
-  virtualisation.oci-containers.containers = if config.homefree.services.baikal.enable == true then {
+  virtualisation.oci-containers.containers = if config.homefree.services.ollama.enable == true then {
     ollama-webui = {
       image = "ghcr.io/open-webui/open-webui:main";
 

@@ -45,6 +45,7 @@
     ./services/radicale-podman.nix
     ./services/snipe-it-podman.nix
     ./services/unifi-podman.nix
+    ./services/vaultwarden-podman.nix
     ./services/zitadel-podman.nix
 
     ## @TODO: Move to podman
@@ -58,10 +59,6 @@
     ./services/linkwarden.nix
     ./services/matrix.nix
     ./services/nextcloud.nix
-
-    ## @TODO: replace with podman
-    ## containers introduce very long build times
-    ./services/vaultwarden-container.nix
 
     ## Temporary fixes
     ./provisional/hypothesis.nix

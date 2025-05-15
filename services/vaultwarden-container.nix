@@ -70,7 +70,7 @@ in
       };
       backup = {
         paths = [
-          "/var/lib/nixos-containers${backup-path}"
+          "/var/lib/nixos-containers/vaultwarden${backup-path}"
         ];
       };
     }
