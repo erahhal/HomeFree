@@ -165,8 +165,8 @@ in
               ## See: https://caddy.community/t/caddy-not-handling-requests-when-listening-on-all-interfaces-serving-a-hostname-mapped-to-an-internal-ip/26384
               # (lib.filter (proxy-config: proxy-config.public == false) proxiedHostConfig)
 
-              ## For services that always need a public IP, e.g. headscale, filter out those with no-internal-ip set to true
-              (lib.filter (service-config: service-config.reverse-proxy.no-internal-ip == false) proxiedHostConfig)
+              ## For services that always need a public IP, e.g. headscale, filter out those with public set to true
+              (lib.filter (service-config: service-config.reverse-proxy.public == false) proxiedHostConfig)
               # proxiedHostConfig
             )
           )

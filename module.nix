@@ -458,12 +458,6 @@
           description = "enable Headscale vpn service";
         };
 
-        public = lib.mkOption {
-          type = lib.types.bool;
-          default = true;
-          description = "Open to public on WAN port";
-        };
-
         stun-port = lib.mkOption {
           type = lib.types.int;
           description = "DERP STUN relay port";
@@ -955,12 +949,6 @@
               type = lib.types.bool;
               default = false;
               description = "Whether to expose on WAN interface";
-            };
-
-            no-internal-ip = lib.mkOption {
-              type = lib.types.bool;
-              default = false;
-              description = "Don't map hostname to internal ip when on LAN";
             };
 
             ssl = lib.mkOption {

@@ -210,10 +210,7 @@ in
         https-domains = [ config.homefree.system.domain ];
         host = "10.0.0.1";
         port = config.services.headscale.port;
-        public = config.homefree.services.headscale.public;
-        ## Always use public IP, so that headscale.<base domain> IP always resolves to the same thing,
-        ## avoiding client errors about the relay server not being available.
-        no-internal-ip = true;
+        public = true;
         extraCaddyConfig = ''
           reverse_proxy /admin* http://10.0.0.1:3009
         '';
