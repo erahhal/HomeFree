@@ -29,6 +29,7 @@
     ./services/postgres.nix
 
     ## Podman-based services
+    ./services/adguardhome-podman.nix
     ./services/baikal-podman.nix
     ./services/cryptpad-podman.nix
     ./services/forgejo-podman.nix
@@ -52,7 +53,7 @@
 
     ## @TODO: Move to podman
     ## Otherwise entire system needs to be upgraded to upgrade individual app
-    ./services/adguardhome.nix
+    # ./services/adguardhome.nix
     ./services/authentik.nix
     ./services/gitea.nix
     ./services/jellyfin.nix

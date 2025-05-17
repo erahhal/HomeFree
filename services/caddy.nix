@@ -14,7 +14,7 @@ in
   ## Restart Unbound DNS with caddy changes
   systemd.services.unbound = {
     partOf = [ "caddy.service" ];
-    before = [ "caddy.service" ] ++ (if config.homefree.services.adguard.enable == true then [ "adguardhome.service" ] else []);
+    before = [ "caddy.service" ] ++ (if config.homefree.services.adguard.enable == true then [ "adguardhome-podman.service" ] else []);
   };
 
   ## Restart Adguard DNS with caddy changes
