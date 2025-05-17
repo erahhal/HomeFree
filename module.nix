@@ -539,6 +539,12 @@
           default = false;
           description = "Open to public on WAN port";
         };
+
+        media-path = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          description = "Location of media files";
+        };
       };
 
       joplin = {

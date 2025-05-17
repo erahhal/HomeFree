@@ -37,6 +37,7 @@
     ./services/grocy-podman.nix
     ./services/home-assistant-podman.nix
     ./services/homebox-podman.nix
+    ./services/jellyfin-podman.nix
     ./services/joplin-podman.nix
     ./services/kanidm-podman.nix
     ./services/immich-podman.nix
@@ -53,10 +54,7 @@
 
     ## @TODO: Move to podman
     ## Otherwise entire system needs to be upgraded to upgrade individual app
-    # ./services/adguardhome.nix
     ./services/authentik.nix
-    ./services/gitea.nix
-    ./services/jellyfin.nix
     ./services/linkwarden.nix
     ./services/matrix.nix
     ./services/nextcloud.nix

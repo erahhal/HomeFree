@@ -10,7 +10,7 @@ let
   version = "0.19.0";
 in
 {
-  virtualisation.oci-containers.containers = if config.homefree.services.vaultwarden.enable == true then {
+  virtualisation.oci-containers.containers = if config.homefree.services.homebox.enable == true then {
     homebox = {
       image = "ghcr.io/sysadminsmedia/homebox:${version}";
 

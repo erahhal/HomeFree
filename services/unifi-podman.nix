@@ -103,7 +103,8 @@ in
         "0.0.0.0:8080:8080"
 
         ## Used with "Make application discoverable on L2 network" in the UniFi Network settings.
-        "0.0.0.0:1900:1900/udp" #optional
+        ## Conflicts with Jellyfin DLNA discovery
+        # "0.0.0.0:1900:1900/udp" #optional
 
         ## Used for HTTPS portal redirection. (only needed if using Guest hotspot)
         "0.0.0.0:8843:8843"     #optional
