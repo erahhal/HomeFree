@@ -41,6 +41,7 @@
     ./services/joplin-podman.nix
     ./services/kanidm-podman.nix
     ./services/immich-podman.nix
+    ./services/linkwarden-podman.nix
     ./services/logseq-podman.nix
     ./services/lidarr-podman.nix
     # ./services/mongo-podman.nix
@@ -54,8 +55,7 @@
 
     ## @TODO: Move to podman
     ## Otherwise entire system needs to be upgraded to upgrade individual app
-    ./services/authentik.nix
-    ./services/linkwarden.nix
+    # ./services/authentik.nix
     ./services/matrix.nix
     ./services/nextcloud.nix
 
