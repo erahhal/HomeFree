@@ -229,7 +229,7 @@
 
   nixvim-config = {
     enable = true;
-    startify-header = let header-space = "    "; in [
+    startify-header = let header-space = "   "; in [
      ''${header-space}  ___ ___                      ___________''
      ''${header-space} /   |   \  ____   _____   ____\_   _____/______   ____   ____''
      ''${header-space}/    ~    \/  _ \ /     \_/ __ \|    __) \_  __ \_/ __ \_/ __ \''
@@ -272,6 +272,7 @@
     inetutils
     iotop
     iperf3
+    jq
     lemonade
     luarocks
     lshw

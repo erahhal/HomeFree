@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, pkgs, ... }:
 let
   version = "v2.10.2";
   version-meili = "v1.12.8";

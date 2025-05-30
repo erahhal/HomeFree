@@ -188,6 +188,7 @@ in
             ## Allow for web traffic
             ## http is needed for headscale relaying
             ## 3022 is for git/forgejo ssh
+            ## @TODO: 3022 should only be opened if forgejo is set to public
             tcp dport { http, https, 3022 } ct state new accept;
 
             ## Headscale connections
