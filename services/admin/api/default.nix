@@ -20,7 +20,7 @@ let
     lanInterface = config.homefree.network.lan-interface;
     services =
     let
-      filtered = lib.filter (service-config: service-config.admin.show == true) config.homefree.service-config;
+      filtered = lib.filter (service-config: service-config.admin.show == true && service-config.reverse-proxy.enable == true) config.homefree.service-config;
       compareByName = a: b: a.name < b.name;
       sorted = builtins.sort compareByName filtered;
     in

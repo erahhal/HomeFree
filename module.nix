@@ -22,7 +22,7 @@
       ## @TODO: Detect or have user enter during setup
       timeZone = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
+        default = "Etc/UTC";
         description = ''
           Timezone for the system in tz database format.
           See: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
