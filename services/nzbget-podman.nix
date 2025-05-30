@@ -18,7 +18,7 @@ in
       autoStart = true;
 
       extraOptions = [
-        "--pull=always"
+        # "--pull=always"
       ];
 
       ports = [
@@ -44,6 +44,7 @@ in
   systemd.services.podman-nzbget = {
     after = [ "dns-ready.service" ];
     requires = [ "dns-ready.service" ];
+    partOf =  [ "nftables.service" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "nzbget-prestart" preStart}" ];
     };

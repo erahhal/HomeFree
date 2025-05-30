@@ -39,7 +39,7 @@ in
       autoStart = true;
 
       extraOptions = [
-        "--pull=always"
+        # "--pull=always"
       ];
 
       ports = [
@@ -68,7 +68,7 @@ in
       autoStart = true;
 
       extraOptions = [
-        "--pull=always"
+        # "--pull=always"
       ];
 
       volumes = [
@@ -86,6 +86,7 @@ in
   systemd.services.podman-linkwarden = {
     after = [ "dns-ready.service" ];
     requires = [ "dns-ready.service" ];
+    partOf = [ "nftables.service" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "linkwarden-prestart" preStart}" ];
     };
@@ -94,6 +95,7 @@ in
   systemd.services.podman-meilisearch = {
     after = [ "dns-ready.service" ];
     requires = [ "dns-ready.service" ];
+    partOf =  [ "nftables.service" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "meili-prestart" preStart}" ];
     };

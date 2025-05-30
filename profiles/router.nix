@@ -162,6 +162,11 @@ in
       ruleset = ''
         flush ruleset
 
+        # add table inet filter
+        # add table ip nat
+        # flush table inet filter
+        # flush table ip nat
+
         ## "inet" indicates both ipv4 and ipv6
         table inet filter {
           ## allow all packets sent by the firewall machine itself

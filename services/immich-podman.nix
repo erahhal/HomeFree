@@ -97,7 +97,7 @@ in
       autoStart = true;
 
       extraOptions = [
-        "--pull=always"
+        # "--pull=always"
       ];
 
       ports = [
@@ -138,7 +138,7 @@ in
       autoStart = true;
 
       extraOptions = [
-        "--pull=always"
+        # "--pull=always"
         ## 1GB of memory, reduces SSD/SD Card wear
         "--mount=type=tmpfs,target=/tmp/cache,tmpfs-size=1000000000"
         "--device=/dev/bus/usb:/dev/bus/usb"  # Passes the USB Coral, needs to be modified for other versions
@@ -170,7 +170,7 @@ in
       autoStart = true;
 
       extraOptions = [
-        "--pull=always"
+        # "--pull=always"
         "--health-cmd=redis-cli ping || exit 1"
       ];
 
@@ -187,6 +187,7 @@ in
   systemd.services.podman-immich-server = {
     after = [ "dns-ready.service" ];
     requires = [ "dns-ready.service" ];
+    partOf =  [ "nftables.service" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "imimich-server-prestart" preStart}" ];
     };
@@ -195,11 +196,13 @@ in
   systemd.services.podman-immich-machine-learning = {
     after = [ "dns-ready.service" ];
     requires = [ "dns-ready.service" ];
+    partOf =  [ "nftables.service" ];
   };
 
   systemd.services.podman-immich-redis = {
     after = [ "dns-ready.service" ];
     requires = [ "dns-ready.service" ];
+    partOf =  [ "nftables.service" ];
   };
 
   homefree.service-config = if config.homefree.services.immich.enable == true then [

@@ -17,7 +17,7 @@ in
       autoStart = true;
 
       extraOptions = [
-        "--pull=always"
+        # "--pull=always"
       ];
 
       ports = [
@@ -40,6 +40,7 @@ in
   systemd.services.podman-homebox = {
     after = [ "dns-ready.service" ];
     requires = [ "dns-ready.service" ];
+    partOf =  [ "nftables.service" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "homebox-prestart" preStart}" ];
     };

@@ -69,7 +69,7 @@ in
       autoStart = true;
 
       extraOptions = [
-        "--pull=always"
+        # "--pull=always"
         "--network=host"
         "--privileged"
       ];
@@ -89,6 +89,7 @@ in
   systemd.services.podman-homeassistant = {
     after = [ "dns-ready.service" ];
     requires = [ "dns-ready.service" ];
+    partOf =  [ "nftables.service" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "homeassistant-prestart" preStart}" ];
     };

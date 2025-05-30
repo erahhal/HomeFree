@@ -25,7 +25,7 @@ in
       autoStart = true;
 
       extraOptions = [
-        "--pull=always"
+        # "--pull=always"
       ];
 
       ports = [
@@ -52,6 +52,7 @@ in
   systemd.services.podman-joplin = {
     after = [ "dns-ready.service" ];
     requires = [ "dns-ready.service" ];
+    partOf =  [ "nftables.service" ];
   };
 
   homefree.service-config = if config.homefree.services.joplin.enable == true then [

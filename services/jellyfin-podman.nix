@@ -41,7 +41,7 @@ in
       autoStart = true;
 
       extraOptions = [
-        "--pull=always"
+        # "--pull=always"
         ## 1GB of memory, reduces SSD/SD Card wear
         "--mount=type=tmpfs,target=/tmp/cache,tmpfs-size=1000000000"
         "--device=/dev/dri:/dev/dri"
@@ -76,6 +76,7 @@ in
   systemd.services.podman-jellyfin = {
     after = [ "dns-ready.service" ];
     requires = [ "dns-ready.service" ];
+    partOf =  [ "nftables.service" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "jellyfin-prestart" preStart}" ];
     };

@@ -31,7 +31,7 @@ in
       autoStart = true;
 
       extraOptions = [
-        "--pull=always"
+        # "--pull=always"
         "--add-host=host.docker.internal:host-gateway"
       ];
 
@@ -64,6 +64,7 @@ in
   systemd.services.podman-ollama-webui = {
     after = [ "dns-ready.service" ];
     requires = [ "dns-ready.service" ];
+    partOf =  [ "nftables.service" ];
     serviceConfig = {
       ExecStartPre = [ "!${pkgs.writeShellScript "ollama-webui-prestart" preStart}" ];
     };
